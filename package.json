@@ -4,7 +4,12 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.16.2"
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "forever": "^0.15.3",
+    "global": "^4.3.2",
+    "pug": "^2.0.0-rc.4",
+    "supervisor": "^0.12.0"
   },
   "devDependencies": {},
   "scripts": {
