@@ -1,5 +1,8 @@
-module.exports = function (app) {
-  app.get('/', function (req, res) {
-    res.render('index.html')
-  });
-}
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req, res) => {
+  res.render('index.html')
+})
+
+module.exports = router;
