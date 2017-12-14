@@ -1,14 +1,23 @@
 <nav>
-  <a class="nav-title" href="/">빈고 CRP</a>
+  <a class="nav-title" href="/">
+    <span>빈고 CRP</span>
+  </a>
   <ul class="nav-menu">
     <li>
-      <a class="menu-item menu-guide" href="/guide">안내</a>
+      <a class="menu-item menu-guide" href="/guide">
+        <span>안내</span>
+      </a>
     </li>
     <li>
-      <a class="menu-item menu-manage" href="/manage">관리</a>
+      <a class="menu-item menu-manage" href="/manage">
+        <span>관리</span>
+      </a>
+      <% include ./header-manage %>
     </li>
     <li>
-      <a class="menu-item menu-chart" href="/chart">통계</a>
+      <a class="menu-item menu-chart" href="/chart">
+        <span>통계</span>
+      </a>
     </li>
   </ul>
   <ul class="nav-system">

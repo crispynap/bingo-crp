@@ -5,25 +5,77 @@ a{
   text-decoration:none;
   color: black;
 }
+
 nav {
-  background-color: #C5D4E2; 
-  padding: 14px 108px;
-}
-nav a, nav li, nav ul {
-  display: inline;
+  background-color: rgb(214, 228, 240);
+  padding: 27px 0px 15px 108px ;
+  height: 22px;
+  overflow: visible;
 }
 .nav-title{
+  position: relative;
+  float: left;
   font-size: 24px;
-  font-weight: 550;  
+  font-weight: 550;
+  margin-right: 20px;
 }
-.menu-item{
-  color: #89959D;
-  font-size: 18px;
-  margin-left: 20px;
+nav li{
+  float: left;
+  position: relative;
+  text-align: left;
+  display: list-item;
 }
-.menu-item:hover{
+nav li:hover{
+  background-color: rgb(176, 209, 204);
+  border-radius: 3px 3px 0 0;
+}
+nav li:hover .menu-item{
   color: black;
 }
+.menu-item{
+  position: relative;
+  float: left;
+  color: rgb(91, 103, 110);
+  font-size: 18px;
+  padding: 5px 5px 5px 5px;
+}
+.menu-item span{
+  display: block;
+  padding: 5px 27px 4px;
+  text-align: center;
+  cursor: pointer;
+}
+nav li:hover .submenu{
+  display:block;
+}
+.submenu{
+  position: absolute;
+  background-color: rgb(176, 209, 204);
+  width: 130px;
+  border-radius: 0px 2px 2px 2px;
+  padding: 5px 0px;
+  display:none;
+  margin-top: 37px;
+}
+.submenu li{
+  width: 120px;
+}
+.submenu-item{
+  position: relative;
+  float: left;
+  width: 130px;
+  font-size: 18px;
+  padding: 10px 0 10px 10px;
+  box-sizing: border-box;
+}
+.submenu-item:hover{
+  background-color: rgb(132, 186, 219);
+  color: black;
+}
+.submenu-item span{
+  font-size: 16px;  
+}
+
 .highlight{
   color: black;
   font-weight: 500;
