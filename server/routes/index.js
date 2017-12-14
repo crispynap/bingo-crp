@@ -15,4 +15,25 @@ router.get('/guide', (req, res) => {
   })
 })
 
+router.get('/manage', (req, res) => {
+  res.render('pages/manage.ejs', {
+    title: 'bingo CRP',
+    highlighted: 'manage'
+  })
+})
+
+router.get('/chart', (req, res) => {
+  res.render('pages/chart.ejs', {
+    title: 'bingo CRP',
+    highlighted: 'chart'
+  })
+})
+
+router.get('/login', (req, res) => {
+  res.render('pages/login.ejs', {
+    title: 'bingo CRP',
+    highlighted: 'login'
+  })
+})
+
 module.exports = router;

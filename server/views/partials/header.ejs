@@ -9,15 +9,27 @@
       <% } %>
     </li>
     <li>
-      <a class="menu-item" href="/manage">관리</a>
+      <% if(highlighted === 'manage'){ %>
+        <a class="menu-item highlight" href="/manage">관리</a>
+      <% } else { %>
+        <a class="menu-item" href="/manage">관리</a>
+      <% } %>
     </li>
     <li>
-      <a class="menu-item" href="/chart">통계</a>
+      <% if(highlighted === 'chart'){ %>
+        <a class="menu-item highlight" href="/chart">통계</a>
+      <% } else { %>
+        <a class="menu-item" href="/chart">통계</a>
+      <% } %>
     </li>
   </ul>
   <ul class="nav-system">
     <li>
-      <a class="menu-item" href="/login">로그인</a>
+      <% if(highlighted === 'login'){ %>
+        <a class="menu-item highlight" href="/login">로그인</a>
+      <% } else { %>
+        <a class="menu-item" href="/login">로그인</a>
+      <% } %>
     </li>
   </ul>
 </nav>
