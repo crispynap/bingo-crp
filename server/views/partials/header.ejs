@@ -2,7 +2,11 @@
   <a class="nav-title" href="/">빈고 CRP</a>
   <ul class="nav-menu">
     <li>
-      <a class="menu-item" href="/guide">안내</a>
+      <% if(highlighted === 'guide'){ %>
+        <a class="menu-item highlight" href="/guide">안내</a>
+      <% } else { %>
+        <a class="menu-item" href="/guide">안내</a>
+      <% } %>
     </li>
     <li>
       <a class="menu-item" href="/manage">관리</a>

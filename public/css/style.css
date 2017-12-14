@@ -14,6 +14,7 @@ nav a, nav li, nav ul {
 }
 .nav-title{
   font-size: 24px;
+  font-weight: 550;  
 }
 .menu-item{
   color: #89959D;
@@ -22,6 +23,10 @@ nav a, nav li, nav ul {
 }
 .menu-item:hover{
   color: black;
+}
+.highlight{
+  color: black;
+  font-weight: 500;
 }
 .nav-system{
   float: right;
