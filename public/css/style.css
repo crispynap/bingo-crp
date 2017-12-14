@@ -28,6 +28,12 @@ nav a, nav li, nav ul {
   padding-top: 6px;
 }
 
+section{
+  margin: 20px 108px;
+}
+section p{
+  margin-top: 10px;
+}
 
 .footer {
   position: absolute;
