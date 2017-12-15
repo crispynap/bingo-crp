@@ -2,30 +2,30 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.render('pages/index/index.ejs', {
+  res.render('pages/index', {
     title: 'bingo CRP',
     highlighted: 'none'
   })
 })
 
 router.get('/guide', (req, res) => {
-  res.render('pages/index/guide.ejs', {
+  res.render('pages/guide', {
     title: 'bingo CRP',
     highlighted: 'guide'
   })
 })
 
-router.get('/manage', (req, res) => {
-  res.render('pages/index/manage.ejs', {
+router.get('/chart', (req, res) => {
+  res.render('pages/chart', {
     title: 'bingo CRP',
-    highlighted: 'manage'
+    highlighted: 'chart'
   })
 })
 
-router.get('/chart', (req, res) => {
-  res.render('pages/index/chart.ejs', {
+router.get('/manage', (req, res) => {
+  res.render('pages/manage', {
     title: 'bingo CRP',
-    highlighted: 'chart'
+    highlighted: 'manage'
   })
 })
 
