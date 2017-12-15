@@ -5,14 +5,18 @@
     <%= title %>
   </title>
   <% include ../../partials/stylesheet %>
+  <link rel="stylesheet" type="text/css" href="/css/manage/member.css">
 </head>
 
 <body>
   <% include ../../partials/header %>
-
-  <section class="container">
-    <p>이것은 조합원 페이지이다</p>
-  </section>
+  <div id="container">
+    <section class="section-title">
+      <h1>조합원 관리</h1>
+    </section>
+    <section class="member-table">
+    </section>
+  </div>
 
   <% include ../../partials/footer %>
   <% include ../../partials/javascript %>

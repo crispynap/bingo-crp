@@ -86,11 +86,13 @@ nav li:hover .submenu{
   margin-right: 154px;
 }
 
-section{
-  margin: 20px 108px;
+#container{
+  margin: 25px 122px;
+  width: 980px;
 }
-section p{
-  margin-top: 10px;
+
+h1{
+  font-size: 24px;
 }
 
 .footer {
