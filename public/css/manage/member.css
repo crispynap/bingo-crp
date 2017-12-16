@@ -8,7 +8,8 @@
   padding: 2px;
   height: 450px;
   overflow: scroll;  
-  width: 700px;
+  width: 100%;
+  border: 1px solid black;
 }
 .member-table:-webkit-scrollbar {
   -webkit-appearance: none;
@@ -20,9 +21,8 @@
 }
 
 
-table{
+table{  
   width: 100%;
-  
 }
 
 table, th, td{

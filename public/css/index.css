@@ -5,9 +5,13 @@ a{
   text-decoration:none;
   color: black;
 }
-
+html{
+  width: 100%
+  
+}
 body{
   position: relative;
+  width: 100%
 }
 
 nav {
@@ -91,8 +95,8 @@ nav li:hover .submenu{
 }
 
 #container{
-  margin: 25px 122px;
-  width: 980px;
+  padding: 25px 0 25px 122px;
+  width: 1000px;
   height: 100%
 }
 
@@ -104,9 +108,10 @@ h1{
   position: absolute;
   bottom: 0;
   width: 100%;
-  /* Set the fixed height of the footer here */
   height: 60px;
   line-height: 60px;
   background-color: #C5D4E2; 
-  padding-left: 108px;
+}
+.footer > div{
+  padding-left: 108px;  
 }
