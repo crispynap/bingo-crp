@@ -1,6 +1,7 @@
 
 const express = require('express');
 const index = require('./server/routes/index');
+const manage = require('./server/routes/manage');
 const app = express();
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -19,6 +20,7 @@ app.set('views', __dirname + '/server/views');
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
+app.use('/manage', manage);
 app.use('/', index);
 
 const server = app.listen(3000, function () {
