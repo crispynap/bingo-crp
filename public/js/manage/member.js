@@ -20,27 +20,25 @@
   table.addEventListener('mousewheel', eventControl.preventOuterWheel);
   table.addEventListener('dblclick', eventControl.selectText);
 
-  var options = {
-    valueNames: ['name', 'city'],
-    item: '<li><h3 class="name"></h3><p class="city"></p></li>'
-  };
+  const tHead = table.querySelector('thead');
+  const th = _.reduce(tableInfo, (memo, { columnName }) => memo + `<th>${columnName}</th>`, '');
+  const head = `<thead><tr>${th}</tr></thead>`;
+  tHead.innerHTML = head;
 
-  var values = [
-    { name: 'Jonny', city: 'Stockholm' }
-    , { name: 'Jonas', city: 'Berlin' }
-  ];
-
-  var hackerList = new List('member-table', options, values);
+  const tBody = table.querySelector('tbody');
+  $.ajax({
+    url: "../api/members",
+    type: 'get',
+    success: function (json) {
+      let body = '';
+      _.each(json, (row) => {
+        const td = _.reduce(row, (memo, field) => memo + `<td contenteditable="true">${field}</td>`, '');
+        body += `<tr>${td}</tr>`;
+      });
+      tBody.innerHTML = body;
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  });
 })();
-
-// $.ajax({
-//   url: "../api/members",
-//   type: 'get',
-//   success: function (json) {
-//     const table = document.querySelector('.member-table');
-//     table.innerHTML = JSON.stringify(json);
-//   },
-//   error: function (error) {
-//     console.log(error);
-//   }
-// });

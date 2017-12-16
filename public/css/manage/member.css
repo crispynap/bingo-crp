@@ -37,8 +37,9 @@ th {
   text-align: left;
   color: #fafeff;
 }
-td{
-  /* width: 100px; */
+th, td{
+  width: 10px;
+  height: 50px;
 }
 tr:nth-child(even) {background-color: #eaf9fd;}
 td:hover {background-color: rgb(206, 241, 211);}
