@@ -4,7 +4,7 @@
 }
 
 .member-table{
-  margin: 30px 10px;
+  margin: 15px 10px;
   padding: 2px;
   height: 450px;
   overflow: scroll;  
@@ -21,13 +21,9 @@
 }
 
 
-table{  
-  width: 100%;
-}
-
 table, th, td{
   border: 1px solid black;
-  padding: 5px;
+  padding: 5px 12px;
   vertical-align: middle;
   box-sizing: border-box;
   cursor: default;
@@ -36,12 +32,13 @@ tr{
   box-sizing: border-box;
   height: 50px;
 }
-
 th {
   background-color: #5067a7;
-  height: 30px;
   text-align: left;
   color: #fafeff;
+}
+td{
+  /* width: 100px; */
 }
 tr:nth-child(even) {background-color: #eaf9fd;}
 td:hover {background-color: rgb(206, 241, 211);}
