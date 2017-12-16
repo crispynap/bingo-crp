@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const memberSchema = new Schema({
   SN: {
-    type: Schema.Types.ObjectId,
+    type: Number,
     required: true
   },
   nick_name: {

@@ -2,6 +2,7 @@
 const express = require('express');
 const index = require('./server/routes/index');
 const manage = require('./server/routes/manage');
+const api = require('./server/routes/api');
 const app = express();
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -20,6 +21,7 @@ app.set('views', __dirname + '/server/views');
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
+app.use('/api', api);
 app.use('/manage', manage);
 app.use('/', index);
 
