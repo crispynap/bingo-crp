@@ -12,7 +12,7 @@ const memberSchema = new Schema({
   },
   nick_choseong: {
     type: String,
-    required: true
+    // required: true
   },
   community: String,
   group: String,
