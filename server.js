@@ -11,11 +11,6 @@ const fs = require("fs");
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({
-  secret: '@#@$Whdsuifh#@$#$',
-  resave: false,
-  saveUninitialized: true
-}));
 
 app.set('views', __dirname + '/server/views');
 app.set('view engine', 'ejs');
