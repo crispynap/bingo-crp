@@ -1,13 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const Member = require('../models/member');
-
+// var fs = require("fs");
+// var testDB = fs.readFileSync("./test.json");
+var testDB = require('./test.json')
 
 router.get('/members', (req, res) => {
-  Member.find(function (err, members) {
-    if (err) return res.status(500).send({ error: 'database failure' });
-    res.json(members);
-  })
+  // Member.find(function (err, members) {
+  //   if (err) return res.status(500).send({ error: 'database failure' });
+  //   res.json(members);
+  // })
+  res.json(testDB)
 });
 
 router.post('/members', (req, res) => {
