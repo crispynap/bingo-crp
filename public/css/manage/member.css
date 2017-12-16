@@ -3,7 +3,7 @@
   outline-offset: -2px;
 }
 
-.member-table{
+#member-table{
   margin: 15px 10px;
   padding: 2px;
   height: 450px;
@@ -11,11 +11,11 @@
   width: 100%;
   border: 1px solid black;
 }
-.member-table:-webkit-scrollbar {
+#member-table:-webkit-scrollbar {
   -webkit-appearance: none;
   width: 8px;
 }
-.member-table:-webkit-scrollbar-thumb {
+#member-table:-webkit-scrollbar-thumb {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, .5);
 }

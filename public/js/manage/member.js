@@ -16,13 +16,31 @@
     { dbName: 'current', columnName: '현황' }
   ]
 
-  const table = document.querySelector('.member-table')
-  table.addEventListener('mousewheel', eventControl.preventOuterWheel)
-  table.addEventListener('dblclick', eventControl.selectText)
+  const table = document.querySelector('#member-table');
+  table.addEventListener('mousewheel', eventControl.preventOuterWheel);
+  table.addEventListener('dblclick', eventControl.selectText);
 
-  const testTable = {
-  }
+  var options = {
+    valueNames: ['name', 'city'],
+    item: '<li><h3 class="name"></h3><p class="city"></p></li>'
+  };
 
+  var values = [
+    { name: 'Jonny', city: 'Stockholm' }
+    , { name: 'Jonas', city: 'Berlin' }
+  ];
 
+  var hackerList = new List('member-table', options, values);
 })();
 
+// $.ajax({
+//   url: "../api/members",
+//   type: 'get',
+//   success: function (json) {
+//     const table = document.querySelector('.member-table');
+//     table.innerHTML = JSON.stringify(json);
+//   },
+//   error: function (error) {
+//     console.log(error);
+//   }
+// });
