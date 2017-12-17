@@ -32,7 +32,8 @@
     success: function (json) {
       let body = '';
       _.each(json, (row) => {
-        const td = _.reduce(row, (memo, field) => memo + `<td contenteditable="true"><div>${field}</div></td>`, '');
+        const tdTemplate = _.partial(template, '<td contenteditable="true"><div>', _, `</div></td>`);
+        const td = _.reduce(row, (memo, field) => memo + tdTemplate(field), '');
         body += `<tr>${td}</tr>`;
       });
       tBody.innerHTML = body;
@@ -41,4 +42,8 @@
       console.log(error);
     }
   });
+
+  function template(first, content, end) {
+    return first + content + end;
+  };
 })();
