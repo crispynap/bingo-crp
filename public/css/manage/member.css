@@ -27,10 +27,11 @@ table, th, td{
   vertical-align: middle;
   box-sizing: border-box;
   cursor: default;
+  font-size: 15px;
 }
 tr{
   box-sizing: border-box;
-  height: 50px;
+  height: 28px;
 }
 th {
   background-color: #5067a7;
@@ -39,7 +40,7 @@ th {
 }
 th, td{
   width: 10px;
-  height: 50px;
+  white-space: nowrap;
 }
 tr:nth-child(even) {background-color: #eaf9fd;}
 td:hover {background-color: rgb(206, 241, 211);}

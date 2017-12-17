@@ -6,8 +6,10 @@
 
 const eventControl = {
   preventOuterWheel(e) {
-    var delta = e.wheelDelta;
-    this.scrollTop += (delta < 0 ? 1 : -1) * 30;
+    const deltaX = e.wheelDeltaX;
+    const deltaY = e.wheelDeltaY;
+    this.scrollLeft += (deltaX < 0 ? 1 : -1) * 30;
+    this.scrollTop += (deltaY < 0 ? 1 : -1) * 30;
     e.preventDefault();
   },
 

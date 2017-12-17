@@ -1,0 +1,50 @@
+[
+  {
+    "SN": 1,
+    "nick_name": "말랴",
+    "community": "",
+    "group": "옛장투",
+    "join_date": "2010/06/01",
+    "real_name": "정철규",
+    "phone_1": 1095858755,
+    "phone_2": "",
+    "email": "jungguji@gmail.com",
+    "birth": "02/16",
+    "blog": "",
+    "address": "제주도",
+    "note": "",
+    "curret": ""
+  },
+  {
+    "SN": 2,
+    "nick_name": "지음",
+    "community": "홍성빈땅모임",
+    "group": "옛장투",
+    "join_date": "2010/06/01",
+    "real_name": "김승택",
+    "phone_1": 1027015944,
+    "phone_2": "",
+    "email": "antiorder@jinbo.net",
+    "birth": "08/29",
+    "blog": "blog.jinbo.net/antiorder",
+    "address": "사랑채",
+    "note": "",
+    "curret": ""
+  },
+  {
+    "SN": 3,
+    "nick_name": "살구",
+    "community": "홍성빈땅모임",
+    "group": "옛장투",
+    "join_date": "2010/06/01",
+    "real_name": "나윤미",
+    "phone_1": 1042810244,
+    "phone_2": "",
+    "email": "kingdumb@gmail.com",
+    "birth": "01/20",
+    "blog": "",
+    "address": "사랑채",
+    "note": "아규",
+    "curret": ""
+  }
+]
