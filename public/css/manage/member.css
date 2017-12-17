@@ -2,6 +2,10 @@
   outline: 3px solid rgb(41, 90, 41);
   outline-offset: -2px;
 }
+[contenteditable]:focus>div{
+  text-overflow:clip; 
+  overflow:visible;
+}
 
 #member-table{
   margin: 15px 10px;
@@ -23,7 +27,6 @@
 
 table, th, td{
   border: 1px solid black;
-  padding: 5px 12px;
   vertical-align: middle;
   box-sizing: border-box;
   cursor: default;
@@ -34,13 +37,20 @@ tr{
   height: 28px;
 }
 th {
+  padding: 5px 12px;
   background-color: #5067a7;
   text-align: left;
   color: #fafeff;
 }
-th, td{
-  width: 10px;
+td > div{
+  margin-top: auto;
+  padding: 0 8px;
   white-space: nowrap;
+  max-width:85px;
+  height: 22px;
+  line-height: 27px;
+  text-overflow:ellipsis; 
+  overflow: hidden;
 }
 tr:nth-child(even) {background-color: #eaf9fd;}
 td:hover {background-color: rgb(206, 241, 211);}
