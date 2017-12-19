@@ -20,12 +20,17 @@
   table.addEventListener('mousewheel', eventControl.preventOuterWheel);
   table.addEventListener('dblclick', eventControl.selectText);
 
+  const search = document.querySelector('.search');
+  search.addEventListener('keyup', function (e) { eventControl.searchTable(e, table, tableContent) })
+  let tableContent = {};
+
   $.ajax({
     url: "../api/members",
     type: 'get',
     success: function (json) {
       setTHead(tableInfo);
       setTBody(json);
+      tableContent = json;
     },
     error: function (error) {
       console.log(error);
@@ -41,11 +46,11 @@
     tHead.innerHTML = head;
   }
 
-  function setTBody(bodyData) {
+  function setTBody(tableData) {
     const table = document.querySelector('#member-table');
     const tBody = table.querySelector('tbody');
     let body = '';
-    _.each(bodyData, (row) => {
+    _.each(tableData, (row) => {
       const tdTemplate = _.partial(template, '<td contenteditable="true"><div>', _, '</div></td>');
       const trTemplate = _.partial(template, '<tr>', _, '</tr>');
 

@@ -20,7 +20,8 @@ const eventControl = {
     }
   },
 
-  searchTable(e) {
+  searchTable(e, table, tableContent) {
+    keyword = e.target.value;
 
   }
 }
