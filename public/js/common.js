@@ -22,7 +22,17 @@ const eventControl = {
 
   searchTable(e, table, tableContent) {
     keyword = e.target.value;
+    if (keyword === "") return;
+    console.log(Hangul.disassembleOnlyCho(keyword));
 
+    _.each(tableContent, row => {
+      // _.each(row, field => console.log(field))
+      // if (_.every(row, field => field.match(keyword))) {
+      //   console.log('yes')
+      // } else {
+      //   console.log('no')
+      // }
+    });
   }
 }
 
@@ -43,5 +53,10 @@ const common = {
   isContainHangul(str) {
     check = /[가-힣]/;
     return check.test(str);
+  },
+
+  isEveryChoseong(str) {
+    check = /[ㄱ-ㅎ]/;
+    return _.every(str, letter => check.test(letter));
   }
 }

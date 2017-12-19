@@ -21,8 +21,8 @@
   table.addEventListener('dblclick', eventControl.selectText);
 
   const search = document.querySelector('.search');
-  search.addEventListener('keyup', function (e) { eventControl.searchTable(e, table, tableContent) })
   let tableContent = {};
+  search.addEventListener('keyup', function (e) { eventControl.searchTable(e, table, tableContent) })
 
   $.ajax({
     url: "../api/members",
@@ -30,10 +30,8 @@
     success: function (json) {
       setTHead(tableInfo);
       setTBody(json);
-
       tableContent = addChoseong(json);
-
-      // tableContent = json;
+      //주의! addChoseong()으로 json 오염됨
     },
     error: function (error) {
       console.log(error);
@@ -65,6 +63,7 @@
     tBody.innerHTML = body;
   }
 
+  //TODO: 순수함수로 바꿀 것
   function addChoseong(tableData) {
     _.each(tableData, row => {
       _.each(row, field => {
@@ -73,6 +72,7 @@
         }
       })
     });
+    return tableData;
   }
 
 
