@@ -22,16 +22,21 @@ const eventControl = {
 
   searchTable(e, table, tableContent) {
     keyword = e.target.value;
+
     if (keyword === "") return;
-    console.log(Hangul.disassembleOnlyCho(keyword));
 
     _.each(tableContent, row => {
-      // _.each(row, field => console.log(field))
-      // if (_.every(row, field => field.match(keyword))) {
-      //   console.log('yes')
-      // } else {
-      //   console.log('no')
-      // }
+      if (_.some(row, field => {
+        if (typeof field === 'string') {
+          return field.match(keyword);
+        } else {
+          return field.toString().match(keyword);
+        }
+      })) {
+        console.log('yes');
+      } else {
+        console.log('no');
+      }
     });
   }
 }

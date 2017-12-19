@@ -68,13 +68,12 @@
     _.each(tableData, row => {
       _.each(row, field => {
         if (common.isContainHangul(field)) {
-          row[field + "Choseong"] = Hangul.disassemble(field);
+          row[field + "Choseong"] = Hangul.disassembleOnlyCho(field);
         }
       })
     });
     return tableData;
   }
-
 
   function template(first, content, end) {
     return first + content + end;
