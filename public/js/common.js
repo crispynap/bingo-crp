@@ -38,5 +38,10 @@ const common = {
       range.moveToElementText(obj);
       range.select();
     }
+  },
+
+  isContainHangul(str) {
+    check = /[가-힣]/;
+    return check.test(str);
   }
 }

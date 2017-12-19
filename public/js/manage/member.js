@@ -9,7 +9,7 @@
     { dbName: 'phone_1', columnName: '전화 1', width: 100 },
     { dbName: 'phone_2', columnName: '전화 2', width: 100 },
     { dbName: 'email', columnName: 'email', width: 100 },
-    { dbName: 'birthday', columnName: '생일', width: 100 },
+    { dbName: 'birth', columnName: '생일', width: 100 },
     { dbName: 'blog', columnName: '웹페이지', width: 100 },
     { dbName: 'address', columnName: '주소', width: 100 },
     { dbName: 'note', columnName: '비고', width: 100 },
@@ -30,7 +30,10 @@
     success: function (json) {
       setTHead(tableInfo);
       setTBody(json);
-      tableContent = json;
+
+      tableContent = addChoseong(json);
+
+      // tableContent = json;
     },
     error: function (error) {
       console.log(error);
@@ -54,11 +57,24 @@
       const tdTemplate = _.partial(template, '<td contenteditable="true"><div>', _, '</div></td>');
       const trTemplate = _.partial(template, '<tr>', _, '</tr>');
 
-      const td = _.reduce(row, (memo, field) => memo + tdTemplate(field), '');
+      const td = _.reduce(tableInfo, (memo, column) => {
+        return memo + tdTemplate(row[column.dbName]);
+      }, '');
       body += trTemplate(td);
     });
     tBody.innerHTML = body;
   }
+
+  function addChoseong(tableData) {
+    _.each(tableData, row => {
+      _.each(row, field => {
+        if (common.isContainHangul(field)) {
+          row[field + "Choseong"] = Hangul.disassemble(field);
+        }
+      })
+    });
+  }
+
 
   function template(first, content, end) {
     return first + content + end;
