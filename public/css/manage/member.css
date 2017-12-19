@@ -9,22 +9,14 @@
 
 #member-table{
   margin: 15px 10px;
-  padding: 2px;
   height: 450px;
   overflow: scroll;  
   width: 100%;
   border: 1px solid black;
 }
-#member-table:-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 8px;
-}
-#member-table:-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, .5);
-}
 
-
+table{
+}
 table, th, td{
   border: 1px solid black;
   vertical-align: middle;
@@ -32,21 +24,29 @@ table, th, td{
   cursor: default;
   font-size: 15px;
 }
+thead{
+  display: block;
+  position: sticky;
+  top: 0px; 
+  width: 100%;
+}
+tbody{
+  display: block;
+  
+}
 tr{
-  box-sizing: border-box;
   height: 28px;
 }
 th {
-  padding: 5px 12px;
+  padding: 0 8px;
   background-color: #5067a7;
   text-align: left;
   color: #fafeff;
 }
 td > div{
-  margin-top: auto;
+  max-width:83px;
   padding: 0 8px;
   white-space: nowrap;
-  max-width:85px;
   height: 22px;
   line-height: 27px;
   text-overflow:ellipsis; 
