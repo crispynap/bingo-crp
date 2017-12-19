@@ -18,6 +18,10 @@ const eventControl = {
       e.preventDefault();
       common.selectRange(e.target)
     }
+  },
+
+  searchTable(e) {
+
   }
 }
 

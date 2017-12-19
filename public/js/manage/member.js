@@ -20,40 +20,12 @@
   table.addEventListener('mousewheel', eventControl.preventOuterWheel);
   table.addEventListener('dblclick', eventControl.selectText);
 
-  const tBody = table.querySelector('tbody');
   $.ajax({
     url: "../api/members",
     type: 'get',
     success: function (json) {
-      const tHead = table.querySelector('thead');
-      const th = _.reduce(tableInfo, (memo, { columnName, width }) => memo + `<th style="width:${width};">${columnName}</th>`, '');
-      const head = `<thead><tr>${th}</tr></thead>`;
-      tHead.innerHTML = head;
-
-      let body = '';
-      _.each(json, (row) => {
-        const tdTemplate = _.partial(template, '<td contenteditable="true"><div>', _, '</div></td>');
-        const trTemplate = _.partial(template, '<tr>', _, '</tr>');
-
-        const td = _.reduce(row, (memo, field) => memo + tdTemplate(field), '');
-        body += trTemplate(td);
-      });
-      tBody.innerHTML = body;
-
-      var a = table.querySelectorAll('tr:nth-child(1) td');
-      var b = table.querySelectorAll('th');
-      // _.each(b, (c) => { console.log(c.clientWidth) });
-
-      for (var d = 0; d < b.length; d++) {
-        console.log(a[d].clientWidth);
-        // console.log(b[d].clientWidth);
-        // b[d].clientWidth = a[d].clientWidth;
-        // console.log(b[d].clientWidth);
-      }
-      // _.each(b, (c) => { console.log(c.clientWidth) });
-      // console.log(a)
-
-
+      setTHead(tableInfo);
+      setTBody(json);
     },
     error: function (error) {
       console.log(error);
@@ -61,7 +33,29 @@
   });
 
 
+  function setTHead(tableInfo) {
+    const table = document.querySelector('#member-table');
+    const tHead = table.querySelector('thead');
+    const th = _.reduce(tableInfo, (memo, { columnName, width }) => memo + `<th style="width:${width};">${columnName}</th>`, '');
+    const head = `<thead><tr>${th}</tr></thead>`;
+    tHead.innerHTML = head;
+  }
+
+  function setTBody(bodyData) {
+    const table = document.querySelector('#member-table');
+    const tBody = table.querySelector('tbody');
+    let body = '';
+    _.each(bodyData, (row) => {
+      const tdTemplate = _.partial(template, '<td contenteditable="true"><div>', _, '</div></td>');
+      const trTemplate = _.partial(template, '<tr>', _, '</tr>');
+
+      const td = _.reduce(row, (memo, field) => memo + tdTemplate(field), '');
+      body += trTemplate(td);
+    });
+    tBody.innerHTML = body;
+  }
+
   function template(first, content, end) {
     return first + content + end;
-  };
+  }
 })();
