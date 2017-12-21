@@ -63,5 +63,24 @@ const common = {
   isEveryChoseong(str) {
     check = /[ㄱ-ㅎ]/;
     return _.every(str, letter => check.test(letter));
+  },
+
+  /* 선택자를 매개변수로 넘겨서 해당 cssRule을 찾아서 리턴하는 함수 */
+  cssSelector(selector) {
+    for (i = 0; i < document.styleSheets.length; i++) {
+      for (j = 0; j < document.styleSheets[i].cssRules.length; j++) {
+        if (document.styleSheets[i].cssRules[j].selectorText == selector) {
+          return document.styleSheets[i].cssRules[j];
+        }
+      }
+    }
+  },
+  /* 위 함수만 정의해 놓으면 아래 방식으로 접근 & 사용 */
+  // var chgStyle=cssSelector("div#d2"); /*원하는 선택자만 매개변수로 넘김 */
+  // chgStyle.style["background-color"]="blue" /* jQuery처럼 짧게 접근^^ */
+
+  cssInsert(style) {
+    const sheet = document.styleSheets[0];
+    sheet.insertRule(style, 1);
   }
 }

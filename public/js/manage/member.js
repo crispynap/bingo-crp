@@ -30,6 +30,7 @@
     success: function (json) {
       setTHead(tableInfo);
       setTBody(json);
+      setTBodyCSS(tableInfo);
       tableContent = addChoseong(json);
       //주의! addChoseong()으로 json 오염됨
     },
@@ -42,7 +43,9 @@
   function setTHead(tableInfo) {
     const table = document.querySelector('#member-table');
     const tHead = table.querySelector('thead');
-    const th = _.reduce(tableInfo, (memo, { columnName, width }) => memo + `<th style="width:${width};">${columnName}</th>`, '');
+    const th = _.reduce(tableInfo, (memo, { columnName, width }) => {
+      return memo + `<th style="width:${width};">${columnName}</th>`;
+    }, '');
     const head = `<thead><tr>${th}</tr></thead>`;
     tHead.innerHTML = head;
   }
@@ -51,16 +54,24 @@
     const table = document.querySelector('#member-table');
     const tBody = table.querySelector('tbody');
     let body = '';
+
     _.each(tableData, (row) => {
-      const tdTemplate = _.partial(template, '<td contenteditable="true"><div>', _, '</div></td>');
       const trTemplate = _.partial(template, '<tr>', _, '</tr>');
 
-      const td = _.reduce(tableInfo, (memo, column) => {
-        return memo + tdTemplate(row[column.dbName]);
+      const td = _.reduce(tableInfo, (memo, { dbName }) => {
+        const field = row[dbName];
+        return memo + `<td contenteditable="true" class="column_${dbName}"><div>${field}</div></td>`;
       }, '');
       body += trTemplate(td);
     });
+
     tBody.innerHTML = body;
+  }
+
+  function setTBodyCSS(tableInfo) {
+    _.each(tableInfo, ({ dbName, width }) => {
+      common.cssInsert(`.column_${dbName}>div{width:${width - 17};}`);
+    });
   }
 
   //TODO: 순수함수로 바꿀 것
@@ -70,7 +81,7 @@
         if (common.isContainHangul(field)) {
           row[field + "Choseong"] = Hangul.disassembleOnlyCho(field);
         }
-      })
+      });
     });
     return tableData;
   }
