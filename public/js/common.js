@@ -1,7 +1,12 @@
 (() => {
-  const currentMenu = location.pathname.split('/')[1];
-  const menuItem = document.querySelector(`.menu-${currentMenu}`);
-  menuItem.classList.add('highlight');
+  navHighlighting();
+
+  function navHighlighting() {
+    const currentMenu = location.pathname.split('/')[1];
+    const menuItem = document.querySelector(`.menu-${currentMenu}`);
+    menuItem.classList.add('highlight');
+  }
+
 })();
 
 const eventControl = {
@@ -23,7 +28,15 @@ const eventControl = {
   searchTable(e, table, tableContent) {
     keyword = e.target.value;
 
-    if (keyword === "") return;
+    if (keyword === "") {
+      const tableRows = table.querySelectorAll('tr');
+      _.each(tableRows, tableRow => {
+        tableRow.style.display = "table-row";
+      })
+      return;
+    }
+
+    const tBody = table.querySelector('tbody');
 
     _.each(tableContent, row => {
       if (_.some(row, field => {
@@ -33,9 +46,13 @@ const eventControl = {
           return field.toString().match(keyword);
         }
       })) {
-        console.log('yes');
+        const tableRow = tBody.querySelector(`tr:nth-child(${row.lineNum})`);
+        tableRow.style.display = "table-row";
+        console.log('yes' + row.lineNum);
       } else {
-        console.log('no');
+        const tableRow = tBody.querySelector(`tr:nth-child(${row.lineNum})`);
+        tableRow.style.display = "none";
+        console.log('no' + row.lineNum);
       }
     });
   }

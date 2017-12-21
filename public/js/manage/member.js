@@ -31,8 +31,8 @@
       setTHead(tableInfo);
       setTBody(json);
       setTBodyCSS(tableInfo);
-      tableContent = addChoseong(json);
-      //주의! addChoseong()으로 json 오염됨
+      tableContent = addChoseong(json); //주의! json 오염됨
+      tableContent = addLineNum(tableContent);
     },
     error: function (error) {
       console.log(error);
@@ -58,11 +58,12 @@
     _.each(tableData, (row) => {
       const trTemplate = _.partial(template, '<tr>', _, '</tr>');
 
-      const td = _.reduce(tableInfo, (memo, { dbName }) => {
+      const tr = _.reduce(tableInfo, (memo, { dbName }) => {
         const field = row[dbName];
         return memo + `<td contenteditable="true" class="column_${dbName}"><div>${field}</div></td>`;
       }, '');
-      body += trTemplate(td);
+
+      body += trTemplate(tr);
     });
 
     tBody.innerHTML = body;
@@ -83,6 +84,16 @@
         }
       });
     });
+    return tableData;
+  }
+
+  function addLineNum(tableData) {
+    let numCount = 1;
+
+    _.each(tableData, row => {
+      row.lineNum = numCount++;
+    });
+
     return tableData;
   }
 

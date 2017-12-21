@@ -13,7 +13,7 @@
     "blog": "",
     "address": "제주도",
     "note": "",
-    "curret": ""
+    "current": ""
   },
   {
     "SN": 2,
@@ -29,7 +29,7 @@
     "blog": "blog.jinbo.net/antiorder",
     "address": "사랑채",
     "note": "",
-    "curret": ""
+    "current": ""
   },
   {
     "SN": 3,
@@ -45,6 +45,6 @@
     "blog": "",
     "address": "사랑채",
     "note": "아규",
-    "curret": ""
+    "current": ""
   }
 ]
