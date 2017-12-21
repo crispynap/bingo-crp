@@ -64,6 +64,7 @@ nav li:hover .submenu{
   padding: 5px 0px;
   display:none;
   margin-top: 37px;
+  z-index: 1;
 }
 .submenu li{
   width: 120px;
