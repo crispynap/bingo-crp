@@ -1,13 +1,5 @@
-
-#member-table{
-  margin: 15px 10px;
-  height: 450px;
-  overflow: scroll;  
-  width: 100%;
-  border: 1px solid black;
-}
-h1{
-  display: inline;
+.section-title{
+  position: relative;
 }
 .search {
   margin-left: 15px;
@@ -26,7 +18,36 @@ h1{
 .search:focus{
   width: 135px;
 }
+.right-buttons{
+  position:absolute; 
+  bottom: 0;
+  right: 0;
+}
+button {
+  background-color: rgb(133, 196, 247);
+  color: rgb(19, 19, 73);
+  font-weight: 650;
+  padding: 5px 9px;
+  font-size: 0.9em;
+  margin: 0px 2px;
+  border: 1px solid rgb(101, 169, 224);
+  box-shadow: 0 2px rgb(50, 102, 145);
+  border-radius: 8px;
+  cursor: pointer;
+}
+button:active{
+  box-shadow: 0 1.0px rgb(41, 94, 138);
+  transform: translateY(1.0px);  
+}
 
+
+#member-table{
+  margin: 15px 10px;
+  height: 450px;
+  overflow: scroll;  
+  width: 100%;
+  border: 1px solid black;
+}
 table{
 }
 table, th, td{

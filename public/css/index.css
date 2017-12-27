@@ -6,12 +6,12 @@ a{
   color: black;
 }
 html{
-  width: 100%;
-  
+  width: 100%;  
 }
 body{
   position: relative;
   width: 100%;
+  font-size: 15px;
 }
 
 nav {
@@ -84,7 +84,6 @@ nav li:hover .submenu{
 .submenu-item span{
   font-size: 16px;  
 }
-
 .highlight{
   color: black;
   font-weight: 500;
@@ -103,6 +102,7 @@ nav li:hover .submenu{
 
 h1{
   font-size: 24px;
+  display: inline;
 }
 
 .footer {
