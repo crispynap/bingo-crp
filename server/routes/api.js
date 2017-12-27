@@ -3,7 +3,7 @@ const router = express.Router();
 const Member = require('../models/member');
 // var fs = require("fs");
 // var testDB = fs.readFileSync("./test.json");
-var testDB = require('./test.json')
+var testDB = require('../test/test.json')
 
 router.get('/members', (req, res) => {
   // Member.find(function (err, members) {

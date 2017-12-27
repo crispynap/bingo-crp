@@ -46,7 +46,7 @@
     const th = _.reduce(tableInfo, (memo, { columnName, width }) => {
       return memo + `<th style="width:${width};">${columnName}</th>`;
     }, '');
-    const head = `<thead><tr>${th}</tr></thead>`;
+    const head = `<tr>${th}</tr>`;
     tHead.innerHTML = head;
   }
 
@@ -60,7 +60,7 @@
 
       const tr = _.reduce(tableInfo, (memo, { dbName }) => {
         const field = row[dbName];
-        return memo + `<td contenteditable="true" class="column_${dbName}"><div>${field}</div></td>`;
+        return memo + `<td contenteditable="true" class="column_${dbName}"><span>${field}</span></td>`;
       }, '');
 
       body += trTemplate(tr);
