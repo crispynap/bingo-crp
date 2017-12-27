@@ -54,14 +54,14 @@ th {
 }
 td{
   max-width: 100px;
-  padding: 0 3px;
+  padding: 0 0 0 3px;
   white-space: nowrap;
   text-overflow:ellipsis; 
   overflow: hidden;
   box-sizing: border-box;
 }
 td>span{
-  padding: 0 5px;
+  padding: 0 10px 0 5px;
 }
 [contenteditable]:focus {
   outline: 3px solid rgb(41, 90, 41);
@@ -71,9 +71,8 @@ td>span{
 }
 [contenteditable]:focus>span {
   position: relative;
-  background-color: rgb(206, 241, 211);
-  padding-right: 15px;
-  z-index: auto;
+  display: inline-block;
+  background-color: rgb(225, 252, 229);
 }
 tr:nth-child(even) {background-color: #eaf9fd;}
 td:hover {background-color: rgb(206, 241, 211);}
