@@ -29,6 +29,10 @@ const eventControl = {
   },
 
   searchTable(e, table, tableContent) {
+    let a = setTimeout(() => { this.excuteTableSearch(e, table, tableContent) }, 600);
+  },
+
+  excuteTableSearch(e, table, tableContent) {
     keyword = e.target.value;
 
     if (keyword === "") {
