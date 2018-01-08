@@ -12,6 +12,10 @@
 
 })();
 
+const data = {
+  selectedFile: ""
+}
+
 const eventControl = {
   preventOuterWheel(e) {
     const deltaX = e.wheelDeltaX;
@@ -27,6 +31,20 @@ const eventControl = {
       common.selectRange(e.target)
     }
   },
+
+  readFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      data.selectedFile = e.target.result;
+      console.log(data.selectedFile);
+    }
+
+    reader.readAsText(file);
+  },
+
 
   searchTable(e, table, tableContent) {
     let a = setTimeout(() => { this.excuteTableSearch(e, table, tableContent) }, 600);

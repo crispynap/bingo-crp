@@ -48,20 +48,11 @@ button:active{
   width: 100%;
   border: 1px solid black;
 }
-table{
-}
 table, th, td{
   border: 1px solid black;
   vertical-align: middle;
   cursor: default;
   font-size: 15px;
-}
-thead{
-  position: sticky;
-  top: 0px; 
-  width: 100%;
-}
-tbody{  
 }
 tr{
   height: 28px;

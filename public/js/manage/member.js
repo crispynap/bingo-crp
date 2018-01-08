@@ -20,6 +20,9 @@
   table.addEventListener('mousewheel', eventControl.preventOuterWheel);
   table.addEventListener('dblclick', eventControl.selectText);
 
+  const csvButton = document.querySelector('.csv-button');
+  csvButton.addEventListener('change', eventControl.readFile);
+
   const search = document.querySelector('.search');
   let tableContent = {};
   search.addEventListener('keyup', function (e) { eventControl.searchTable(e, table, tableContent) })

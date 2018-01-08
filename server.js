@@ -15,16 +15,16 @@ app.set('views', __dirname + '/server/views');
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/test', {
-  useMongoClient: true
-});
+// mongoose.Promise = global.Promise;
+// mongoose.connect('mongodb://localhost/test', {
+//   useMongoClient: true
+// });
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-  console.log("Connected to mongod server");
-});
+// const db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function () {
+//   console.log("Connected to mongod server");
+// });
 
 app.use('/api', api);
 app.use('/manage', manage);
