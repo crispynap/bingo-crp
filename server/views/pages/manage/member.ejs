@@ -16,9 +16,9 @@
       <h1>조합원 관리</h1>
       <input type="text" class="search" placeholder="검색">
       <div class="right-buttons">
-        <div class="csv-upload">
-          <input type="file" value="csv파일 업로드">
-          <button>csv파일 삽입</button>
+        <div class="xls-upload">
+          <input type="file" value="엑셀파일 업로드">
+          <button>엑셀 파일 삽입</button>
         </div>
         <button>저장</button>
       </div>
@@ -38,6 +38,7 @@
   <% include ../../partials/footer %>
   <% include ../../partials/javascript %>
   <script src='/js/manage/member.js'></script>
+  <script src='/js/lib/excel2json.js'></script>
 </body>
 
 </html>

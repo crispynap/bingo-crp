@@ -34,11 +34,11 @@ button {
   border-radius: 8px;
   cursor: pointer;
 }
-.csv-upload{
+.xls-upload{
   display: inline;
   position: relative;
 }
-.csv-upload>input{
+.xls-upload>input{
   opacity: 0;
   position: relative;
   left: 145px;
@@ -48,7 +48,7 @@ button {
   z-index: 1;
   cursor: pointer;
 }
-.csv-upload>button{
+.xls-upload>button{
   position: relative;
   width: 140px;
   height: 30px;
