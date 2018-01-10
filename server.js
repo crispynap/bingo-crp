@@ -31,5 +31,5 @@ app.use('/manage', manage);
 app.use('/', index);
 
 const server = app.listen(3000, function () {
-  console.log("Express server has started on port 3000")
+  console.log("메시지 수정해도 됨. Express server has started on port 3000")
 })
