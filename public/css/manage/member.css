@@ -31,14 +31,27 @@ button {
   font-size: 0.9em;
   margin: 0px 2px;
   border: 1px solid rgb(101, 169, 224);
-  box-shadow: 0 2px rgb(50, 102, 145);
   border-radius: 8px;
   cursor: pointer;
 }
-button:active{
-  box-shadow: 0 1.0px rgb(41, 94, 138);
-  transform: translateY(1.0px);  
+.csv-upload{
+  display: inline;
+  position: relative;
 }
+.csv-upload>input{
+  opacity: 0;
+  position: relative;
+  width: 140px;
+  height: 30px;
+  z-index: 1;
+  cursor: pointer;
+}
+.csv-upload>button{
+  position: relative;
+  top: 0;
+  width: 140px;
+  height: 30px;
+} 
 
 
 #member-table{
