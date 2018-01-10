@@ -41,6 +41,8 @@ button {
 .csv-upload>input{
   opacity: 0;
   position: relative;
+  left: 145px;
+  top: -5px;
   width: 140px;
   height: 30px;
   z-index: 1;
@@ -48,7 +50,6 @@ button {
 }
 .csv-upload>button{
   position: relative;
-  top: 0;
   width: 140px;
   height: 30px;
 } 
