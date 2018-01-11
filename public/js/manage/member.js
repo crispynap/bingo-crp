@@ -68,7 +68,7 @@
       body += trTemplate(tr);
     });
 
-    tBody.innerHTML = tBody.innerHTML += body;
+    tBody.innerHTML += body;
   }
 
   //TODO: 순수함수로 바꿀 것
