@@ -20,7 +20,7 @@
   table.addEventListener('mousewheel', eventControl.preventOuterWheel);
   table.addEventListener('dblclick', eventControl.selectText);
 
-  const xlsButton = document.querySelector('.xls-upload>button');
+  const xlsButton = document.querySelector('.xls-upload>input');
   xlsButton.addEventListener('change', eventControl.readFile);
 
   const search = document.querySelector('.search');

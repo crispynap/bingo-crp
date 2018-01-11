@@ -38,11 +38,14 @@ const eventControl = {
 
     const reader = new FileReader();
     reader.onload = (e) => {
-      data.selectedFile = e.target.result;
+      let buffers = e.target.result;
+      buffers = new Uint8Array(buffers);
+
+      data.selectedFile = XLSX.read(buffers, { type: "array" });
       console.log(data.selectedFile);
     }
 
-    reader.readAsText(file);
+    reader.readAsArrayBuffer(file);
   },
 
 
