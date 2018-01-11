@@ -16,7 +16,7 @@
     { dbName: 'current', columnName: '현황' }
   ]
 
-  const table = document.querySelector('#member-table');
+  const table = document.querySelector('section.sheet');
   table.addEventListener('mousewheel', commonEvent.preventOuterWheel);
 
   const xlsButton = document.querySelector('.xls-upload>input');
@@ -42,7 +42,7 @@
 
 
   function setTHead(tableInfo) {
-    const table = document.querySelector('#member-table');
+    const table = document.querySelector('section.sheet');
     const tHead = table.querySelector('thead');
     const th = _.reduce(tableInfo, (memo, { columnName, width }) => {
       return memo + `<th>${columnName}</th>`;
@@ -52,7 +52,7 @@
   }
 
   function setTBody(tableData) {
-    const table = document.querySelector('#member-table');
+    const table = document.querySelector('section.sheet');
     const tBody = table.querySelector('tbody');
     let body = '';
 

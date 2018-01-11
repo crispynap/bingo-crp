@@ -1,4 +1,4 @@
-.section-title{
+section.title{
   position: relative;
 }
 .search {
@@ -55,7 +55,7 @@ button {
 } 
 
 
-#member-table{
+section.sheet{
   margin: 15px 10px;
   height: 450px;
   overflow: scroll;  
