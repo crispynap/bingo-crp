@@ -97,7 +97,7 @@
     return first + content + end;
   }
 
-  function getXlsx() {
+  function getXlsx(file) {
 
   }
 })();

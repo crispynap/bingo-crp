@@ -54,7 +54,7 @@ const commonEvent = {
   },
 
   excuteTableSearch(e, table, tableContent) {
-    keyword = e.target.value;
+    const keyword = e.target.value;
 
     if (keyword === "") {
       const tableRows = table.querySelectorAll('tr');
