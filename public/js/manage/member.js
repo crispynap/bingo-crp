@@ -17,15 +17,15 @@
   ]
 
   const table = document.querySelector('#member-table');
-  table.addEventListener('mousewheel', eventControl.preventOuterWheel);
-  table.addEventListener('dblclick', eventControl.selectText);
+  table.addEventListener('mousewheel', commonEvent.preventOuterWheel);
+  table.addEventListener('dblclick', commonEvent.selectText);
 
   const xlsButton = document.querySelector('.xls-upload>input');
-  xlsButton.addEventListener('change', eventControl.readFile);
+  xlsButton.addEventListener('change', function (e) { commonEvent.readFile(e, ) });
 
   const search = document.querySelector('.search');
   let tableContent = {};
-  search.addEventListener('keyup', function (e) { eventControl.searchTable(e, table, tableContent) })
+  search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
 
   $.ajax({
     url: "../api/members",

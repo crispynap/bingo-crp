@@ -16,7 +16,7 @@ const data = {
   selectedFile: ""
 }
 
-const eventControl = {
+const commonEvent = {
   preventOuterWheel(e) {
     const deltaX = e.wheelDeltaX;
     const deltaY = e.wheelDeltaY;
