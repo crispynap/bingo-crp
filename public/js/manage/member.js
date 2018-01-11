@@ -21,7 +21,7 @@
   table.addEventListener('dblclick', commonEvent.selectText);
 
   const xlsButton = document.querySelector('.xls-upload>input');
-  xlsButton.addEventListener('change', function (e) { commonEvent.readFile(e, getXlsx) });
+  xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx) });
 
   const search = document.querySelector('.search');
   let tableContent = {};
@@ -61,14 +61,15 @@
       const trTemplate = _.partial(template, '<tr>', _, '</tr>');
 
       const tr = _.reduce(tableInfo, (memo, { dbName }) => {
-        const field = row[dbName];
+        let field = row[dbName];
+        if (field === undefined) field = "";
         return memo + `<td contenteditable="true""><span>${field}</span></td>`;
       }, '');
 
       body += trTemplate(tr);
     });
 
-    tBody.innerHTML = body;
+    tBody.innerHTML = tBody.innerHTML += body;
   }
 
   //TODO: 순수함수로 바꿀 것
@@ -97,7 +98,10 @@
     return first + content + end;
   }
 
-  function getXlsx(file) {
-
+  function getXlsx(rows) {
+    setTBody(rows);
+    rows = addChoseong(rows);
+    rows = addLineNum(rows);
+    console.log(rows)
   }
 })();

@@ -12,10 +12,6 @@
 
 })();
 
-const data = {
-  selectedFile: ""
-}
-
 const commonEvent = {
   preventOuterWheel(e) {
     const deltaX = e.wheelDeltaX;
@@ -32,7 +28,7 @@ const commonEvent = {
     }
   },
 
-  readFile(e) {
+  readXlsx(e, callback) {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -41,8 +37,9 @@ const commonEvent = {
       let buffers = e.target.result;
       buffers = new Uint8Array(buffers);
 
-      data.selectedFile = XLSX.read(buffers, { type: "array" });
-      console.log(data.selectedFile);
+      const workbook = XLSX.read(buffers, { type: "array" });
+      const sheet_name_list = workbook.SheetNames;
+      callback(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]));
     }
 
     reader.readAsArrayBuffer(file);
@@ -76,11 +73,9 @@ const commonEvent = {
       })) {
         const tableRow = tBody.querySelector(`tr:nth-child(${row.lineNum})`);
         tableRow.style.display = "table-row";
-        console.log('yes' + row.lineNum);
       } else {
         const tableRow = tBody.querySelector(`tr:nth-child(${row.lineNum})`);
         tableRow.style.display = "none";
-        console.log('no' + row.lineNum);
       }
     });
   }
