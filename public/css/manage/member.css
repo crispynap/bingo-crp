@@ -85,20 +85,7 @@ td{
   text-overflow:ellipsis; 
   overflow: hidden;
   box-sizing: border-box;
-}
-td>span{
   padding: 0 10px 0 5px;
 }
-[contenteditable]:focus {
-  outline: 3px solid rgb(41, 90, 41);
-  outline-offset: -2px;
-  text-overflow:clip; 
-  overflow:visible;
-}
-[contenteditable]:focus>span {
-  position: relative;
-  display: inline-block;
-  background-color: rgb(225, 252, 229);
-}
 tr:nth-child(even) {background-color: #eaf9fd;}
-td:hover {background-color: rgb(206, 241, 211);}
+tr:hover {background-color: rgb(206, 241, 211);}

@@ -18,7 +18,6 @@
 
   const table = document.querySelector('#member-table');
   table.addEventListener('mousewheel', commonEvent.preventOuterWheel);
-  table.addEventListener('dblclick', commonEvent.selectText);
 
   const xlsButton = document.querySelector('.xls-upload>input');
   xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx) });
@@ -63,7 +62,7 @@
       const tr = _.reduce(tableInfo, (memo, { dbName }) => {
         let field = row[dbName];
         if (field === undefined) field = "";
-        return memo + `<td contenteditable="true""><span>${field}</span></td>`;
+        return memo + `<td>${field}</td>`;
       }, '');
 
       body += trTemplate(tr);
