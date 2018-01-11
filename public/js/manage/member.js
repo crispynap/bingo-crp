@@ -21,7 +21,7 @@
   table.addEventListener('dblclick', commonEvent.selectText);
 
   const xlsButton = document.querySelector('.xls-upload>input');
-  xlsButton.addEventListener('change', function (e) { commonEvent.readFile(e, ) });
+  xlsButton.addEventListener('change', function (e) { commonEvent.readFile(e, getXlsx) });
 
   const search = document.querySelector('.search');
   let tableContent = {};
@@ -95,5 +95,9 @@
 
   function template(first, content, end) {
     return first + content + end;
+  }
+
+  function getXlsx() {
+
   }
 })();
