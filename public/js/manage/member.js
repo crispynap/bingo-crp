@@ -1,20 +1,21 @@
 (() => {
-  const tableInfo = [
-    { dbName: 'SN', columnName: 'SN' },
-    { dbName: 'nick_name', columnName: '별명' },
-    { dbName: 'community', columnName: '공동체' },
-    { dbName: 'group', columnName: '분류' },
-    { dbName: 'join_date', columnName: '가입일' },
-    { dbName: 'real_name', columnName: '실명' },
-    { dbName: 'phone_1', columnName: '전화 1' },
-    { dbName: 'phone_2', columnName: '전화 2' },
-    { dbName: 'email', columnName: 'email' },
-    { dbName: 'birth', columnName: '생일' },
-    { dbName: 'blog', columnName: '웹페이지' },
-    { dbName: 'address', columnName: '주소' },
-    { dbName: 'note', columnName: '비고' },
-    { dbName: 'current', columnName: '현황' }
-  ]
+  const tableInfo = [];
+
+  $.ajax({
+    url: "../api/members/scheme",
+    type: 'get',
+    success: function (json) {
+      _.each(json, row => {
+        let newRow = {};
+        newRow.dbName = row.COLUMN_NAME;
+        newRow.columnName = row.COLUMN_COMMENT;
+        tableInfo.push(newRow);
+      });
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  });
 
   const table = document.querySelector('section.sheet');
   table.addEventListener('mousewheel', commonEvent.preventOuterWheel);
@@ -27,7 +28,7 @@
   search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
 
   $.ajax({
-    url: "../api/members",
+    url: "../api/members/content",
     type: 'get',
     success: function (json) {
       setTHead(tableInfo);
