@@ -5,11 +5,14 @@ const router = express.Router();
 var testDB = require('../test/test.json')
 
 router.get('/members', (req, res) => {
-  // Member.find(function (err, members) {
-  //   if (err) return res.status(500).send({ error: 'database failure' });
-  //   res.json(members);
-  // })
-  res.json(testDB)
+  const query = "SELECT `COLUMN_COMMENT` FROM information_schema.COLUMNS WHERE `TABLE_NAME` = '조합원';";
+  const mysql_dbc = require('../config/db/db_con')();
+  const connection = mysql_dbc.init();
+  connection.query(query, function (err, result) {
+    res.json(result);
+  });
+
+  // res.json(testDB)
 });
 
 router.post('/members', (req, res) => {

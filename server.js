@@ -19,16 +19,10 @@ app.use('/api', api);
 app.use('/manage', manage);
 app.use('/', index);
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: 'Bingo0221!',
-  database: 'crp'
-});
-connection.connect();
-
 const server = app.listen(3000, function () {
-  console.log("Express server has started on port 3000  hahaha")
+  console.log("Express server has started on port 3000")
 })
 
+const mysql_dbc = require('./server/config/db/db_con')();
+const connection = mysql_dbc.init();
+mysql_dbc.test_open(connection);
