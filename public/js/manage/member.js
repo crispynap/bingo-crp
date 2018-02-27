@@ -1,20 +1,9 @@
 (() => {
-  const tableInfo = [];
-
   $.ajax({
     url: "../api/members/scheme",
     type: 'get',
-    success: function (json) {
-      _.each(json, row => {
-        let newRow = {};
-        newRow.dbName = row.COLUMN_NAME;
-        newRow.columnName = row.COLUMN_COMMENT;
-        tableInfo.push(newRow);
-      });
-    },
-    error: function (error) {
-      console.log(error);
-    }
+    success: getScheme,
+    error: console.log
   });
 
   const table = document.querySelector('section.sheet');
@@ -27,20 +16,30 @@
   let tableContent = {};
   search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
 
-  $.ajax({
-    url: "../api/members/content",
-    type: 'get',
-    success: function (json) {
-      setTHead(tableInfo);
-      setTBody(json);
-      tableContent = addChoseong(json); //주의! json 오염됨
-      tableContent = addLineNum(tableContent);
-    },
-    error: function (error) {
-      console.log(error);
-    }
-  });
+  function getScheme(json) {
+    const tableInfo = [];
 
+    _.each(json, row => {
+      let newRow = {};
+      newRow.dbName = row.COLUMN_NAME;
+      newRow.columnName = row.COLUMN_COMMENT;
+      tableInfo.push(newRow);
+    });
+
+    $.ajax({
+      url: "../api/members/content",
+      type: 'get',
+      success: (json) => setData(tableInfo, json),
+      error: console.log
+    });
+  }
+
+  function setData(tableInfo, json) {
+    setTHead(tableInfo);
+    setTBody(tableInfo, json);
+    tableContent = addChoseong(json); //주의! json 오염됨
+    tableContent = addLineNum(tableContent);
+  }
 
   function setTHead(tableInfo) {
     const table = document.querySelector('section.sheet');
@@ -52,7 +51,7 @@
     tHead.innerHTML = head;
   }
 
-  function setTBody(tableData) {
+  function setTBody(tableInfo, tableData) {
     const table = document.querySelector('section.sheet');
     const tBody = table.querySelector('tbody');
     let body = '';
