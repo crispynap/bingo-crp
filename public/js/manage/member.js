@@ -1,36 +1,36 @@
 (() => {
-  tableInfo = [
+  tablesInfo = [
     [
-      { dbName: member_code, colName: "코드" },
-      { dbName: name, colName: "이름" },
-      { dbName: rname, colName: "실명" },
-      { dbName: none, colName: "주 공동체" },
-      { dbName: category, colName: "분류" },
-      { dbName: note, colName: "비고" },
-      { dbName: current, colName: "현황" },
-      { dbName: join_date, colName: "가입일" },
-      { dbName: celeb_date, colName: "기념일" },
-      { dbName: tel1, colName: "전화" },
-      { dbName: addr, colName: "주소" },
+      { dbName: "member_code", colName: "코드" },
+      { dbName: "name", colName: "이름" },
+      { dbName: "rname", colName: "실명" },
+      { dbName: "none", colName: "주 공동체" },
+      { dbName: "category", colName: "분류" },
+      { dbName: "note", colName: "비고" },
+      { dbName: "current", colName: "현황" },
+      { dbName: "join_date", colName: "가입일" },
+      { dbName: "celeb_date", colName: "기념일" },
+      { dbName: "tel1", colName: "전화" },
+      { dbName: "addr", colName: "주소" },
     ],
     [
-      { dbName: member_code, colName: "코드" },
-      { dbName: name, colName: "이름" },
+      { dbName: "member_code", colName: "코드" },
+      { dbName: "name", colName: "이름" },
     ],
     [
-      { dbName: member_code, colName: "코드" },
-      { dbName: name, colName: "이름" },
+      { dbName: "member_code", colName: "코드" },
+      { dbName: "name", colName: "이름" },
     ],
     [
-      { dbName: member_code, colName: "코드" },
-      { dbName: name, colName: "이름" },
+      { dbName: "member_code", colName: "코드" },
+      { dbName: "name", colName: "이름" },
     ],
   ]
 
   $.ajax({
     url: "../api/members/content",
     type: 'get',
-    success: (json) => setTable(tableInfo, json),
+    success: (json) => setTables(tablesInfo, json),
     error: console.log
   });
 
@@ -41,30 +41,36 @@
   let tableContent = {};
   search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
 
-  function setTable(tableInfo, json) {
-    _.each(tableInfo, (table) => {
+  function setTables(tablesInfo, json) {
+    let tableNum = 1;
 
-    })
+    _.each(tablesInfo, (tableInfo) => {
+      setTable(tableInfo, json, tableNum);
+      tableNum++;
+    });
   }
 
-  function setData(tableInfo, json) {
-    setTHead(tableInfo);
-    setTBody(tableInfo, json);
-    tableContent = addChoseong(json); //주의! json 오염됨
-    tableContent = addLineNum(tableContent);
+  function setTable(tableInfo, json, tableNum) {
+    const sheet = document.querySelector('section.sheet');
+    let table = document.createElement('table');
+    table.classList.add("table" + tableNum);
+    table = sheet.appendChild(table);
+
+    setTHead(table, tableInfo);
+    setTBody(table, tableInfo, json);
+    // tableContent = addChoseong(json); //주의! json 오염됨
+    // tableContent = addLineNum(tableContent);
   }
 
-  function setTHead(tableInfo) {
-    const table = document.querySelector('section.sheet table');
-    const th = _.reduce(tableInfo, (memo, { columnName, width }) => {
-      return memo + `<th>${columnName}</th>`;
+  function setTHead(table, tableInfo) {
+    const th = _.reduce(tableInfo, (memo, { colName, width }) => {
+      return memo + `<th>${colName}</th>`;
     }, '');
     const head = `<thead><tr>${th}</tr></thead>`;
     table.innerHTML += head;
   }
 
-  function setTBody(tableInfo, tableData) {
-    const table = document.querySelector('section.sheet table');
+  function setTBody(table, tableInfo, tableData) {
     let body = '';
 
     _.each(tableData, (row) => {
