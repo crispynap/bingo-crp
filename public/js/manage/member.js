@@ -39,18 +39,16 @@
   }
 
   function setTHead(tableInfo) {
-    const table = document.querySelector('section.sheet');
-    const tHead = table.querySelector('thead');
+    const table = document.querySelector('section.sheet table');
     const th = _.reduce(tableInfo, (memo, { columnName, width }) => {
       return memo + `<th>${columnName}</th>`;
     }, '');
-    const head = `<tr>${th}</tr>`;
-    tHead.innerHTML = head;
+    const head = `<thead><tr>${th}</tr></thead>`;
+    table.innerHTML += head;
   }
 
   function setTBody(tableInfo, tableData) {
-    const table = document.querySelector('section.sheet');
-    const tBody = table.querySelector('tbody');
+    const table = document.querySelector('section.sheet table');
     let body = '';
 
     _.each(tableData, (row) => {
@@ -65,7 +63,7 @@
       body += trTemplate(tr);
     });
 
-    tBody.innerHTML += body;
+    table.innerHTML += "<tbody>" + body + "</tbody>";
   }
 
   //TODO: 순수함수로 바꿀 것
