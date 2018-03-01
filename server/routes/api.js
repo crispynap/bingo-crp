@@ -1,16 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const Member = require('../models/member');
 // var fs = require("fs");
 // var testDB = fs.readFileSync("./test.json");
 var testDB = require('../test/test.json')
 
-router.get('/members', (req, res) => {
-  // Member.find(function (err, members) {
-  //   if (err) return res.status(500).send({ error: 'database failure' });
-  //   res.json(members);
-  // })
-  res.json(testDB)
+router.get('/members/scheme', (req, res) => {
+  const query = "SELECT `COLUMN_NAME`, `COLUMN_COMMENT` FROM information_schema.COLUMNS WHERE `TABLE_NAME` = '조합원';";
+  const mysql_dbc = require('../config/db/db_con')();
+  const connection = mysql_dbc.init();
+  connection.query(query, function (err, result) {
+    res.json(result);
+  });
+});
+
+router.get('/members/content', (req, res) => {
+  const query = "SELECT * FROM `조합원`;";
+  const mysql_dbc = require('../config/db/db_con')();
+  const connection = mysql_dbc.init();
+  connection.query(query, function (err, result) {
+    res.json(result);
+  });
 });
 
 router.post('/members', (req, res) => {
