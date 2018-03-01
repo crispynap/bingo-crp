@@ -12,11 +12,7 @@
 
 })();
 
-const data = {
-  selectedFile: ""
-}
-
-const eventControl = {
+const commonEvent = {
   preventOuterWheel(e) {
     const deltaX = e.wheelDeltaX;
     const deltaY = e.wheelDeltaY;
@@ -25,24 +21,21 @@ const eventControl = {
     e.preventDefault();
   },
 
-  selectText(e) {
-    {
-      e.preventDefault();
-      common.selectRange(e.target)
-    }
-  },
-
-  readFile(e) {
+  readXlsx(e, callback) {
     const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = (e) => {
-      data.selectedFile = e.target.result;
-      console.log(data.selectedFile);
+      let buffers = e.target.result;
+      buffers = new Uint8Array(buffers);
+
+      const workbook = XLSX.read(buffers, { type: "array" });
+      const sheet_name_list = workbook.SheetNames;
+      callback(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]));
     }
 
-    reader.readAsText(file);
+    reader.readAsArrayBuffer(file);
   },
 
 
@@ -51,7 +44,7 @@ const eventControl = {
   },
 
   excuteTableSearch(e, table, tableContent) {
-    keyword = e.target.value;
+    const keyword = e.target.value;
 
     if (keyword === "") {
       const tableRows = table.querySelectorAll('tr');
@@ -73,11 +66,9 @@ const eventControl = {
       })) {
         const tableRow = tBody.querySelector(`tr:nth-child(${row.lineNum})`);
         tableRow.style.display = "table-row";
-        console.log('yes' + row.lineNum);
       } else {
         const tableRow = tBody.querySelector(`tr:nth-child(${row.lineNum})`);
         tableRow.style.display = "none";
-        console.log('no' + row.lineNum);
       }
     });
   }

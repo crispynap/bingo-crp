@@ -12,31 +12,41 @@
 <body>
   <% include ../../partials/header %>
   <section class="container">
-    <section class="section-title">
+    <section class="title">
       <h1>조합원 관리</h1>
-      <input type="text" class="search" placeholder="검색">
       <div class="right-buttons">
-        <div class="csv-upload">
-          <input type="file" value="csv파일 업로드">
-          <button>csv파일 삽입</button>
+        <button>서식 받기</button>
+        <div class="xls-upload">
+          <input type="file" value="엑셀파일 업로드">
+          <button>서식 삽입</button>
         </div>
         <button>저장</button>
       </div>
     </section>
-    <section id="member-table">
-      <table>
-        <thead>
-        </thead>
-        <tbody>
-        </tbody>
-        <tfoot>
-        </tfoot>
-      </table>
+    <form class="i-form">
+      <fieldset class="i-slot">
+        <div class="label">날짜</div>
+        <input class="calendar" type="text" value="20180111">        
+        <div class="quick-date">
+        </div>
+      </fieldset>
+    </form>
+    <input type="text" class="search" placeholder="검색">
+    <section class="sheets">
+      <div class="tabs">
+        <li class="active-tab" rel="tab1">기본 정보</li>
+        <li rel="tab2">출자 정보</li>
+        <li rel="tab3">이용 정보</li>
+        <li rel="tab4">활동 정보</li>
+      </div>
+      <section class="sheet">
+      </section>
     </section>
   </section>
 
   <% include ../../partials/footer %>
   <% include ../../partials/javascript %>
+  <script src='/js/lib/xlsx.min.js'></script>
   <script src='/js/manage/member.js'></script>
 </body>
 

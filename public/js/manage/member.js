@@ -1,74 +1,91 @@
 (() => {
-  const tableInfo = [
-    { dbName: 'SN', columnName: 'SN' },
-    { dbName: 'nick_name', columnName: '별명' },
-    { dbName: 'community', columnName: '공동체' },
-    { dbName: 'group', columnName: '분류' },
-    { dbName: 'join_date', columnName: '가입일' },
-    { dbName: 'real_name', columnName: '실명' },
-    { dbName: 'phone_1', columnName: '전화 1' },
-    { dbName: 'phone_2', columnName: '전화 2' },
-    { dbName: 'email', columnName: 'email' },
-    { dbName: 'birth', columnName: '생일' },
-    { dbName: 'blog', columnName: '웹페이지' },
-    { dbName: 'address', columnName: '주소' },
-    { dbName: 'note', columnName: '비고' },
-    { dbName: 'current', columnName: '현황' }
+  tablesInfo = [
+    [
+      { dbName: "member_code", colName: "코드" },
+      { dbName: "name", colName: "이름" },
+      { dbName: "rname", colName: "실명" },
+      { dbName: "none", colName: "주 공동체" },
+      { dbName: "category", colName: "분류" },
+      { dbName: "note", colName: "비고" },
+      { dbName: "current", colName: "현황" },
+      { dbName: "join_date", colName: "가입일" },
+      { dbName: "celeb_date", colName: "기념일" },
+      { dbName: "tel1", colName: "전화" },
+      { dbName: "addr", colName: "주소" },
+    ],
+    [
+      { dbName: "member_code", colName: "코드" },
+      { dbName: "name", colName: "이름" },
+    ],
+    [
+      { dbName: "member_code", colName: "코드" },
+      { dbName: "name", colName: "이름" },
+    ],
+    [
+      { dbName: "member_code", colName: "코드" },
+      { dbName: "name", colName: "이름" },
+    ],
   ]
 
-  const table = document.querySelector('#member-table');
-  table.addEventListener('mousewheel', eventControl.preventOuterWheel);
-  table.addEventListener('dblclick', eventControl.selectText);
+  $.ajax({
+    url: "../api/members/content",
+    type: 'get',
+    success: (json) => setTables(tablesInfo, json),
+    error: console.log
+  });
 
-  const csvButton = document.querySelector('.csv-button');
-  csvButton.addEventListener('change', eventControl.readFile);
+  const xlsButton = document.querySelector('.xls-upload>input');
+  xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx) });
 
   const search = document.querySelector('.search');
   let tableContent = {};
-  search.addEventListener('keyup', function (e) { eventControl.searchTable(e, table, tableContent) })
+  search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
 
-  $.ajax({
-    url: "../api/members",
-    type: 'get',
-    success: function (json) {
-      setTHead(tableInfo);
-      setTBody(json);
-      tableContent = addChoseong(json); //주의! json 오염됨
-      tableContent = addLineNum(tableContent);
-    },
-    error: function (error) {
-      console.log(error);
-    }
-  });
+  function setTables(tablesInfo, json) {
+    let tableNum = 1;
 
-
-  function setTHead(tableInfo) {
-    const table = document.querySelector('#member-table');
-    const tHead = table.querySelector('thead');
-    const th = _.reduce(tableInfo, (memo, { columnName, width }) => {
-      return memo + `<th>${columnName}</th>`;
-    }, '');
-    const head = `<tr>${th}</tr>`;
-    tHead.innerHTML = head;
+    _.each(tablesInfo, tableInfo => {
+      setTable(tableInfo, json, tableNum);
+      tableNum++;
+    });
   }
 
-  function setTBody(tableData) {
-    const table = document.querySelector('#member-table');
-    const tBody = table.querySelector('tbody');
+  function setTable(tableInfo, json, tableNum) {
+    const sheet = document.querySelector('section.sheet');
+    let table = document.createElement('table');
+    table.classList.add("table" + tableNum);
+    table = sheet.appendChild(table);
+
+    setTHead(table, tableInfo);
+    setTBody(table, tableInfo, json);
+    // tableContent = addChoseong(json); //주의! json 오염됨
+    // tableContent = addLineNum(tableContent);
+  }
+
+  function setTHead(table, tableInfo) {
+    const th = _.reduce(tableInfo, (memo, { colName, width }) => {
+      return memo + `<th>${colName}</th>`;
+    }, '');
+    const head = `<thead><tr>${th}</tr></thead>`;
+    table.innerHTML += head;
+  }
+
+  function setTBody(table, tableInfo, tableData) {
     let body = '';
 
-    _.each(tableData, (row) => {
+    _.each(tableData, row => {
       const trTemplate = _.partial(template, '<tr>', _, '</tr>');
 
       const tr = _.reduce(tableInfo, (memo, { dbName }) => {
-        const field = row[dbName];
-        return memo + `<td contenteditable="true""><span>${field}</span></td>`;
+        let field = row[dbName];
+        if (field === undefined) field = "";
+        return memo + `<td>${field}</td>`;
       }, '');
 
       body += trTemplate(tr);
     });
 
-    tBody.innerHTML = body;
+    table.innerHTML += "<tbody>" + body + "</tbody>";
   }
 
   //TODO: 순수함수로 바꿀 것
@@ -95,5 +112,12 @@
 
   function template(first, content, end) {
     return first + content + end;
+  }
+
+  function getXlsx(rows) {
+    setTBody(rows);
+    rows = addChoseong(rows);
+    rows = addLineNum(rows);
+    console.log(rows)
   }
 })();
