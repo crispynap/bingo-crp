@@ -37,20 +37,21 @@ button {
 .xls-upload{
   display: inline;
   position: relative;
+  margin-left: -80px;
 }
 .xls-upload>input{
   opacity: 0;
   position: relative;
-  left: 145px;
+  left: 85px;
   top: -5px;
-  width: 140px;
+  width: 80px;
   height: 30px;
   z-index: 1;
   cursor: pointer;
 }
 .xls-upload>button{
   position: relative;
-  width: 140px;
+  width: 80px;
   height: 30px;
 } 
 
