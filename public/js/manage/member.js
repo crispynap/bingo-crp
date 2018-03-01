@@ -44,7 +44,7 @@
   function setTables(tablesInfo, json) {
     let tableNum = 1;
 
-    _.each(tablesInfo, (tableInfo) => {
+    _.each(tablesInfo, tableInfo => {
       setTable(tableInfo, json, tableNum);
       tableNum++;
     });
@@ -73,7 +73,7 @@
   function setTBody(table, tableInfo, tableData) {
     let body = '';
 
-    _.each(tableData, (row) => {
+    _.each(tableData, row => {
       const trTemplate = _.partial(template, '<tr>', _, '</tr>');
 
       const tr = _.reduce(tableInfo, (memo, { dbName }) => {
