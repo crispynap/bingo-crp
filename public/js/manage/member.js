@@ -1,5 +1,5 @@
 (() => {
-  tablesInfo = [
+  const tablesInfo = [
     [
       { dbName: "member_code", colName: "코드" },
       { dbName: "name", colName: "이름" },
@@ -27,6 +27,9 @@
     ],
   ]
 
+  let tableContent = {};
+
+
   $.ajax({
     url: "../api/members/content",
     type: 'get',
@@ -37,9 +40,12 @@
   const xlsButton = document.querySelector('.xls-upload>input');
   xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx) });
 
-  const search = document.querySelector('.search');
-  let tableContent = {};
-  search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
+  // const search = document.querySelector('.search');
+  // search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
+
+  const tabs = document.querySelector('.tabs');
+  tabs.addEventListener('click', e => { selectTab(e) })
+
 
   function setTables(tablesInfo, json) {
     let tableNum = 1;
@@ -53,7 +59,7 @@
   function setTable(tableInfo, json, tableNum) {
     const sheet = document.querySelector('section.sheet');
     let table = document.createElement('table');
-    table.classList.add("table" + tableNum);
+    table.id = ("table" + tableNum);
     table = sheet.appendChild(table);
 
     setTHead(table, tableInfo);
@@ -119,5 +125,19 @@
     rows = addChoseong(rows);
     rows = addLineNum(rows);
     console.log(rows)
+  }
+
+  function selectTab(e) {
+    const selectedTab = e.target;
+    const tabs = document.querySelectorAll('.tabs li');
+    _.each(tabs, tab => tab.classList.remove("active"))
+    selectedTab.classList.add("active");
+
+    let selectedTable = selectedTab.attributes.rel.value;
+    selectedTable = document.querySelector("table#" + selectedTable);
+
+    const tables = document.querySelectorAll('.sheets table');
+    _.each(tables, table => table.classList.remove("active"))
+    selectedTable.classList.add("active");
   }
 })();

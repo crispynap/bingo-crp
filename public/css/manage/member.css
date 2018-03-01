@@ -107,8 +107,6 @@ input.search:focus{
   float: left; 
   list-style: none; 
   height: 32px; 
-  border-bottom: 1px solid #eee; 
-  border-left: 1px solid #eee; 
   width: 100%; 
 }
 .tabs li { 
@@ -126,9 +124,9 @@ input.search:focus{
   overflow: hidden; 
   position: relative; 
 } 
-.tabs li.active-tab{ 
+.tabs li.active{ 
   background: #FFFFFF; 
-  border-bottom: 1px solid #FFFFFF; 
+  border-bottom: 2px solid #FFFFFF; 
   color: darkred;
   font-weight: bolder;
 } 
@@ -139,12 +137,18 @@ section.sheets{
   width: 100%;
   border: 1px solid black;
 }
-section.sheet{
-  height: 450px;
-  overflow: scroll;  
-  width: 100%;
+.sheets table{
+  display: none;
 }
-table, th, td{
+.sheets table.active{
+  display: block;
+}
+table{
+  vertical-align: middle;
+  cursor: default;
+}
+
+th, td{
   border: 1px solid black;
   vertical-align: middle;
   cursor: default;
