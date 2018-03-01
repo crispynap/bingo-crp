@@ -1,8 +1,36 @@
 (() => {
+  tableInfo = [
+    [
+      { dbName: member_code, colName: "코드" },
+      { dbName: name, colName: "이름" },
+      { dbName: rname, colName: "실명" },
+      { dbName: none, colName: "주 공동체" },
+      { dbName: category, colName: "분류" },
+      { dbName: note, colName: "비고" },
+      { dbName: current, colName: "현황" },
+      { dbName: join_date, colName: "가입일" },
+      { dbName: celeb_date, colName: "기념일" },
+      { dbName: tel1, colName: "전화" },
+      { dbName: addr, colName: "주소" },
+    ],
+    [
+      { dbName: member_code, colName: "코드" },
+      { dbName: name, colName: "이름" },
+    ],
+    [
+      { dbName: member_code, colName: "코드" },
+      { dbName: name, colName: "이름" },
+    ],
+    [
+      { dbName: member_code, colName: "코드" },
+      { dbName: name, colName: "이름" },
+    ],
+  ]
+
   $.ajax({
-    url: "../api/members/scheme",
+    url: "../api/members/content",
     type: 'get',
-    success: getScheme,
+    success: (json) => setTable(tableInfo, json),
     error: console.log
   });
 
@@ -13,22 +41,10 @@
   let tableContent = {};
   search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
 
-  function getScheme(json) {
-    const tableInfo = [];
+  function setTable(tableInfo, json) {
+    _.each(tableInfo, (table) => {
 
-    _.each(json, row => {
-      let newRow = {};
-      newRow.dbName = row.COLUMN_NAME;
-      newRow.columnName = row.COLUMN_COMMENT;
-      tableInfo.push(newRow);
-    });
-
-    $.ajax({
-      url: "../api/members/content",
-      type: 'get',
-      success: (json) => setData(tableInfo, json),
-      error: console.log
-    });
+    })
   }
 
   function setData(tableInfo, json) {
