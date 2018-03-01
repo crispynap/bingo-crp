@@ -6,9 +6,6 @@
     error: console.log
   });
 
-  const table = document.querySelector('section.sheet');
-  table.addEventListener('mousewheel', commonEvent.preventOuterWheel);
-
   const xlsButton = document.querySelector('.xls-upload>input');
   xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx) });
 
