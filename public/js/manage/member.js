@@ -139,8 +139,8 @@
     const duplNames = getDuplicates(sheet, "이름");
     if (duplNames) return { err: true, message: messages.duplicatedNames(duplNames) }
 
-    // const duplCodes = getDuplicatedNames(sheet);
-    // if (duplNames) return { err: true, message: messages.duplicatedNames(duplNames) }
+    const duplCodes = getDuplicates(sheet, "조합원 코드");
+    if (duplCodes) return { err: true, message: messages.duplicatedCodes(duplCodes) }
 
     //조합원코드 중복 체크
 
