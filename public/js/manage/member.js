@@ -134,15 +134,20 @@
 
   function sheetValidCheck(sheet) {
 
-    if (!formValid(sheet))
-      return { err: true, message: messages.incorrectSheet };
+    if (!formValid(sheet)) return { err: true, message: messages.incorrectSheet };
 
-    if (!_.contains(
-      _.map(sheet, _.val("표시"))
-      , "끝")) {
-      return { err: true, message: messages.noSheetsEnd };
-    }
+    if (!containsEnd(sheet)) return { err: true, message: messages.noSheetsEnd };
 
+    const duplNames = getDuplicatedNames(sheet);
+    if (duplNames) return { err: true, message: messages.duplicatedNames(duplNames) }
+
+    return { err: false };
+  }
+
+  function formValid(sheet) { return (_.isArray(sheet)); }
+  function containsEnd(sheet) { return _.contains(_.map(sheet, _.val("표시")), "끝") }
+
+  function getDuplicatedNames(sheet) {
     const memo = {};
     _.each(_.map(sheet, _.val("이름")), col => {
       if (!_.isNumber(memo[col])) {
@@ -151,16 +156,8 @@
         memo[col]++;
       }
     });
-    const duplNames = _.keys(_.pick(memo, (value) => { return value > 0; }));
-    if (duplNames) return { err: true, message: messages.duplicatedNames(duplNames) }
-
-    return { err: false };
+    return _.keys(_.pick(memo, (value) => { return value > 0; }));
   }
-
-  function formValid(sheet) {
-    return (_.isArray(sheet));
-  }
-
 
   function selectTab(e) {
     const selectedTab = e.target;
