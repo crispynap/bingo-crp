@@ -117,3 +117,11 @@ const common = {
     sheet.insertRule(style, 1);
   }
 }
+
+const messages = {
+  incorrectSheet: "서식이 맞지 않습니다.",
+  noSheetsEnd: "'끝'행이 없습니다.",
+  duplicatedNames(names) {
+    return `이름이 중복되었습니다: ${names}`
+  }
+}

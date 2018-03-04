@@ -120,12 +120,47 @@
     return first + content + end;
   }
 
-  function getXlsx(rows) {
-    setTBody(rows);
-    rows = addChoseong(rows);
-    rows = addLineNum(rows);
-    console.log(rows)
+  function getXlsx(sheet) {
+    console.dir(sheet)
+
+    const valid = sheetValidCheck(sheet);
+
+    if (!valid.err) {
+      console.log('no error')
+    } else {
+      console.log(valid.message)
+    }
   }
+
+  function sheetValidCheck(sheet) {
+
+    if (!formValid(sheet))
+      return { err: true, message: messages.incorrectSheet };
+
+    if (!_.contains(
+      _.map(sheet, _.val("표시"))
+      , "끝")) {
+      return { err: true, message: messages.noSheetsEnd };
+    }
+
+    const memo = {};
+    _.each(_.map(sheet, _.val("이름")), col => {
+      if (!_.isNumber(memo[col])) {
+        memo[col] = 0;
+      } else {
+        memo[col]++;
+      }
+    });
+    const duplNames = _.keys(_.pick(memo, (value) => { return value > 0; }));
+    if (duplNames) return { err: true, message: messages.duplicatedNames(duplNames) }
+
+    return { err: false };
+  }
+
+  function formValid(sheet) {
+    return (_.isArray(sheet));
+  }
+
 
   function selectTab(e) {
     const selectedTab = e.target;
