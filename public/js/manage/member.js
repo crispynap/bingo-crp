@@ -136,17 +136,24 @@
 
     if (!formValid(sheet)) return { err: true, message: messages.incorrectSheet };
 
-    const duplNames = getDuplicatedNames(sheet);
+    const duplNames = getDuplicates(sheet, "이름");
     if (duplNames) return { err: true, message: messages.duplicatedNames(duplNames) }
+
+    // const duplCodes = getDuplicatedNames(sheet);
+    // if (duplNames) return { err: true, message: messages.duplicatedNames(duplNames) }
+
+    //조합원코드 중복 체크
+
 
     return { err: false };
   }
 
   function formValid(sheet) { return (_.isArray(sheet)); }
+  // function containsEnd(sheet) { return _.contains(_.map(sheet, _.val("표시")), "끝") }
 
-  function getDuplicatedNames(sheet) {
+  function getDuplicates(sheet, name) {
     const memo = {};
-    _.each(_.map(sheet, _.val("이름")), col => {
+    _.each(_.map(sheet, _.val(name)), col => {
       if (!_.isNumber(memo[col])) {
         memo[col] = 0;
       } else {
