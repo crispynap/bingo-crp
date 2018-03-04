@@ -136,8 +136,6 @@
 
     if (!formValid(sheet)) return { err: true, message: messages.incorrectSheet };
 
-    if (!containsEnd(sheet)) return { err: true, message: messages.noSheetsEnd };
-
     const duplNames = getDuplicatedNames(sheet);
     if (duplNames) return { err: true, message: messages.duplicatedNames(duplNames) }
 
@@ -145,7 +143,6 @@
   }
 
   function formValid(sheet) { return (_.isArray(sheet)); }
-  function containsEnd(sheet) { return _.contains(_.map(sheet, _.val("표시")), "끝") }
 
   function getDuplicatedNames(sheet) {
     const memo = {};
