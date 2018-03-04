@@ -124,6 +124,6 @@ const messages = {
     return `이름이 중복되었습니다: ${names}`
   },
   duplicatedCodes(codes) {
-    return `코드가 중복되었습니다: ${codes}`
+    return `조합원 코드가 중복되었습니다: ${codes}`
   }
 }
