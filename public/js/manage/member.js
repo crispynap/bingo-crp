@@ -31,7 +31,7 @@
 
 
   $.ajax({
-    url: "../api/members/content",
+    url: "../api/members",
     type: 'get',
     success: (json) => setTables(tablesInfo, json),
     error: console.log
@@ -54,6 +54,7 @@
       setTable(tableInfo, json, tableNum);
       tableNum++;
     });
+    tableContent = json;
   }
 
   function setTable(tableInfo, json, tableNum) {
@@ -136,13 +137,20 @@
 
     if (!formValid(sheet)) return { err: true, message: messages.incorrectSheet };
 
-    const duplNames = getDuplicates(sheet, "이름");
+    const duplNames = getFieldDuplicates(getFieldCounts(sheet, "이름"));
     if (!_.isEmpty(duplNames)) return { err: true, message: messages.duplicatedNames(duplNames) }
 
-    const duplCodes = getDuplicates(sheet, "조합원 코드");
+    const duplCodes = getFieldDuplicates(getFieldCounts(sheet, "조합원 코드"));
     if (!_.isEmpty(duplCodes)) return { err: true, message: messages.duplicatedCodes(duplCodes) }
 
-    //조합원코드 중복 체크
+    //'a' / 'A' 에 이름이 있는지
+    //'a' / 'A' 와 현재 테이블 내용을 합친 것 중에서 이름이 중복된 게 있는지
+    //'a' / 'A' 와 현재 테이블 내용을 합친 것 중에서 조합원 코드가 중복된 게 있는지
+
+    //'s' / 'S' 에 코드 혹은 이름이 있는지
+    //'s' / 'S' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
+    //'d' / 'D' 에 코드 혹은 이름이 있는지
+    //'s' / 'S' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
 
 
     return { err: false };
@@ -151,16 +159,19 @@
   function formValid(sheet) { return (_.isArray(sheet)); }
   // function containsEnd(sheet) { return _.contains(_.map(sheet, _.val("표시")), "끝") }
 
-  function getDuplicates(sheet, name) {
-    const memo = {};
+  function getFieldDuplicates(counts) {
+    return _.keys(_.pick(counts, (value) => { return value > 0; }));
+  }
+
+  function getFieldCounts(sheet, name, counts = {}) {
     _.each(_.map(sheet, _.val(name)), col => {
-      if (!_.isNumber(memo[col])) {
-        memo[col] = 0;
+      if (!_.isNumber(counts[col])) {
+        counts[col] = 0;
       } else {
-        memo[col]++;
+        counts[col]++;
       }
     });
-    return _.keys(_.pick(memo, (value) => { return value > 0; }));
+    return counts;
   }
 
   function selectTab(e) {
