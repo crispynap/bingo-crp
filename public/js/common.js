@@ -120,8 +120,7 @@ const common = {
 
 const messages = {
   incorrectSheet: "서식이 맞지 않습니다.",
-  emptyAtagRow: "A 표시 줄 중 코드와 이름이 둘 다 빈 줄이 있습니다.",
-  emptyStagRow: "S 표시 줄 중 코드와 이름이 둘 다 빈 줄이 있습니다.",
+  emptyCodeRow: "코드와 이름 둘 다 누락된 줄이 있습니다.",
   duplicatedNames(names) {
     return `이름이 중복되었습니다: ${names}`
   },

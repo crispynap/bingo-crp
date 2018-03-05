@@ -137,12 +137,11 @@
 
     if (!formValid(sheet)) return { err: true, message: messages.incorrectSheet };
 
-    const aTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "a" || 표시 === "A" });
-    const sTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "s" || 표시 === "S" });
+    //코드와 이름 둘 다 누락된 줄이 있는지
+    if (_.find(sheet, (row) => { return (_.isEmpty(row['이름']) && _.isEmpty(row['조합원 코드'])) }))
+      return { err: true, message: messages.emptyCodeRow };
 
-    //'a' / 'A' 에 코드와 이름 둘 다 빈 줄이 있는지
-    if (_.find(aTagRows, (row) => { return (_.isEmpty(row['이름']) && _.isEmpty(row['조합원 코드'])) }))
-      return { err: true, message: messages.emptyAtagRow };
+    const aTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "a" || 표시 === "A" });
 
     //'a' / 'A'에 이름 중복 행이 있는지
     const sheetNamesCount = getFieldCounts(aTagRows, "이름");
@@ -164,11 +163,9 @@
     duplTableCode = _.findKey(sheetCodesCount, (count, code) => { return _.has(tableCodesCount, code) })
     if (duplTableCode) return { err: true, message: messages.duplicatedCodes(duplTableCode) }
 
-
-    //'s' / 'S' 에 코드 혹은 이름이 있는지
     //'s' / 'S' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
-    //'d' / 'D' 에 코드 혹은 이름이 있는지
-    //'s' / 'S' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
+    //'d' / 'D' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
+    const sTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "s" || 표시 === "S" });
 
 
     return { err: false };
