@@ -142,7 +142,6 @@
       return { err: true, message: messages.emptyCodeRow };
 
     const aTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "a" || 표시 === "A" });
-
     //'a' / 'A'에 이름 중복 행이 있는지
     const sheetNamesCount = getFieldCounts(aTagRows, "이름");
     const duplSheetNames = getDuplicatesField(sheetNamesCount);
@@ -165,8 +164,7 @@
 
     //'s' / 'S' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
     //'d' / 'D' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
-    const sTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "s" || 표시 === "S" });
-
+    // const SDTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "s" || 표시 === "S" || 표시 === "d" || 표시 === "D" });
 
     return { err: false };
   }
