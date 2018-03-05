@@ -126,10 +126,9 @@
 
     const valid = sheetValidCheck(sheet, tableContent);
 
-    if (!valid.err) {
-      console.log('no error')
-    } else {
+    if (valid.err) {
       console.log(valid.message)
+      return;
     }
   }
 
@@ -171,9 +170,7 @@
 
   function formValid(sheet) { return (_.isArray(sheet)); }
 
-  function getDuplicatesField(counts) {
-    return _.keys(_.pick(counts, (value) => { return value > 1; }));
-  }
+  function getDuplicatesField(counts) { return _.keys(_.pick(counts, (value) => { return value > 1; })); }
 
   function getFieldCounts(sheet, name, counts = {}) {
     _.each(_.map(sheet, _.val(name)), col => {
