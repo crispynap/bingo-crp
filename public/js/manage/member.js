@@ -38,7 +38,7 @@
   });
 
   const xlsButton = document.querySelector('.xls-upload>input');
-  xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx) });
+  xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableContent) });
 
   // const search = document.querySelector('.search');
   // search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
@@ -121,10 +121,10 @@
     return first + content + end;
   }
 
-  function getXlsx(sheet) {
+  function getXlsx(sheet, tableContent) {
     console.dir(sheet)
 
-    const valid = sheetValidCheck(sheet);
+    const valid = sheetValidCheck(sheet, tableContent);
 
     if (!valid.err) {
       console.log('no error')
@@ -133,19 +133,37 @@
     }
   }
 
-  function sheetValidCheck(sheet) {
+  function sheetValidCheck(sheet, tableContent) {
 
     if (!formValid(sheet)) return { err: true, message: messages.incorrectSheet };
 
-    const duplNames = getFieldDuplicates(getFieldCounts(sheet, "이름"));
-    if (!_.isEmpty(duplNames)) return { err: true, message: messages.duplicatedNames(duplNames) }
+    const aTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "a" || 표시 === "A" });
+    const sTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "s" || 표시 === "S" });
 
-    const duplCodes = getFieldDuplicates(getFieldCounts(sheet, "조합원 코드"));
-    if (!_.isEmpty(duplCodes)) return { err: true, message: messages.duplicatedCodes(duplCodes) }
+    //'a' / 'A' 에 코드와 이름 둘 다 빈 줄이 있는지
+    if (_.find(aTagRows, (row) => { return (_.isEmpty(row['이름']) && _.isEmpty(row['조합원 코드'])) }))
+      return { err: true, message: messages.emptyAtagRow };
 
-    //'a' / 'A' 에 이름이 있는지
-    //'a' / 'A' 와 현재 테이블 내용을 합친 것 중에서 이름이 중복된 게 있는지
-    //'a' / 'A' 와 현재 테이블 내용을 합친 것 중에서 조합원 코드가 중복된 게 있는지
+    //'a' / 'A'에 이름 중복 행이 있는지
+    const sheetNamesCount = getFieldCounts(aTagRows, "이름");
+    const duplSheetNames = getDuplicatesField(sheetNamesCount);
+    if (!_.isEmpty(duplSheetNames)) return { err: true, message: messages.duplicatedNames(duplSheetNames) }
+
+    //'a' / 'A'와 현재 테이블에 중복되는 이름 있는지
+    const tableNamesCount = getFieldCounts(tableContent, "name");
+    duplTableName = _.findKey(sheetNamesCount, (count, name) => { return _.has(tableNamesCount, name) })
+    if (duplTableName) return { err: true, message: messages.duplicatedNames(duplTableName) }
+
+    //'a' / 'A'에 조합원 코드 중복 행이 있는지
+    const sheetCodesCount = getFieldCounts(aTagRows, "조합원 코드");
+    const duplSheetCodes = getDuplicatesField(sheetCodesCount);
+    if (!_.isEmpty(duplSheetCodes)) return { err: true, message: messages.duplicatedCodes(duplSheetCodes) }
+
+    //'a' / 'A'와 현재 테이블에 중복되는 조합원 코드가 있는지
+    const tableCodesCount = getFieldCounts(tableContent, "member_code");
+    duplTableCode = _.findKey(sheetCodesCount, (count, code) => { return _.has(tableCodesCount, code) })
+    if (duplTableCode) return { err: true, message: messages.duplicatedCodes(duplTableCode) }
+
 
     //'s' / 'S' 에 코드 혹은 이름이 있는지
     //'s' / 'S' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
@@ -157,16 +175,15 @@
   }
 
   function formValid(sheet) { return (_.isArray(sheet)); }
-  // function containsEnd(sheet) { return _.contains(_.map(sheet, _.val("표시")), "끝") }
 
-  function getFieldDuplicates(counts) {
-    return _.keys(_.pick(counts, (value) => { return value > 0; }));
+  function getDuplicatesField(counts) {
+    return _.keys(_.pick(counts, (value) => { return value > 1; }));
   }
 
   function getFieldCounts(sheet, name, counts = {}) {
     _.each(_.map(sheet, _.val(name)), col => {
       if (!_.isNumber(counts[col])) {
-        counts[col] = 0;
+        counts[col] = 1;
       } else {
         counts[col]++;
       }

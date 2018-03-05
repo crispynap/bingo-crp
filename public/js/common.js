@@ -21,7 +21,7 @@ const commonEvent = {
     e.preventDefault();
   },
 
-  readXlsx(e, callback) {
+  readXlsx(e, callback, tableContent) {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -32,7 +32,7 @@ const commonEvent = {
 
       const workbook = XLSX.read(buffers, { type: "array" });
       const sheet_name_list = workbook.SheetNames;
-      callback(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]));
+      callback(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]), tableContent);
     }
 
     reader.readAsArrayBuffer(file);
@@ -120,6 +120,8 @@ const common = {
 
 const messages = {
   incorrectSheet: "서식이 맞지 않습니다.",
+  emptyAtagRow: "A 표시 줄 중 코드와 이름이 둘 다 빈 줄이 있습니다.",
+  emptyStagRow: "S 표시 줄 중 코드와 이름이 둘 다 빈 줄이 있습니다.",
   duplicatedNames(names) {
     return `이름이 중복되었습니다: ${names}`
   },
