@@ -61,6 +61,7 @@
     const sheet = document.querySelector('section.sheet');
     let table = document.createElement('table');
     table.id = ("table" + tableNum);
+    if (tableNum === 1) table.classList.add("active");
     table = sheet.appendChild(table);
 
     setTHead(table, tableInfo);
@@ -127,9 +128,11 @@
     const valid = sheetValidCheck(sheet, tableContent);
 
     if (valid.err) {
-      console.log(valid.message)
+      alert(valid.message)
       return;
     }
+
+
   }
 
   function sheetValidCheck(sheet, tableContent) {
@@ -186,14 +189,14 @@
   function selectTab(e) {
     const selectedTab = e.target;
     const tabs = document.querySelectorAll('.tabs li');
-    _.each(tabs, tab => tab.classList.remove("active"))
+    _.each(tabs, tab => tab.classList.remove("active"));
     selectedTab.classList.add("active");
 
     let selectedTable = selectedTab.attributes.rel.value;
     selectedTable = document.querySelector("table#" + selectedTable);
 
     const tables = document.querySelectorAll('.sheets table');
-    _.each(tables, table => table.classList.remove("active"))
+    _.each(tables, table => table.classList.remove("active"));
     selectedTable.classList.add("active");
   }
 })();
