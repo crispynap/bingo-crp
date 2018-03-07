@@ -1,7 +1,7 @@
 (() => {
   const tablesInfo = [
     [
-      { dbName: "member_code", colName: "코드" },
+      { dbName: "member_code", colName: "조합원 코드" },
       { dbName: "name", colName: "이름" },
       { dbName: "rname", colName: "실명" },
       { dbName: "none", colName: "주 공동체" },
@@ -38,7 +38,7 @@
   });
 
   const xlsButton = document.querySelector('.xls-upload>input');
-  xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableContent) });
+  xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableContent, tablesInfo) });
 
   // const search = document.querySelector('.search');
   // search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
@@ -122,9 +122,7 @@
     return first + content + end;
   }
 
-  function getXlsx(sheet, tableContent) {
-    console.dir(sheet)
-
+  function getXlsx(sheet, tableContent, tablesInfo) {
     const valid = sheetValidCheck(sheet, tableContent);
 
     if (valid.err) {
@@ -132,7 +130,31 @@
       return;
     }
 
+    console.dir(sheet)
+    console.dir(tableContent)
 
+    const aTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "a" || 표시 === "A" });
+    SheetRowToTableRow(aTagRows, tablesInfo[0]);
+  }
+
+  function SheetRowToTableRow(sheetRows, tableInfo) {
+    console.log(sheetRows)
+
+    const changedRows =
+      _.map(sheetRows, (sheetRow) => {
+        const changedRow = {}
+
+        _.each(tableInfo, (column) => {
+          changedRow[column.dbName] = sheetRow[column.colName];
+          console.log(column.colName + ' ' + sheetRow[column.colName])
+        })
+
+        return changedRow;
+      })
+
+    console.log(changedRows)
+
+    return changedRows;
   }
 
   function sheetValidCheck(sheet, tableContent) {
