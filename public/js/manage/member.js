@@ -51,11 +51,7 @@
   }
 
   function setTable(tableInfo, json, tableNum) {
-    const sheet = document.querySelector('section.sheet');
-    let table = document.createElement('table');
-    table.id = ("table" + tableNum);
-    if (tableNum === 1) table.classList.add("active");
-    table = sheet.appendChild(table);
+    const table = document.querySelector('table#table' + tableNum);
 
     setTHead(table, tableInfo);
     setTBody(table, tableInfo, json);
