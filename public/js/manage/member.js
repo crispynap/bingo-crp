@@ -112,6 +112,7 @@
   }
 
   function getXlsx(sheet, tableContent, tablesInfo) {
+    _.removeByIndex(sheet, 0);
     const valid = sheetValidCheck(sheet, tableContent);
 
     if (valid.err) {
@@ -122,9 +123,22 @@
     console.dir(sheet)
     console.dir(tableContent)
 
-    addMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
+    getMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
     // updateMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
     // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
+  }
+
+  function getMembers(membersInfo) {
+    const ids = _.map(membersInfo, ({ member_code }) => member_code)
+
+    $.ajax({
+      url: "../api/members",
+      type: 'get',
+      data: JSON.stringify(ids),
+      dataType: "json",
+      success: (json) => setTables(tablesInfo, json),
+      error: console.log
+    });
   }
 
   function addMembers(memberInfos) {
@@ -136,12 +150,12 @@
     if (!formValid(sheet)) return { err: true, message: messages.incorrectSheet };
 
     //코드와 이름 둘 다 누락된 줄이 있는지
-    if (_.find(sheet, (row) => { return (_.isEmpty(row['이름']) && _.isEmpty(row['조합원 코드'])) }))
+    if (_.find(sheet, (row) => { return (_.isEmpty(row['name']) && _.isEmpty(row['member_code'])) }))
       return { err: true, message: messages.emptyCodeRow };
 
-    const aTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "a" || 표시 === "A" });
+    const aTagRows = _.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" });
     //'a' / 'A'에 이름 중복 행이 있는지
-    const sheetNamesCount = getFieldCounts(aTagRows, "이름");
+    const sheetNamesCount = getFieldCounts(aTagRows, "name");
     const duplSheetNames = getDuplicatesField(sheetNamesCount);
     if (!_.isEmpty(duplSheetNames)) return { err: true, message: messages.duplicatedNames(duplSheetNames) }
 
@@ -151,7 +165,7 @@
     if (duplTableName) return { err: true, message: messages.duplicatedNames(duplTableName) }
 
     //'a' / 'A'에 조합원 코드 중복 행이 있는지
-    const sheetCodesCount = getFieldCounts(aTagRows, "조합원 코드");
+    const sheetCodesCount = getFieldCounts(aTagRows, "member_code");
     const duplSheetCodes = getDuplicatesField(sheetCodesCount);
     if (!_.isEmpty(duplSheetCodes)) return { err: true, message: messages.duplicatedCodes(duplSheetCodes) }
 

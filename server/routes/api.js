@@ -5,13 +5,27 @@ const router = express.Router();
 var testDB = require('../test/test.json')
 
 router.get('/members', (req, res) => {
-  const query = "SELECT * FROM `조합원`;";
+  if (JSON.stringify(req.query) === '{}') {
+
+    const query = "SELECT * FROM `조합원`;";
+    res.send(mysqlQuery(query))
+
+  } else {
+
+    const
+    const query = "SELECT * FROM `조합원` WHERE member_code = ";
+    res.send(mysqlQuery(query))
+  }
+
+});
+
+function mysqlQuery(query) {
   const mysql_dbc = require('../config/db/db_con')();
   const connection = mysql_dbc.init();
   connection.query(query, function (err, result) {
-    res.json(result);
+    res.send(result);
   });
-});
+}
 
 router.post('/members', (req, res) => {
   const member = new Member();
