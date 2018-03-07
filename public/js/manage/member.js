@@ -27,29 +27,18 @@
     ],
   ]
 
-  const apiInfo = {
-    url: "../api/members"
-  }
-
   let tableContent = {};
+  getMembersAll()
+  setEvents()
 
-
-  $.ajax({
-    url: apiInfo.url,
-    type: 'get',
-    success: (json) => setTables(tablesInfo, json),
-    error: console.log
-  });
-
-  const xlsButton = document.querySelector('.xls-upload>input');
-  xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableContent, tablesInfo) });
-
-  // const search = document.querySelector('.search');
-  // search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
-
-  const tabs = document.querySelector('.tabs');
-  tabs.addEventListener('click', e => { selectTab(e) })
-
+  function getMembersAll() {
+    $.ajax({
+      url: "./api/members",
+      type: 'get',
+      success: (json) => setTables(tablesInfo, json),
+      error: console.log
+    });
+  }
 
   function setTables(tablesInfo, json) {
     let tableNum = 1;
@@ -209,5 +198,16 @@
     const tables = document.querySelectorAll('.sheets table');
     _.each(tables, table => table.classList.remove("active"));
     selectedTable.classList.add("active");
+  }
+
+  function setEvents() {
+    const xlsButton = document.querySelector('.xls-upload>input');
+    xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableContent, tablesInfo) });
+
+    // const search = document.querySelector('.search');
+    // search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
+
+    const tabs = document.querySelector('.tabs');
+    tabs.addEventListener('click', e => { selectTab(e) })
   }
 })();
