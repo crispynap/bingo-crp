@@ -27,11 +27,15 @@
     ],
   ]
 
+  const apiInfo = {
+    url: "../api/members"
+  }
+
   let tableContent = {};
 
 
   $.ajax({
-    url: "../api/members",
+    url: apiInfo.url,
     type: 'get',
     success: (json) => setTables(tablesInfo, json),
     error: console.log
@@ -138,6 +142,9 @@
     // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
   }
 
+  function addMembers(memberInfos) {
+
+  }
 
   function sheetValidCheck(sheet, tableContent) {
 
