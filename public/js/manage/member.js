@@ -33,7 +33,7 @@
 
   function getMembersAll() {
     $.ajax({
-      url: "./api/members",
+      url: "../api/members",
       type: 'get',
       success: (json) => setTables(tablesInfo, json),
       error: console.log
