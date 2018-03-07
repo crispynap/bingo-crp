@@ -133,29 +133,11 @@
     console.dir(sheet)
     console.dir(tableContent)
 
-    const aTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "a" || 표시 === "A" });
-    SheetRowToTableRow(aTagRows, tablesInfo[0]);
+    addMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
+    // updateMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
+    // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
   }
 
-  function SheetRowToTableRow(sheetRows, tableInfo) {
-    console.log(sheetRows)
-
-    const changedRows =
-      _.map(sheetRows, (sheetRow) => {
-        const changedRow = {}
-
-        _.each(tableInfo, (column) => {
-          changedRow[column.dbName] = sheetRow[column.colName];
-          console.log(column.colName + ' ' + sheetRow[column.colName])
-        })
-
-        return changedRow;
-      })
-
-    console.log(changedRows)
-
-    return changedRows;
-  }
 
   function sheetValidCheck(sheet, tableContent) {
 
