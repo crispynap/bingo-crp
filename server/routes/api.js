@@ -30,20 +30,9 @@ function queryAndSend(query, res) {
 
 
 router.post('/members', (req, res) => {
-  const member = new Member();
-  const data = req.body;
-  member.SN = data.SN;
-  member.nick_name = data.nick_name;
+  console.log(req.body)
 
-  member.save(function (err) {
-    if (err) {
-      console.error(err);
-      res.json({ result: 0 });
-      return;
-    }
 
-    res.json({ result: 1 });
-  });
 });
 
 router.put('/members/:member_id', (req, res) => {

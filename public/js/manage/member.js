@@ -32,11 +32,8 @@
   setEvents();
 
   function getMembersAll() {
-    $.ajax({
-      url: "../api/members",
-      type: 'get',
-      success: (json) => setTables(tablesInfo, json),
-      error: console.log
+    $.get("../api/members", (data) => {
+      setTables(tablesInfo, data);
     });
   }
 
@@ -137,16 +134,12 @@
 
     console.log(idsQuery)
 
-    $.ajax({
-      url: "../api/members/" + idsQuery,
-      type: 'get',
-      success: (json) => setTables(tablesInfo, json),
-      error: console.log
+    $.get("../api/members/" + idsQuery, (data) => {
+      setTables(tablesInfo, data)
     });
   }
 
   function addMembers(memberInfos) {
-
   }
 
   function sheetValidCheck(sheet, tableContent) {
