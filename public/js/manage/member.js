@@ -130,7 +130,10 @@
 
   function getMembers(membersInfo) {
     const ids = _.map(membersInfo, ({ member_code }) => member_code);
-    const idsQuery = _.reduce(ids, (memo, id) => memo + `${id}&`, '');
+    const idsQuery = _.reduce(ids, (memo, id) => {
+      if (memo !== '') memo += '&';
+      return memo + id
+    }, '');
 
     console.log(idsQuery)
 

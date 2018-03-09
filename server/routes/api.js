@@ -7,22 +7,26 @@ router.get('/members', (req, res) => {
   queryAndSend(query, res);
 });
 
+router.get('/members/:ids', (req, res) => {
+  const ids = req.params.ids.split('&');
+  const idsQuery = _.reduce(ids, (memo, id) => {
+    if (memo !== '') memo += ',';
+    return memo + "'" + id + "'";
+  }, '');
+
+  const query = "SELECT * FROM `조합원` WHERE member_code in (" + idsQuery + ')';
+
+  queryAndSend(query, res);
+});
+
 function queryAndSend(query, res) {
   const mysql_dbc = require('../config/db/db_con')();
   const connection = mysql_dbc.init();
+
   connection.query(query, function (err, result) {
     res.send(result);
   });
 }
-
-router.get('/members/:ids', (req, res) => {
-  const ids = req.params.ids.split('&');
-  console.log(ids);
-
-  const query = "SELECT * FROM `조합원` WHERE member_code = ";
-  // const ids = JSON.parse(req.query);
-  // queryAndSend(query, res);
-});
 
 
 router.post('/members', (req, res) => {
