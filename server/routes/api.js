@@ -1,25 +1,23 @@
 const express = require('express');
 const router = express.Router();
-// var fs = require("fs");
-// var testDB = fs.readFileSync("./test.json");
-var testDB = require('../test/test.json')
 
 router.get('/members', (req, res) => {
   if (JSON.stringify(req.query) === '{}') {
 
     const query = "SELECT * FROM `조합원`;";
-    res.send(mysqlQuery(query))
+    queryAndSend(query, res);
 
   } else {
 
-    const
     const query = "SELECT * FROM `조합원` WHERE member_code = ";
-    res.send(mysqlQuery(query))
+    // const ids = JSON.parse(req.query);
+    console.log(req.query);
+    queryAndSend(query, res);
   }
 
 });
 
-function mysqlQuery(query) {
+function queryAndSend(query, res) {
   const mysql_dbc = require('../config/db/db_con')();
   const connection = mysql_dbc.init();
   connection.query(query, function (err, result) {

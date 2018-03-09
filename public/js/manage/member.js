@@ -129,13 +129,14 @@
   }
 
   function getMembers(membersInfo) {
-    const ids = _.map(membersInfo, ({ member_code }) => member_code)
+    const ids = _.map(membersInfo, ({ member_code }) => member_code);
+    const idsQuery = _.reduce(ids, (memo, id) => memo + `${id}&`, '');
+
+    console.log(idsQuery)
 
     $.ajax({
       url: "../api/members",
       type: 'get',
-      data: JSON.stringify(ids),
-      dataType: "json",
       success: (json) => setTables(tablesInfo, json),
       error: console.log
     });
