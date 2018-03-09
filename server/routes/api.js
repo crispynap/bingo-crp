@@ -1,20 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const _ = require('partial-js');
 
 router.get('/members', (req, res) => {
-  if (JSON.stringify(req.query) === '{}') {
-
-    const query = "SELECT * FROM `조합원`;";
-    queryAndSend(query, res);
-
-  } else {
-
-    const query = "SELECT * FROM `조합원` WHERE member_code = ";
-    // const ids = JSON.parse(req.query);
-    console.log(req.query);
-    queryAndSend(query, res);
-  }
-
+  const query = "SELECT * FROM `조합원`;";
+  queryAndSend(query, res);
 });
 
 function queryAndSend(query, res) {
@@ -24,6 +14,16 @@ function queryAndSend(query, res) {
     res.send(result);
   });
 }
+
+router.get('/members/:ids', (req, res) => {
+  const ids = req.params.ids.split('&');
+  console.log(ids);
+
+  const query = "SELECT * FROM `조합원` WHERE member_code = ";
+  // const ids = JSON.parse(req.query);
+  // queryAndSend(query, res);
+});
+
 
 router.post('/members', (req, res) => {
   const member = new Member();

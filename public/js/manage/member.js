@@ -28,8 +28,8 @@
   ]
 
   let tableContent = {};
-  getMembersAll()
-  setEvents()
+  getMembersAll();
+  setEvents();
 
   function getMembersAll() {
     $.ajax({
@@ -135,7 +135,7 @@
     console.log(idsQuery)
 
     $.ajax({
-      url: "../api/members",
+      url: "../api/members/" + idsQuery,
       type: 'get',
       success: (json) => setTables(tablesInfo, json),
       error: console.log
