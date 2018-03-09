@@ -33,7 +33,7 @@
 
   var a = []
   a.length = tablesInfo[0].length;
-  console.log(common.fill(a))
+  console.log(_.fill(a))
 
 
   function getMembersAll() {
