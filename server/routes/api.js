@@ -30,7 +30,7 @@ function queryAndSend(query, res) {
 
 
 router.post('/members', (req, res) => {
-  console.log(req.body)
+  console.log(req.body.memberInfos)
 
 
 });

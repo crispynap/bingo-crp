@@ -120,9 +120,17 @@
     console.dir(sheet)
     console.dir(tableContent)
 
-    getMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
+
+    addMembers(getMarkedRows(sheet, "a", "A"));
     // updateMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
     // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
+  }
+
+  function getMarkedRows(sheet, ...selectedMarks) {
+    return _.go(sheet,
+      sheet => _.pick(sheet, ({ mark }) => { return _.some(selectedMarks, selMark => selMark === mark) }),
+      aTageRows => _.map(aTageRows, row => _.omit(row, 'mark'))
+    )
   }
 
   function getMembers(membersInfo) {
@@ -132,14 +140,14 @@
       return memo + id
     }, '');
 
-    console.log(idsQuery)
-
     $.get("../api/members/" + idsQuery, (data) => {
       setTables(tablesInfo, data)
     });
   }
 
   function addMembers(memberInfos) {
+    console.log(memberInfos)
+    $.post("../api/members", { memberInfos: memberInfos });
   }
 
   function sheetValidCheck(sheet, tableContent) {
