@@ -98,6 +98,13 @@ const common = {
     return _.every(str, letter => check.test(letter));
   },
 
+  fill(list, filling = '') {
+    return _.map(list, element => {
+      if (_.isUndefined(element)) return filling;
+      return element;
+    })
+  },
+
   /* 선택자를 매개변수로 넘겨서 해당 cssRule을 찾아서 리턴하는 함수 */
   cssSelector(selector) {
     for (i = 0; i < document.styleSheets.length; i++) {

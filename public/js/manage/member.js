@@ -31,6 +31,11 @@
   getMembersAll();
   setEvents();
 
+  var a = []
+  a.length = tablesInfo[0].length;
+  console.log(common.fill(a))
+
+
   function getMembersAll() {
     $.get("../api/members", (data) => {
       setTables(tablesInfo, data);
