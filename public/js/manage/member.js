@@ -1,4 +1,22 @@
 (() => {
+  const dbInfo = [
+    { dbName: "member_code", colName: "조합원 코드" },
+    { dbName: "name", colName: "이름" },
+    { dbName: "rname", colName: "실명" },
+    { dbName: "category", colName: "분류" },
+    { dbName: "note", colName: "비고" },
+    { dbName: "current", colName: "현황" },
+    { dbName: "join_date", colName: "가입일" },
+    { dbName: "leave_date", colName: "탈퇴일" },
+    { dbName: "celeb_date", colName: "기념일" },
+    { dbName: "tel1", colName: "전화1" },
+    { dbName: "tel2", colName: "전화2" },
+    { dbName: "addr", colName: "주소" },
+    { dbName: "facebook", colName: "페이스북" },
+    { dbName: "kakaotalk", colName: "카카오톡" },
+    { dbName: "webpage", colName: "웹페이지" },
+    { dbName: "finance_account", colName: "금융 계좌" },
+  ]
   const tablesInfo = [
     [
       { dbName: "member_code", colName: "조합원 코드" },
@@ -30,10 +48,6 @@
   let tableContent = {};
   getMembersAll();
   setEvents();
-
-  var a = []
-  a.length = tablesInfo[0].length;
-  console.log(_.fill(a))
 
 
   function getMembersAll() {
@@ -151,8 +165,15 @@
   }
 
   function addMembers(memberInfos) {
-    console.log(memberInfos)
-    $.post("../api/members", { memberInfos: memberInfos });
+
+    const membersStructure = _.map(dbInfo, ({ dbName }) => dbName);
+    const membersData = _.map(memberInfos, (memberInfo) => {
+      return _.fill(_.map(membersStructure, fieldName => {
+        return memberInfo[fieldName];
+      }));
+    });
+
+    $.post("../api/members", { membersStructure: membersStructure, membersData: membersData });
   }
 
   function sheetValidCheck(sheet, tableContent) {

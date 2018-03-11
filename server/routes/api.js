@@ -4,7 +4,7 @@ const _ = require('partial-js');
 
 router.get('/members', (req, res) => {
   const query = "SELECT * FROM `조합원`;";
-  queryAndSend(query, res);
+  sqlQuery(query, (err, result) => res.send(result));
 });
 
 router.get('/members/:ids', (req, res) => {
@@ -16,23 +16,35 @@ router.get('/members/:ids', (req, res) => {
 
   const query = "SELECT * FROM `조합원` WHERE member_code in (" + idsQuery + ')';
 
-  queryAndSend(query, res);
+  sqlQuery(query, (err, result) => res.send(result));
 });
 
-function queryAndSend(query, res) {
+function sqlQuery(query, callback = () => { }) {
   const mysql_dbc = require('../config/db/db_con')();
   const connection = mysql_dbc.init();
 
-  connection.query(query, function (err, result) {
-    res.send(result);
-  });
+  connection.query(query, callback);
 }
 
 
 router.post('/members', (req, res) => {
-  console.log(req.body.memberInfos)
+  const membersStructure = req.body.membersStructure;
+  const structureQuery = _.reduce(membersStructure, (memo, fieldName) => {
+    if (memo !== '(') memo += ', ';
+    return memo + fieldName;
+  }, '(') + ')';
+  const membersData = req.body.membersData;
+  const dataQuery = _.reduce(membersData, (memo, row) => {
+    if (memo !== '') memo += ', ';
+    return memo + _.reduce(row, (memo, field) => {
+      if (memo !== '(') memo += ', ';
+      return memo + "'" + field + "'";
+    }, '(') + ')';
+  }, '');
 
-
+  const membersQuery = "INSERT INTO `조합원` " + structureQuery + " VALUES " + dataQuery + ";"
+  console.log(membersQuery)
+  // sqlQuery(membersQuery, console.log);
 });
 
 router.put('/members/:member_id', (req, res) => {
