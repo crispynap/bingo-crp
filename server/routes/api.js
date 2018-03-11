@@ -4,8 +4,17 @@ const _ = require('partial-js');
 
 router.get('/members', (req, res) => {
   const query = "SELECT * FROM `조합원`;";
-  sqlQuery(query, (err, result) => res.send(result));
+  _.go(query,
+    queryDB,
+    resSend(res)
+  )
 });
+
+function resSend(res) {
+  return function (result) {
+    res.send(result)
+  }
+}
 
 router.get('/members/:ids', (req, res) => {
   const ids = req.params.ids.split('&');
@@ -16,16 +25,8 @@ router.get('/members/:ids', (req, res) => {
 
   const query = "SELECT * FROM `조합원` WHERE member_code in (" + idsQuery + ')';
 
-  sqlQuery(query, (err, result) => res.send(result));
+  queryDB(query, (err, result) => res.send(result));
 });
-
-function sqlQuery(query, callback = () => { }) {
-  const mysql_dbc = require('../config/db/db_con')();
-  const connection = mysql_dbc.init();
-
-  connection.query(query, callback);
-}
-
 
 router.post('/members', (req, res) => {
   const membersStructure = req.body.membersStructure;
@@ -43,8 +44,7 @@ router.post('/members', (req, res) => {
   }, '');
 
   const membersQuery = "INSERT INTO `조합원` " + structureQuery + " VALUES " + dataQuery + ";"
-  console.log(membersQuery)
-  // sqlQuery(membersQuery, console.log);
+  queryDB(membersQuery);
 });
 
 router.put('/members/:member_id', (req, res) => {
@@ -54,5 +54,28 @@ router.put('/members/:member_id', (req, res) => {
 router.delete('/members/:member_id', (req, res) => {
   res.end();
 });
+
+function queryDB(query) {
+  return new Promise((resolve) => {
+    const mysql_dbc = require('../config/db/db_con')();
+    const connection = mysql_dbc.init();
+
+    connection.query(query, (err, result) => resolve(result));
+  })
+}
+
+function addMember(memberInfo) {
+  const query = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}')`;
+  // memberInfo
+  // addDoer('조합원', memberInfo.name);
+}
+
+function addDoer(category, name) {
+  const query = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}')`;
+  // queryDB(query);
+  const query = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}')`;
+  // queryDB(query);
+}
+
 
 module.exports = router;
