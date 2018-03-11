@@ -10,12 +10,6 @@ router.get('/members', (req, res) => {
   )
 });
 
-function resSend(res) {
-  return function (result) {
-    res.send(result)
-  }
-}
-
 router.get('/members/:ids', (req, res) => {
   const ids = req.params.ids.split('&');
   const idsQuery = _.reduce(ids, (memo, id) => {
@@ -76,6 +70,14 @@ function addDoer(category, name) {
   const query = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}')`;
   // queryDB(query);
 }
+
+function resSend(res) {
+  return function (result) {
+    res.send(result)
+  }
+}
+
+
 
 
 module.exports = router;
