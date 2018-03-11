@@ -165,15 +165,7 @@
   }
 
   function addMembers(memberInfos) {
-
-    const membersStructure = _.map(dbInfo, ({ dbName }) => dbName);
-    const membersData = _.map(memberInfos, (memberInfo) => {
-      return _.fill(_.map(membersStructure, fieldName => {
-        return memberInfo[fieldName];
-      }));
-    });
-
-    $.post("../api/members", { membersStructure: membersStructure, membersData: membersData });
+    $.post("../api/members", { memberInfos: memberInfos });
   }
 
   function sheetValidCheck(sheet, tableContent) {

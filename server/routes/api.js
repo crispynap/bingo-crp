@@ -4,10 +4,7 @@ const _ = require('partial-js');
 
 router.get('/members', (req, res) => {
   const query = "SELECT * FROM `조합원`;";
-  _.go(query,
-    queryDB,
-    resSend(res)
-  )
+  queryAndSend(query, res)
 });
 
 router.get('/members/:ids', (req, res) => {
@@ -18,27 +15,12 @@ router.get('/members/:ids', (req, res) => {
   }, '');
 
   const query = "SELECT * FROM `조합원` WHERE member_code in (" + idsQuery + ')';
-
-  queryDB(query, (err, result) => res.send(result));
+  queryAndSend(query, res)
 });
 
 router.post('/members', (req, res) => {
-  const membersStructure = req.body.membersStructure;
-  const structureQuery = _.reduce(membersStructure, (memo, fieldName) => {
-    if (memo !== '(') memo += ', ';
-    return memo + fieldName;
-  }, '(') + ')';
-  const membersData = req.body.membersData;
-  const dataQuery = _.reduce(membersData, (memo, row) => {
-    if (memo !== '') memo += ', ';
-    return memo + _.reduce(row, (memo, field) => {
-      if (memo !== '(') memo += ', ';
-      return memo + "'" + field + "'";
-    }, '(') + ')';
-  }, '');
-
-  const membersQuery = "INSERT INTO `조합원` " + structureQuery + " VALUES " + dataQuery + ";"
-  queryDB(membersQuery);
+  const membersInfos = req.body.membersInfos;
+  _.each(membersInfos, membersInfo => addMember(membersInfo))
 });
 
 router.put('/members/:member_id', (req, res) => {
@@ -48,6 +30,20 @@ router.put('/members/:member_id', (req, res) => {
 router.delete('/members/:member_id', (req, res) => {
   res.end();
 });
+
+
+function queryAndSend(query, res) {
+  _.go(query,
+    queryDB,
+    resSend(res)
+  )
+}
+
+function resSend(res) {
+  return function (result) {
+    res.send(result)
+  }
+}
 
 function queryDB(query) {
   return new Promise((resolve) => {
@@ -71,13 +67,24 @@ function addDoer(category, name) {
   // queryDB(query);
 }
 
-function resSend(res) {
-  return function (result) {
-    res.send(result)
-  }
-}
 
 
+// const membersStructure = req.body.membersStructure;
+// const structureQuery = _.reduce(membersStructure, (memo, fieldName) => {
+//   if (memo !== '(') memo += ', ';
+//   return memo + fieldName;
+// }, '(') + ')';
+// const membersData = req.body.membersData;
+// const dataQuery = _.reduce(membersData, (memo, row) => {
+//   if (memo !== '') memo += ', ';
+//   return memo + _.reduce(row, (memo, field) => {
+//     if (memo !== '(') memo += ', ';
+//     return memo + "'" + field + "'";
+//   }, '(') + ')';
+// }, '');
+
+// const membersQuery = "INSERT INTO `조합원` " + structureQuery + " VALUES " + dataQuery + ";"
+// queryDB(membersQuery);
 
 
 module.exports = router;
