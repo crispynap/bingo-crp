@@ -5,6 +5,8 @@ const _ = require('partial-js');
 router.get('/members', (req, res) => {
   const query = "SELECT * FROM `조합원`;";
   queryAndSend(query, res)
+
+  addDoer('조합원', '모모');
 });
 
 router.get('/members/:ids', (req, res) => {
@@ -50,20 +52,27 @@ function queryDB(query) {
     const mysql_dbc = require('../config/db/db_con')();
     const connection = mysql_dbc.init();
 
-    connection.query(query, (err, result) => resolve(result));
+    connection.query(query, (err, result) => { console.log(result); resolve(result) });
   })
 }
 
 function addMember(memberInfo) {
-  const query = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}')`;
+  // const query = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}')`;
   // memberInfo
-  // addDoer('조합원', memberInfo.name);
+  addDoer('조합원', memberInfo.name);
 }
 
 function addDoer(category, name) {
-  const query = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}')`;
+  const setQuery = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}');`;
+  const getQuery = `SELECT doer_code FROM 주체 WHERE doer_name=${name};`;
+  queryDB(setQuery)
+    .then(
+      queryDB(getQuery)
+    )
+    .then(
+      console.log
+    )
   // queryDB(query);
-  const query = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}')`;
   // queryDB(query);
 }
 
