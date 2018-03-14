@@ -43,13 +43,6 @@ function queryAndSend(query, res) {
     })
 }
 
-function resSend(res) {
-  return function (result) {
-    res.send(result)
-  }
-}
-
-
 function addMember(memberInfo) {
   // const query = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}')`;
   // memberInfo
