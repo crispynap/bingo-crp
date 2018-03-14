@@ -22,7 +22,3 @@ app.use('/', index);
 const server = app.listen(3000, function () {
   console.log("Express server has started on port 3000")
 })
-
-const mysql_dbc = require('./server/config/db/db_con')();
-const connection = mysql_dbc.init();
-mysql_dbc.test_open(connection);
