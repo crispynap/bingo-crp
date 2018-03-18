@@ -6,8 +6,6 @@ const mysqlDbc = require('../config/db/db_con');
 router.get('/members', (req, res) => {
   const query = "SELECT * FROM `조합원`;";
   queryAndSend(query, res)
-
-  addDoer('조합원', '모모');
 });
 
 router.get('/members/:ids', (req, res) => {
@@ -47,14 +45,10 @@ function queryAndSend(query, res) {
 }
 
 function addMember(memberInfo) {
-  // const query = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}')`;
-  // memberInfo
-  addDoer('조합원', memberInfo.name);
-}
+  const addDoerQuery = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}');`;
+  const getDoerCodeQuery = `SELECT doer_code FROM 주체 WHERE doer_name='${name}';`;
+  const addMemberQuery = `;`;
 
-function addDoer(category, name) {
-  const setQuery = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}');`;
-  const getQuery = `SELECT doer_code FROM 주체 WHERE doer_name='${name}';`;
   let doerCode = "";
   _.go('',
     () => db.query(setQuery),
@@ -65,21 +59,7 @@ function addDoer(category, name) {
       db.close();
     })
 
-  // db.query(setQuery)
-  //   .then(rows => {
-  //     console.log(rows);
-  //     return db.query(getQuery);
-  //   })
-  //   .then(rows => {
-  //     console.log(rows);
-  //     doerCode = rows;
-  //     db.close();
-  //   })
-
-  // console.log(doerCode);
-  // return doerCode;
 }
-
 
 
 // const membersStructure = req.body.membersStructure;
