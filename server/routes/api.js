@@ -55,19 +55,29 @@ function addMember(memberInfo) {
 function addDoer(category, name) {
   const setQuery = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('${category}', '${name}');`;
   const getQuery = `SELECT doer_code FROM 주체 WHERE doer_name='${name}';`;
-  const db = new mysqlDbc();
   let doerCode = "";
-  db.query(setQuery)
-    .then(rows => {
-      db.query(getQuery);
-    })
-    .then(rows => {
-      doerCode = rows[0]
+  _.go('',
+    () => db.query(setQuery),
+    rows => db.query(getQuery),
+    rows => {
+      doerCode = rows;
+      console.log(rows);
       db.close();
     })
 
-  console.log(doerCode);
-  return doerCode;
+  // db.query(setQuery)
+  //   .then(rows => {
+  //     console.log(rows);
+  //     return db.query(getQuery);
+  //   })
+  //   .then(rows => {
+  //     console.log(rows);
+  //     doerCode = rows;
+  //     db.close();
+  //   })
+
+  // console.log(doerCode);
+  // return doerCode;
 }
 
 
