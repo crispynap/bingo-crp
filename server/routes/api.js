@@ -7,14 +7,16 @@ router.get('/members', (req, res) => {
   const query = "SELECT * FROM `조합원`;";
   queryAndSend(query, res)
 
-  var a = {
+  const a = [{
     name: '시카리',
     category: '옛장투'
-  }
-  _.go(a,
-    row => addMember(a),
-    row => console.log('a')
-  )
+  },
+  {
+    name: '오보리',
+    category: '장투'
+  }]
+  addMembers(a)
+    .then(() => console.log('ok'))
 });
 
 router.get('/members/:ids', (req, res) => {
@@ -51,6 +53,15 @@ function queryAndSend(query, res) {
     }, err => {
       console.log(err)
     })
+}
+
+function addMembers(memberInfos = {}) {
+  return new Promise((resolve, reject) => {
+    _.each(memberInfos, memberInfo => addMember(memberInfo))
+      .then(
+        () => resolve()
+      )
+  });
 }
 
 function addMember(memberInfo = {}) {
