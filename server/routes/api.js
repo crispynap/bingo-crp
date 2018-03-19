@@ -11,7 +11,10 @@ router.get('/members', (req, res) => {
     name: '시카리',
     category: '옛장투'
   }
-  addMember(a)
+  _.go(a,
+    row => addMember(a),
+    row => console.log('a')
+  )
 });
 
 router.get('/members/:ids', (req, res) => {
@@ -51,26 +54,29 @@ function queryAndSend(query, res) {
 }
 
 function addMember(memberInfo = {}) {
-  const addDoerQuery = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('조합원', '${memberInfo.name}');`;
-  const getDoerCodeQuery = `SELECT doer_code FROM 주체 WHERE doer_name='${memberInfo.name}';`;
-  const db = new mysqlDbc();
+  return new Promise((resolve, reject) => {
+    const addDoerQuery = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('조합원', '${memberInfo.name}');`;
+    const getDoerCodeQuery = `SELECT doer_code FROM 주체 WHERE doer_name='${memberInfo.name}';`;
+    const db = new mysqlDbc();
 
-  _.go('',
-    () => db.query(addDoerQuery),
-    result => db.query(getDoerCodeQuery),
-    rows => {
-      const doerCode = rows[0].doer_code;
-      let fieldNames = 'doer_code';
-      let fieldValues = `'${doerCode}'`;
-      _.each(_.pairs(_.omit(memberInfo, 'name')), field => {
-        fieldNames += ', ' + field[0];
-        fieldValues += `, '${field[1]}'`
-      })
-      const addMemberQuery = `INSERT INTO 조합원 (${fieldNames}) VALUES (${fieldValues});`;
-
-      return db.query(addMemberQuery);
-    }),
-    rows => db.close();
+    _.go('',
+      () => db.query(addDoerQuery),
+      result => db.query(getDoerCodeQuery),
+      rows => {
+        const doerCode = rows[0].doer_code;
+        let fieldNames = 'doer_code';
+        let fieldValues = `'${doerCode}'`;
+        _.each(_.pairs(_.omit(memberInfo, 'name')), field => {
+          fieldNames += ', ' + field[0];
+          fieldValues += `, '${field[1]}'`
+        })
+        const addMemberQuery = `INSERT INTO 조합원 (${fieldNames}) VALUES (${fieldValues});`;
+        return db.query(addMemberQuery);
+      },
+      rows => db.close(),
+      rows => resolve()
+    )
+  })
 }
 
 
