@@ -6,17 +6,6 @@ const mysqlDbc = require('../config/db/db_con');
 router.get('/members', (req, res) => {
   const query = "SELECT * FROM `조합원`;";
   queryAndSend(query, res)
-
-  const a = [{
-    name: '시카리',
-    category: '옛장투'
-  },
-  {
-    name: '오보리',
-    category: '장투'
-  }]
-  addMembers(a)
-    .then(() => console.log('ok'))
 });
 
 router.get('/members/:ids', (req, res) => {
@@ -32,7 +21,9 @@ router.get('/members/:ids', (req, res) => {
 
 router.post('/members', (req, res) => {
   const membersInfos = req.body.membersInfos;
-  _.each(membersInfos, membersInfo => addMember(membersInfo))
+
+  addMembers(membersInfos)
+    .then(() => console.log('ok'))
 });
 
 router.put('/members/:member_id', (req, res) => {
