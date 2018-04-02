@@ -57,13 +57,16 @@
   }
 
   function setTables(tablesInfo, json) {
-    let tableNum = 1;
 
-    _.each(tablesInfo, tableInfo => {
-      setTable(tableInfo, json, tableNum);
-      tableNum++;
-    });
-    tableContent = json;
+
+
+    // let tableNum = 1;
+
+    // _.each(tablesInfo, tableInfo => {
+    //   setTable(tableInfo, json, tableNum);
+    //   tableNum++;
+    // });
+    // tableContent = json;
   }
 
   function setTable(tableInfo, json, tableNum) {
