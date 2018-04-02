@@ -63,9 +63,6 @@
     $('#sheet1').DataTable({
       data: json,
       select: 'single',
-      // paging: false,
-      // scrollY: 200,
-      // scrollCollapse: true,
       columns: [
         { data: 'member_code' },
         { data: 'category' },
@@ -76,17 +73,14 @@
     $('#sheet2').DataTable({
       data: json,
       select: 'single',
-      // paging: false,
-      // scrollCollapse: true,
-      // scrollY: 200,
       columns: [
         { data: 'member_code' },
-        { data: 'category' },
-        { data: 'rname' },
+        { data: 'note' },
+        { data: 'current' },
       ]
     });
 
-    $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+    // $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
     // let tableNum = 1;
 
     // _.each(tablesInfo, tableInfo => {
