@@ -174,4 +174,4 @@ td{
   padding: 0 10px 0 5px;
 }
 tr:nth-child(even) {background-color: #eaf9fd;}
-tr:hover {background-color: rgb(206, 241, 211);}
+#sheets tr:hover {background-color: rgb(206, 241, 211);}
