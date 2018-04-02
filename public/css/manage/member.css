@@ -137,12 +137,7 @@ section.sheets{
   width: 100%;
   border: 1px solid black;
 }
-.sheets table{
-  display: none;
-}
-.sheets table.active{
-  display: block;
-}
+
 table{
   vertical-align: middle;
   cursor: default;
