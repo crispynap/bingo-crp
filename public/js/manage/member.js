@@ -59,7 +59,17 @@
   function setTables(tablesInfo, json) {
     console.log(json)
     console.log(tablesInfo)
-    $('#sheets').DataTable({
+    $('#sheet1').DataTable({
+      data: json,
+      select: 'single',
+      columns: [
+        { data: 'member_code' },
+        { data: 'category' },
+        { data: 'rname' },
+      ]
+    });
+
+    $('#sheet2').DataTable({
       data: json,
       select: 'single',
       columns: [
