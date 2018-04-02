@@ -175,3 +175,4 @@ td{
 }
 tr:nth-child(even) {background-color: #eaf9fd;}
 #sheets tr:hover {background-color: rgb(206, 241, 211);}
+#sheets tr.selected {background-color: #08C;}

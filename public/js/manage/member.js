@@ -61,6 +61,7 @@
     console.log(tablesInfo)
     $('#sheets').DataTable({
       data: json,
+      select: 'single',
       columns: [
         { data: 'member_code' },
         { data: 'category' },
