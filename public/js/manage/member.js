@@ -71,8 +71,6 @@
 
     setTHead(table, tableInfo);
     setTBody(table, tableInfo, json);
-    // tableContent = addChoseong(json); //주의! json 오염됨
-    // tableContent = addLineNum(tableContent);
   }
 
   function setTHead(table, tableInfo) {
@@ -236,9 +234,6 @@
   function setEvents() {
     const xlsButton = document.querySelector('.xls-upload>input');
     xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableContent, tablesInfo) });
-
-    // const search = document.querySelector('.search');
-    // search.addEventListener('keyup', function (e) { commonEvent.searchTable(e, table, tableContent) })
 
     const tabs = document.querySelector('.tabs');
     tabs.addEventListener('click', e => { selectTab(e) })
