@@ -57,8 +57,16 @@
   }
 
   function setTables(tablesInfo, json) {
-
-
+    console.log(json)
+    console.log(tablesInfo)
+    $('#sheets').DataTable({
+      data: json,
+      columns: [
+        { data: 'member_code' },
+        { data: 'category' },
+        { data: 'rname' },
+      ]
+    });
 
     // let tableNum = 1;
 
@@ -237,8 +245,5 @@
   function setEvents() {
     const xlsButton = document.querySelector('.xls-upload>input');
     xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableContent, tablesInfo) });
-
-    const tabs = document.querySelector('.tabs');
-    tabs.addEventListener('click', e => { selectTab(e) })
   }
 })();
