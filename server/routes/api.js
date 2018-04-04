@@ -4,7 +4,7 @@ const _ = require('partial-js');
 const mysqlDbc = require('../config/db/db_con');
 
 router.get('/members', (req, res) => {
-  const query = "SELECT * FROM `조합원`;";
+  const query = "SELECT * FROM `members_view`;";
   queryAndSend(query, res)
 });
 
@@ -15,7 +15,7 @@ router.get('/members/:ids', (req, res) => {
     return memo + "'" + id + "'";
   }, '');
 
-  const query = "SELECT * FROM `조합원` WHERE member_code in (" + idsQuery + ')';
+  const query = "SELECT * FROM `members_view` WHERE member_code in (" + idsQuery + ')';
   queryAndSend(query, res)
 });
 
