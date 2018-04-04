@@ -60,7 +60,7 @@
   function setTables(tablesInfo, json) {
     // $('table.table').DataTable();
 
-    $('#sheet1').DataTable({
+    $('#sheet-primary').DataTable({
       data: json,
       select: 'single',
       columns: [
@@ -76,18 +76,51 @@
       ]
     });
 
-    $('#sheet2').DataTable({
+    $('#sheet-fund').DataTable({
       data: json,
       select: 'single',
       columns: [
-        { data: 'member_code' },
-        { data: 'note' },
-        { data: 'current' },
+        { data: 'doer_name' },
+        { data: 'total_fund' },
       ]
     });
 
-    // $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
-    // let tableNum = 1;
+    $('#sheet-fund').DataTable({
+      data: json,
+      select: 'single',
+      columns: [
+        { data: 'doer_name' },
+        { data: 'total_fund' },
+      ]
+    });
+
+    $('#sheet-util').DataTable({
+      data: json,
+      select: 'single',
+      columns: [
+        { data: 'doer_name' },
+        { data: 'total_util' },
+      ]
+    });
+
+    $('#sheet-action').DataTable({
+      data: json,
+      select: 'single',
+      columns: [
+        { data: 'doer_name' },
+        { data: 'main_commune' },
+      ]
+    });
+
+    $('#sheet-detail').DataTable({
+      data: json,
+      select: 'single',
+      columns: [
+        { data: 'doer_name' },
+        { data: 'rname' },
+      ]
+    });
+
 
     // _.each(tablesInfo, tableInfo => {
     //   setTable(tableInfo, json, tableNum);
