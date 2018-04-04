@@ -18,6 +18,10 @@ nav {position: relative;}
 }
 .nav-right{
   position: absolute;
-  right: 60px;
+  right: 100px;
   top: 30px;
+}
+nav .dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0;
 }
