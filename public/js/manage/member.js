@@ -65,8 +65,14 @@
       select: 'single',
       columns: [
         { data: 'member_code' },
-        { data: 'category' },
+        { data: 'doer_name' },
         { data: 'rname' },
+        { data: 'category' },
+        { data: 'main_commune' },
+        { data: 'total_fund' },
+        { data: 'total_util' },
+        { data: 'note' },
+        { data: 'current' },
       ]
     });
 
