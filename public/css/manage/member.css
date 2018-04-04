@@ -7,17 +7,6 @@ section.title{
   bottom: 0;
   right: 0;
 }
-button {
-  background-color: rgb(133, 196, 247);
-  color: rgb(19, 19, 73);
-  font-weight: 650;
-  padding: 5px 9px;
-  font-size: 0.9em;
-  margin: 0px 2px;
-  border: 1px solid rgb(101, 169, 224);
-  border-radius: 8px;
-  cursor: pointer;
-}
 .xls-upload{
   display: inline;
   position: relative;
@@ -25,19 +14,14 @@ button {
 }
 .xls-upload>input{
   opacity: 0;
-  position: relative;
-  left: 85px;
-  top: -5px;
-  width: 80px;
-  height: 30px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   z-index: 1;
   cursor: pointer;
 }
-.xls-upload>button{
-  position: relative;
-  width: 80px;
-  height: 30px;
-} 
 
 form.i-form{
   position: relative;
