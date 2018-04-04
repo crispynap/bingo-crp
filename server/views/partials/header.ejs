@@ -1,25 +1,15 @@
-<nav>
-  <a class="nav-title" href="/">
-    <span>빈고 CRP</span>
-  </a>
-  <ul class="nav-menu">
-    <li>
-      <a class="menu-item menu-guide" href="/guide">
-        <span>안내</span>
-      </a>
-    </li>
-    <li>
-      <a class="menu-item menu-manage" href="/manage">
-        <span>관리</span>
-      </a>
-      <% include ./header-manage %>
-    </li>
-    <li>
-      <a class="menu-item menu-chart" href="/chart">
-        <span>통계</span>
-      </a>
-    </li>
-  </ul>
+<nav class="navbar navbar-default">
+  <div class="nav-left">
+    <a class="nav-title" href="/">
+      <span>빈고 CRP</span>
+    </a>
+    <ul class="nav nav-tabs">
+      <li class="dropdown"><a data-toggle="dropdown" href="/guide">안내</a></li>
+      <li class="dropdown"><a data-toggle="dropdown" href="/manage">관리</a></li>
+      <li class="dropdown"><a data-toggle="dropdown" href="/chart">통계</a></li>
+    </ul>
+  </div>
+
   <ul class="nav-system">
     <li>
       <a class="menu-item menu-login" href="/login">로그인</a>
