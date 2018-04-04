@@ -1,0 +1,34 @@
+button {
+  outline: none;  
+}
+a{
+  text-decoration:none;
+  color: black;
+}
+html{
+  width: 100%;  
+}
+body{
+  position: relative;
+  width: 100%;
+  font-size: 15px;
+}
+
+.container{
+  padding: 25px 0 25px 122px;
+  width: 1000px;
+  min-height: 400px;
+}
+
+
+.footer {
+  position: relative;
+  clear: both;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  background-color: #C5D4E2; 
+}
+.footer > div{
+  padding-left: 108px;  
+}
