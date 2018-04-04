@@ -20,9 +20,9 @@ router.get('/members/:ids', (req, res) => {
 });
 
 router.post('/members', (req, res) => {
-  const membersInfos = req.body.membersInfos;
+  const memberInfos = req.body.memberInfos;
 
-  addMembers(membersInfos)
+  addMembers(memberInfos)
     .then(() => console.log('ok'))
 });
 
@@ -51,14 +51,14 @@ function addMembers(memberInfos = {}) {
     _.each(memberInfos, memberInfo => addMember(memberInfo))
       .then(
         () => resolve()
-      )
+      );
   });
 }
 
 function addMember(memberInfo = {}) {
-  return new Promise((resolve, reject) => {
-    console.log(memberInfo)
+  console.log(memberInfo)
 
+  return new Promise((resolve, reject) => {
     const addDoerQuery = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('조합원', '${memberInfo.name}');`;
     const getDoerCodeQuery = `SELECT doer_code FROM 주체 WHERE doer_name='${memberInfo.name}';`;
     const db = new mysqlDbc();

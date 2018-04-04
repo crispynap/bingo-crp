@@ -217,7 +217,6 @@
   }
 
   function addMembers(memberInfos) {
-    console.log(memberInfos)
     $.post("../api/members", { memberInfos: memberInfos });
   }
 
