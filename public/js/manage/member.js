@@ -85,15 +85,6 @@
       ]
     });
 
-    $('#sheet-fund').DataTable({
-      data: json,
-      select: 'single',
-      columns: [
-        { data: 'doer_name' },
-        { data: 'total_fund' },
-      ]
-    });
-
     $('#sheet-util').DataTable({
       data: json,
       select: 'single',
@@ -226,6 +217,7 @@
   }
 
   function addMembers(memberInfos) {
+    console.log(memberInfos)
     $.post("../api/members", { memberInfos: memberInfos });
   }
 
@@ -296,6 +288,6 @@
 
   function setEvents() {
     const xlsButton = document.querySelector('.xls-upload>input');
-    xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableContent, tablesInfo) });
+    xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx) });
   }
 })();

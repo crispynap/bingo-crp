@@ -57,6 +57,8 @@ function addMembers(memberInfos = {}) {
 
 function addMember(memberInfo = {}) {
   return new Promise((resolve, reject) => {
+    console.log(memberInfo)
+
     const addDoerQuery = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('조합원', '${memberInfo.name}');`;
     const getDoerCodeQuery = `SELECT doer_code FROM 주체 WHERE doer_name='${memberInfo.name}';`;
     const db = new mysqlDbc();
