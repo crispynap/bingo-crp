@@ -1,3 +1,4 @@
+nav {position: relative;}
 .nav-left{
   margin: 0 0 0 40px;
 }
@@ -14,4 +15,9 @@
 }
 .nav-title{
   margin: 30px 15px 0 30px;
+}
+.nav-right{
+  position: absolute;
+  right: 60px;
+  top: 30px;
 }
