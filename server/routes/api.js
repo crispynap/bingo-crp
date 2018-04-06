@@ -23,7 +23,8 @@ router.post('/members', (req, res) => {
   const memberInfos = req.body.memberInfos;
 
   addMembers(memberInfos)
-    .then(() => console.log('ok'))
+    .then(() => res.end('ok'))
+    .catch(() => res.end('error'));
 });
 
 router.put('/members/:member_id', (req, res) => {

@@ -4,6 +4,8 @@
 
 const commonEvent = {
   readXlsx(e, callback, tableData) {
+    console.log(tableData)
+
     const file = e.target.files[0];
     if (!file) return;
 
@@ -11,8 +13,16 @@ const commonEvent = {
     reader.onload = (e) => {
       let buffers = e.target.result;
       buffers = new Uint8Array(buffers);
+      let workbook = [];
 
-      const workbook = XLSX.read(buffers, { type: "array" });
+      try {
+        workbook = XLSX.read(buffers, { type: "array" });
+      }
+      catch (error) {
+        alert(messages.incorrectFile);
+        return;
+      }
+
       const sheet_name_list = workbook.SheetNames;
       callback(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]), tableData);
     }
@@ -44,6 +54,7 @@ const common = {
 }
 
 const messages = {
+  incorrectFile: "파일이 형식에 맞지 않습니다.",
   incorrectSheet: "서식이 맞지 않습니다.",
   emptyCodeRow: "코드와 이름 둘 다 누락된 줄이 있습니다.",
   duplicatedNames(names) {

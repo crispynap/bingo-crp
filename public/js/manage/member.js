@@ -78,7 +78,7 @@
     const valid = sheetValidCheck(sheet, tableData);
 
     if (valid.err) {
-      alert(valid.message)
+      alert(valid.message);
       return;
     }
 
