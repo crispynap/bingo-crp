@@ -84,21 +84,23 @@
         const nowTab = $('.tab-content>.active')[0].dataset.tablename;
         const selectedData = tableData[indexes[0]];
 
-        const getInput = inputName => {
-          if (inputName) {
-            return `<div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1">${inputName}</span>
-              <input type="text" class="form-control" value="$">
+        const getInput = columnInfo => {
+          if (columnInfo.inputName) {
+            const inputData = selectedData[columnInfo.data] !== null ? selectedData[columnInfo.data] : "";
+            return `
+            <div class="col-xs-4">
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">${columnInfo.inputName}</span>
+                <input type="text" class="form-control" value="${inputData}">
+              </div>
             </div>`;
           } else {
             return "";
           }
         }
-        const inputs = _.reduce(tableColumns[nowTab], (memo, column) => memo + getInput(column.inputName), "");
+        const inputs = _.reduce(tableColumns[nowTab], (memo, column) => memo + getInput(column), "");
 
-        console.log(inputs)
-
-        $('#form-setting').empty().append(inputs);
+        $('#form-setting>div').empty().append(inputs);
       });
     })
   }
