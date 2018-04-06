@@ -3,7 +3,7 @@
 })();
 
 const commonEvent = {
-  readXlsx(e, callback, tableContent, tablesInfo) {
+  readXlsx(e, callback, tableData) {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -14,7 +14,7 @@ const commonEvent = {
 
       const workbook = XLSX.read(buffers, { type: "array" });
       const sheet_name_list = workbook.SheetNames;
-      callback(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]), tableContent, tablesInfo);
+      callback(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]), tableData);
     }
 
     reader.readAsArrayBuffer(file);

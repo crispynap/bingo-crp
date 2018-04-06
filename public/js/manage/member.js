@@ -9,7 +9,7 @@
 
   function setEvents() {
     const xlsButton = document.querySelector('.xls-upload>input');
-    xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx) });
+    xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableData) });
   }
 
   function getMembersAll() {
