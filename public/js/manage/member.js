@@ -3,15 +3,15 @@
   let tableData = [];
   const tableColumns = {
     primary: [
-      { data: 'member_code' },
-      { data: 'doer_name' },
-      { data: 'rname' },
-      { data: 'category' },
-      { data: 'main_commune' },
-      { data: 'total_fund' },
-      { data: 'total_util' },
-      { data: 'note' },
-      { data: 'current' },
+      { data: 'member_code', },
+      { data: 'doer_name', inputName: '이름' },
+      { data: 'rname', inputName: '실명' },
+      { data: 'category', inputName: '구분' },
+      { data: 'main_commune', inputName: '주 공동체' },
+      { data: 'total_fund', },
+      { data: 'total_util', },
+      { data: 'note', inputName: '비고' },
+      { data: 'current', inputName: '현황' },
     ],
     fund: [
       { data: 'doer_name' },
@@ -81,9 +81,8 @@
 
     _.each(tables, (table) => {
       table.on('select', function (e, dt, type, indexes) {
-        console.log(tableData[indexes[0]])
-        const nowTab = $('.tab-content>.active');
-        console.log(nowTab.dataset.tableName)
+        const nowTab = $('.tab-content>.active')[0].dataset.tablename;
+        const selectedData = tableData[indexes[0]];
 
       });
     })
