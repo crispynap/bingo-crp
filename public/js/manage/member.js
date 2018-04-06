@@ -1,19 +1,27 @@
 (() => {
 
+  let tableData = [];
+
   $(document).ready(() => {
-    getMembersAll();
     setEvents();
+    getMembersAll();
   });
+
+  function setEvents() {
+    const xlsButton = document.querySelector('.xls-upload>input');
+    xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx) });
+  }
 
   function getMembersAll() {
     $.get("../api/members", (data) => {
       setTables(data);
+      tableData = data;
     });
   }
 
-  function setTables(json) {
+  function setTables(data) {
     $('#sheet-primary').DataTable({
-      data: json,
+      data: data,
       select: 'single',
       columns: [
         { data: 'member_code' },
@@ -29,7 +37,7 @@
     });
 
     $('#sheet-fund').DataTable({
-      data: json,
+      data: data,
       select: 'single',
       columns: [
         { data: 'doer_name' },
@@ -38,7 +46,7 @@
     });
 
     $('#sheet-util').DataTable({
-      data: json,
+      data: data,
       select: 'single',
       columns: [
         { data: 'doer_name' },
@@ -47,7 +55,7 @@
     });
 
     $('#sheet-action').DataTable({
-      data: json,
+      data: data,
       select: 'single',
       columns: [
         { data: 'doer_name' },
@@ -56,7 +64,7 @@
     });
 
     $('#sheet-detail').DataTable({
-      data: json,
+      data: data,
       select: 'single',
       columns: [
         { data: 'doer_name' },
@@ -65,9 +73,9 @@
     });
   }
 
-  function getXlsx(sheet, tableContent, tablesInfo) {
+  function getXlsx(sheet, tableData) {
     _.removeByIndex(sheet, 0);
-    const valid = sheetValidCheck(sheet, tableContent);
+    const valid = sheetValidCheck(sheet, tableData);
 
     if (valid.err) {
       alert(valid.message)
@@ -75,7 +83,7 @@
     }
 
     console.dir(sheet)
-    console.dir(tableContent)
+    console.dir(tableData)
 
 
     addMembers(getMarkedRows(sheet, "a", "A"));
@@ -157,8 +165,4 @@
     return counts;
   }
 
-  function setEvents() {
-    const xlsButton = document.querySelector('.xls-upload>input');
-    xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx) });
-  }
 })();
