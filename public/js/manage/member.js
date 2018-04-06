@@ -81,9 +81,8 @@
 
     _.each(tables, (table) => {
       table.on('select', function (e, dt, type, indexes) {
-        console.log(tableData[indexes[0]])
-        const nowTab = $('.tab-content>.active');
-        console.log(nowTab.dataset.tableName)
+        const nowTab = $('.tab-content>.active')[0].dataset.tablename;
+        const selectedData = tableData[indexes[0]];
 
       });
     })
