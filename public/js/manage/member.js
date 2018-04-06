@@ -114,7 +114,7 @@
     $.post("../api/members", { memberInfos: memberInfos });
   }
 
-  function sheetValidCheck(sheet, tableContent) {
+  function sheetValidCheck(sheet, tableData) {
 
     if (!formValid(sheet)) return { err: true, message: messages.incorrectSheet };
 
@@ -129,7 +129,7 @@
     if (!_.isEmpty(duplSheetNames)) return { err: true, message: messages.duplicatedNames(duplSheetNames) }
 
     //'a' / 'A'와 현재 테이블에 중복되는 이름 있는지
-    const tableNamesCount = getFieldCounts(tableContent, "name");
+    const tableNamesCount = getFieldCounts(tableData, "name");
     duplTableName = _.findKey(sheetNamesCount, (count, name) => { return _.has(tableNamesCount, name) })
     if (duplTableName) return { err: true, message: messages.duplicatedNames(duplTableName) }
 
@@ -139,7 +139,7 @@
     if (!_.isEmpty(duplSheetCodes)) return { err: true, message: messages.duplicatedCodes(duplSheetCodes) }
 
     //'a' / 'A'와 현재 테이블에 중복되는 조합원 코드가 있는지
-    const tableCodesCount = getFieldCounts(tableContent, "member_code");
+    const tableCodesCount = getFieldCounts(tableData, "member_code");
     duplTableCode = _.findKey(sheetCodesCount, (count, code) => { return _.has(tableCodesCount, code) })
     if (duplTableCode) return { err: true, message: messages.duplicatedCodes(duplTableCode) }
 

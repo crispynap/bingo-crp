@@ -1,26 +1,8 @@
 (() => {
-  navHighlighting();
-
-  function navHighlighting() {
-    const currentMenu = location.pathname.split('/')[1];
-    const menuItem = document.querySelector(`.menu-${currentMenu}`);
-
-    if (menuItem) {
-      menuItem.classList.add('highlight');
-    }
-  }
 
 })();
 
 const commonEvent = {
-  preventOuterWheel(e) {
-    const deltaX = e.wheelDeltaX;
-    const deltaY = e.wheelDeltaY;
-    this.scrollLeft += (deltaX < 0 ? 1 : -1) * 30;
-    this.scrollTop += (deltaY < 0 ? 1 : -1) * 30;
-    e.preventDefault();
-  },
-
   readXlsx(e, callback, tableContent, tablesInfo) {
     const file = e.target.files[0];
     if (!file) return;
@@ -38,66 +20,9 @@ const commonEvent = {
     reader.readAsArrayBuffer(file);
   },
 
-
-  searchTable(e, table, tableContent) {
-    let a = setTimeout(() => { this.excuteTableSearch(e, table, tableContent) }, 600);
-  },
-
-  excuteTableSearch(e, table, tableContent) {
-    const keyword = e.target.value;
-
-    if (keyword === "") {
-      const tableRows = table.querySelectorAll('tr');
-      _.each(tableRows, tableRow => {
-        tableRow.style.display = "table-row";
-      })
-      return;
-    }
-
-    const tBody = table.querySelector('tbody');
-
-    _.each(tableContent, row => {
-      if (_.some(row, field => {
-        if (typeof field === 'string') {
-          return field.match(keyword);
-        } else {
-          return field.toString().match(keyword);
-        }
-      })) {
-        const tableRow = tBody.querySelector(`tr:nth-child(${row.lineNum})`);
-        tableRow.style.display = "table-row";
-      } else {
-        const tableRow = tBody.querySelector(`tr:nth-child(${row.lineNum})`);
-        tableRow.style.display = "none";
-      }
-    });
-  }
 }
 
 const common = {
-
-  //긁어옴. 출처: http://rootbox.co.kr/p/384
-  selectRange(obj) {
-    if (window.getSelection) {
-      var selected = window.getSelection();
-      selected.selectAllChildren(obj);
-    } else if (document.body.createTextRange) {
-      var range = document.body.createTextRange();
-      range.moveToElementText(obj);
-      range.select();
-    }
-  },
-
-  isContainHangul(str) {
-    check = /[가-힣]/;
-    return check.test(str);
-  },
-
-  isEveryChoseong(str) {
-    check = /[ㄱ-ㅎ]/;
-    return _.every(str, letter => check.test(letter));
-  },
-
   /* 선택자를 매개변수로 넘겨서 해당 cssRule을 찾아서 리턴하는 함수 */
   cssSelector(selector) {
     for (i = 0; i < document.styleSheets.length; i++) {
