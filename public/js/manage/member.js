@@ -83,7 +83,7 @@
       table.on('select', function (e, dt, type, indexes) {
         console.log(tableData[indexes[0]])
         const nowTab = $('.tab-content>.active');
-        console.log(nowTab)
+        console.log(nowTab.dataset.tableName)
 
       });
     })
