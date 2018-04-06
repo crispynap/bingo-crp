@@ -4,8 +4,6 @@
 
 const commonEvent = {
   readXlsx(e, callback, tableData) {
-    console.log(tableData)
-
     const file = e.target.files[0];
     if (!file) return;
 
