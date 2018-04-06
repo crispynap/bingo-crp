@@ -60,25 +60,33 @@
     const tables = [];
 
     const primaryTableOptions = getTableOptions(data, tableColumns.primary);
-    const primaryTable = $('#sheet-primary').DataTable(primaryTableOptions);
+    const primaryTable = $('#table-primary').DataTable(primaryTableOptions);
     tables.push(primaryTable);
 
     const fundTableOptions = getTableOptions(data, tableColumns.fund);
-    const fundTable = $('#sheet-fund').DataTable(fundTableOptions);
+    const fundTable = $('#table-fund').DataTable(fundTableOptions);
     tables.push(fundTable);
 
     const utilTableOptions = getTableOptions(data, tableColumns.util);
-    const utilTable = $('#sheet-util').DataTable(utilTableOptions);
+    const utilTable = $('#table-util').DataTable(utilTableOptions);
     tables.push(utilTable);
 
     const actionTableOptions = getTableOptions(data, tableColumns.action);
-    const actionTable = $('#sheet-action').DataTable(actionTableOptions);
+    const actionTable = $('#table-action').DataTable(actionTableOptions);
     tables.push(actionTable);
 
     const detailTableOptions = getTableOptions(data, tableColumns.detail);
-    const detailTable = $('#sheet-detail').DataTable(detailTableOptions);
+    const detailTable = $('#table-detail').DataTable(detailTableOptions);
     tables.push(detailTable);
 
+    _.each(tables, (table) => {
+      table.on('select', function (e, dt, type, indexes) {
+        console.log(tableData[indexes[0]])
+        const nowTab = $('.tab-content>.active');
+        console.log(nowTab)
+
+      });
+    })
   }
 
   function getXlsx(sheet, tableData) {
