@@ -84,9 +84,23 @@
         const nowTab = $('.tab-content>.active')[0].dataset.tablename;
         const selectedData = tableData[indexes[0]];
 
+        const getInput = inputName => {
+          if (inputName) {
+            return
+            `<div class="input-group">
+              <span class="input-group-addon" id="basic-addon1">${inputName}</span>
+              <input type="text" class="form-control" value="$">
+            </div>`;
+          }
+        }
+        const inputs = _.reduce(tableColumns[nowTab], (memo, column) => getInput(column.inputName));
+
+
+
       });
     })
   }
+
 
   function getXlsx(sheet, tableData) {
     _.removeByIndex(sheet, 0);
