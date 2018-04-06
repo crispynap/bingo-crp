@@ -23,7 +23,7 @@ section.title{
   cursor: pointer;
 }
 
-form.i-form{
+#form-setting{
   position: relative;
   width: 100%;
   height: 150px;

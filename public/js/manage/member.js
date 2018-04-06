@@ -86,17 +86,19 @@
 
         const getInput = inputName => {
           if (inputName) {
-            return
-            `<div class="input-group">
-              <span class="input-group-addon" id="basic-addon1">${inputName}</span>
+            return `<div class="input-group">
+                      <span class="input-group-addon" id="basic-addon1">${inputName}</span>
               <input type="text" class="form-control" value="$">
             </div>`;
+          } else {
+            return "";
           }
         }
-        const inputs = _.reduce(tableColumns[nowTab], (memo, column) => getInput(column.inputName));
+        const inputs = _.reduce(tableColumns[nowTab], (memo, column) => memo + getInput(column.inputName), "");
 
+        console.log(inputs)
 
-
+        $('#form-setting').empty().append(inputs);
       });
     })
   }
