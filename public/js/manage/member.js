@@ -57,20 +57,27 @@
   }
 
   function setTables(data) {
+    const tables = [];
+
     const primaryTableOptions = getTableOptions(data, tableColumns.primary);
     const primaryTable = $('#sheet-primary').DataTable(primaryTableOptions);
+    tables.push(primaryTable);
 
     const fundTableOptions = getTableOptions(data, tableColumns.fund);
     const fundTable = $('#sheet-fund').DataTable(fundTableOptions);
+    tables.push(fundTable);
 
     const utilTableOptions = getTableOptions(data, tableColumns.util);
     const utilTable = $('#sheet-util').DataTable(utilTableOptions);
+    tables.push(utilTable);
 
     const actionTableOptions = getTableOptions(data, tableColumns.action);
     const actionTable = $('#sheet-action').DataTable(actionTableOptions);
+    tables.push(actionTable);
 
     const detailTableOptions = getTableOptions(data, tableColumns.detail);
     const detailTable = $('#sheet-detail').DataTable(detailTableOptions);
+    tables.push(detailTable);
 
   }
 
