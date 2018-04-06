@@ -1,6 +1,35 @@
 (() => {
 
   let tableData = [];
+  const tableColumns = {
+    primary: [
+      { data: 'member_code' },
+      { data: 'doer_name' },
+      { data: 'rname' },
+      { data: 'category' },
+      { data: 'main_commune' },
+      { data: 'total_fund' },
+      { data: 'total_util' },
+      { data: 'note' },
+      { data: 'current' },
+    ],
+    fund: [
+      { data: 'doer_name' },
+      { data: 'total_fund' },
+    ],
+    util: [
+      { data: 'doer_name' },
+      { data: 'total_util' },
+    ],
+    action: [
+      { data: 'doer_name' },
+      { data: 'main_commune' },
+    ],
+    detail: [
+      { data: 'doer_name' },
+      { data: 'rname' },
+    ],
+  }
 
   $(document).ready(() => {
     setEvents();
@@ -19,58 +48,30 @@
     });
   }
 
+  function getTableOptions(data, columns) {
+    return {
+      data: data,
+      select: 'single',
+      columns: columns
+    }
+  }
+
   function setTables(data) {
-    $('#sheet-primary').DataTable({
-      data: data,
-      select: 'single',
-      columns: [
-        { data: 'member_code' },
-        { data: 'doer_name' },
-        { data: 'rname' },
-        { data: 'category' },
-        { data: 'main_commune' },
-        { data: 'total_fund' },
-        { data: 'total_util' },
-        { data: 'note' },
-        { data: 'current' },
-      ]
-    });
+    const primaryTableOptions = getTableOptions(data, tableColumns.primary);
+    const primaryTable = $('#sheet-primary').DataTable(primaryTableOptions);
 
-    $('#sheet-fund').DataTable({
-      data: data,
-      select: 'single',
-      columns: [
-        { data: 'doer_name' },
-        { data: 'total_fund' },
-      ]
-    });
+    const fundTableOptions = getTableOptions(data, tableColumns.fund);
+    const fundTable = $('#sheet-fund').DataTable(fundTableOptions);
 
-    $('#sheet-util').DataTable({
-      data: data,
-      select: 'single',
-      columns: [
-        { data: 'doer_name' },
-        { data: 'total_util' },
-      ]
-    });
+    const utilTableOptions = getTableOptions(data, tableColumns.util);
+    const utilTable = $('#sheet-util').DataTable(utilTableOptions);
 
-    $('#sheet-action').DataTable({
-      data: data,
-      select: 'single',
-      columns: [
-        { data: 'doer_name' },
-        { data: 'main_commune' },
-      ]
-    });
+    const actionTableOptions = getTableOptions(data, tableColumns.action);
+    const actionTable = $('#sheet-action').DataTable(actionTableOptions);
 
-    $('#sheet-detail').DataTable({
-      data: data,
-      select: 'single',
-      columns: [
-        { data: 'doer_name' },
-        { data: 'rname' },
-      ]
-    });
+    const detailTableOptions = getTableOptions(data, tableColumns.detail);
+    const detailTable = $('#sheet-detail').DataTable(detailTableOptions);
+
   }
 
   function getXlsx(sheet, tableData) {
