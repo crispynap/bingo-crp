@@ -5,7 +5,8 @@ module.exports = (function () {
       port: '3306',
       user: 'root',
       password: 'Bingo0221!',
-      database: 'crp'
+      database: 'crp',
+      dateStrings: 'date'
     },
     real: { // real server db info
       host: '',

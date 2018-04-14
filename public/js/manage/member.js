@@ -118,6 +118,9 @@
       return;
     }
 
+    console.log('sheet: ', sheet)
+    console.log('tableData: ', tableData)
+
     try {
       const formatedSheet = xlsxFormating(sheet);
     }
@@ -125,7 +128,7 @@
       alert(e.message);
     }
 
-    addMembers(getMarkedRows(formatedSheet, "a", "A"));
+    addMembers(getMarkedRows(sheet, "a", "A"));
     // updateMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
     // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
   }

@@ -23,8 +23,7 @@ const commonEvent = {
         return;
       }
 
-      const sheet_name_list = workbook.SheetNames;
-      callback(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]), tableData);
+      callback(XLSX.utils.sheet_to_row_object_array(workbook.Sheets.content), tableData, {});
     }
 
     reader.readAsArrayBuffer(file);
