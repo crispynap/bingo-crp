@@ -14,20 +14,23 @@
       { data: 'current', inputName: '현황' },
     ],
     fund: [
-      { data: 'doer_name' },
+      { data: 'doer_name', inputName: '이름' },
       { data: 'total_fund' },
     ],
     util: [
-      { data: 'doer_name' },
+      { data: 'doer_name', inputName: '이름' },
       { data: 'total_util' },
     ],
     action: [
-      { data: 'doer_name' },
-      { data: 'main_commune' },
+      { data: 'doer_name', inputName: '이름' },
+      { data: 'main_commune', inputName: '주 공동체' },
     ],
     detail: [
-      { data: 'doer_name' },
-      { data: 'rname' },
+      { data: 'doer_name', inputName: '이름' },
+      { data: 'rname', inputName: '실명' },
+      { data: 'join_date', format: 'date', inputName: '가입일' },
+      { data: 'leave_date', format: 'date', inputName: '탈퇴일' },
+      { data: 'celeb_date', format: 'date', inputName: '기념일' },
     ],
   }
 
@@ -115,11 +118,14 @@
       return;
     }
 
-    console.dir(sheet)
-    console.dir(tableData)
+    try {
+      const formatedSheet = xlsxFormating(sheet);
+    }
+    catch (e) {
+      alert(e.message);
+    }
 
-
-    addMembers(getMarkedRows(sheet, "a", "A"));
+    addMembers(getMarkedRows(formatedSheet, "a", "A"));
     // updateMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
     // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
   }
@@ -145,6 +151,16 @@
 
   function addMembers(memberInfos) {
     $.post("../api/members", { memberInfos: memberInfos });
+  }
+
+  function xlsxFormating(sheet) {
+    return _.map(sheet, row => {
+      return _.map(row, cell => {
+
+
+        return cell;
+      })
+    })
   }
 
   function sheetValidCheck(sheet, tableData) {

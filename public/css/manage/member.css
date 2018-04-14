@@ -74,7 +74,7 @@ input.calendar{
   font-family: system-ui;
 }
 
-section#sheets .tab-content{
+section#tables .tab-content{
   min-height: 400px;
   padding: 5px;
   border: 1px solid #ddd;
@@ -102,5 +102,5 @@ td{
   padding: 0 10px 0 5px;
 }
 tr:nth-child(even) {background-color: #eaf9fd;}
-#sheets tr:hover {background-color: rgb(206, 241, 211);}
-#sheets tr.selected {background-color: #08C;}
+#tables tr:hover {background-color: rgb(206, 241, 211);}
+#tables tr.selected {background-color: #08C;}
