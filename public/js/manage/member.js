@@ -1,6 +1,8 @@
 (() => {
 
   let tableData = [];
+  let selectedRowNumber;
+
   const tableColumns = {
     primary: [
       { data: 'member_code', },
@@ -42,6 +44,13 @@
   function setEvents() {
     const xlsButton = document.querySelector('.xls-upload>input');
     xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableData) });
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+
+      console.log(e.target)
+
+      setFormSetting(selectedRowNumber);
+    })
   }
 
   function getMembersAll() {
@@ -60,54 +69,59 @@
   }
 
   function setTables(data) {
-    const tables = [];
+    const tables = {};
 
     const primaryTableOptions = getTableOptions(data, tableColumns.primary);
     const primaryTable = $('#table-primary').DataTable(primaryTableOptions);
-    tables.push(primaryTable);
+    tables.primary = primaryTable;
 
     const fundTableOptions = getTableOptions(data, tableColumns.fund);
     const fundTable = $('#table-fund').DataTable(fundTableOptions);
-    tables.push(fundTable);
+    tables.fund = fundTable;
 
     const utilTableOptions = getTableOptions(data, tableColumns.util);
     const utilTable = $('#table-util').DataTable(utilTableOptions);
-    tables.push(utilTable);
+    tables.util = utilTable;
 
     const actionTableOptions = getTableOptions(data, tableColumns.action);
     const actionTable = $('#table-action').DataTable(actionTableOptions);
     tables.push(actionTable);
+    tables.action = actionTable;
 
     const detailTableOptions = getTableOptions(data, tableColumns.detail);
     const detailTable = $('#table-detail').DataTable(detailTableOptions);
-    tables.push(detailTable);
+    tables.detail = detailTable;
 
     _.each(tables, (table) => {
       table.on('select', function (e, dt, type, indexes) {
-        const nowTab = $('.tab-content>.active')[0].dataset.tablename;
-        const selectedData = tableData[indexes[0]];
-
-        const getInput = columnInfo => {
-          if (columnInfo.inputName) {
-            const inputData = selectedData[columnInfo.data] !== null ? selectedData[columnInfo.data] : "";
-            return `
-            <div class="col-xs-4">
-              <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">${columnInfo.inputName}</span>
-                <input type="text" class="form-control" value="${inputData}">
-              </div>
-            </div>`;
-          } else {
-            return "";
-          }
-        }
-        const inputs = _.reduce(tableColumns[nowTab], (memo, column) => memo + getInput(column), "");
-
-        $('#form-setting>div').empty().append(inputs);
+        selectedRowNumber = indexes[0];
+        setFormSetting(selectedRowNumber);
       });
     })
   }
 
+  function setFormSetting(rowNumber) {
+    const nowTab = $('.tab-content>.active')[0].dataset.tablename;
+    const selectedData = tableData[rowNumber];
+
+    const getInput = columnInfo => {
+      if (columnInfo.inputName) {
+        const inputData = selectedData[columnInfo.data] !== null ? selectedData[columnInfo.data] : "";
+        return `
+        <div class="col-xs-4">
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">${columnInfo.inputName}</span>
+            <input type="text" class="form-control" value="${inputData}">
+          </div>
+        </div>`;
+      } else {
+        return "";
+      }
+    }
+    const inputs = _.reduce(tableColumns[nowTab], (memo, column) => memo + getInput(column), "");
+
+    $('#form-setting>div').empty().append(inputs);
+  }
 
   function getXlsx(sheet, tableData) {
     _.removeByIndex(sheet, 0);
