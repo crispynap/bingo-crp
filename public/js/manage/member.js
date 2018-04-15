@@ -151,13 +151,6 @@
     console.log('sheet: ', sheet)
     console.log('tableData: ', tableData)
 
-    try {
-      const formatedSheet = xlsxFormating(sheet);
-    }
-    catch (e) {
-      alert(e.message);
-    }
-
     addMembers(getMarkedRows(sheet, "a", "A"));
     // updateMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
     // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
@@ -186,23 +179,12 @@
     $.post("../api/members", { memberInfos: memberInfos });
   }
 
-  function xlsxFormating(sheet) {
-    return _.map(sheet, row => {
-      return _.map(row, cell => {
-
-
-        return cell;
-      })
-    })
-  }
-
   function sheetValidCheck(sheet, tableData) {
 
     if (!formFormatCheck(sheet)) return { err: true, message: messages.incorrectSheet };
 
-    //코드와 이름 둘 다 누락된 줄이 있는지
-    if (_.find(sheet, (row) => { return (_.isEmpty(row['name']) && _.isEmpty(row['member_code'])) }))
-      return { err: true, message: messages.emptyCodeRow };
+    const everyRowsErr = everyRowsCheck(sheet, tableData);
+    if (everyRowsErr.err) return everyRowsErr;
 
     const addingRowsErr = addingRowsCheck(sheet, tableData);
     if (addingRowsErr.err) return addingRowsErr;
@@ -217,6 +199,18 @@
     // const SDTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "s" || 표시 === "S" || 표시 === "d" || 표시 === "D" });
 
     return { err: false };
+  }
+
+  function everyRowsCheck(sheet, tableData) {
+
+    //코드와 이름 둘 다 누락된 줄이 있는지
+    if (_.find(sheet, (row) => { return (_.isEmpty(row['name']) && _.isEmpty(row['member_code'])) }))
+      return { err: true, message: messages.emptyCodeRow };
+
+    //포맷 체크
+    _.each(sheet, row => {
+
+    });
   }
 
   function addingRowsCheck(sheet, tableData) {
