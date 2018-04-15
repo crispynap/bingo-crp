@@ -204,6 +204,24 @@
     if (_.find(sheet, (row) => { return (_.isEmpty(row['name']) && _.isEmpty(row['member_code'])) }))
       return { err: true, message: messages.emptyCodeRow };
 
+    const addingRowsErr = aTagRowsCheck(sheet, tableData);
+    if (addingRowsErr.err) return addingRowsErr;
+
+    const changingRowsErr = sTagRowsCheck(sheet, tableData);
+    if (changingRowsErr.err) return changingRowsErr;
+
+    const deletingRowsErr = dTagRowsCheck(sheet, tableData);
+    if (deletingRowsErr.err) return deletingRowsErr;
+
+    //'s' / 'S' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
+    //'d' / 'D' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
+    // const SDTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "s" || 표시 === "S" || 표시 === "d" || 표시 === "D" });
+
+    return { err: false };
+  }
+
+  function aTagRowsCheck(sheet, tableData) {
+
     const aTagRows = _.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" });
     //'a' / 'A'에 이름 중복 행이 있는지
     const sheetNamesCount = getFieldCounts(aTagRows, "name");
@@ -224,10 +242,6 @@
     const tableCodesCount = getFieldCounts(tableData, "member_code");
     duplTableCode = _.findKey(sheetCodesCount, (count, code) => { return _.has(tableCodesCount, code) })
     if (duplTableCode) return { err: true, message: messages.duplicatedCodes(duplTableCode) }
-
-    //'s' / 'S' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
-    //'d' / 'D' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
-    // const SDTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "s" || 표시 === "S" || 표시 === "d" || 표시 === "D" });
 
     return { err: false };
   }
