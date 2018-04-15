@@ -1,7 +1,7 @@
 (() => {
 
   let tableData = [];
-  let selectedRowNumber;
+  let editingRow;
   const dataTables = {};
 
   const tableColumns = {
@@ -54,7 +54,7 @@
       const shownTabName = $(e.target).attr("href");
       const shownTableName = $(shownTabName)[0].dataset.tablename;
       const shownTable = dataTables[shownTableName];
-      shownTable.row(selectedRowNumber).select();
+      shownTable.row(editingRow).select();
     })
   }
 
@@ -96,8 +96,8 @@
 
     _.each(dataTables, (table) => {
       table.on('select', function (e, dt, type, indexes) {
-        selectedRowNumber = indexes[0];
-        setFormSetting(selectedRowNumber);
+        editingRow = indexes[0];
+        setFormSetting(editingRow);
       });
     });
 
