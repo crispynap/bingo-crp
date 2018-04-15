@@ -57,10 +57,24 @@ const messages = {
   incorrectSheet: "서식이 맞지 않습니다.",
   emptyCodeRow: "코드와 이름 둘 다 누락된 줄이 있습니다.",
   duplicatedNames(names) {
-    return `이름이 중복되었습니다: 중복 이름: ${names}`
+    return `이름이 중복되었습니다: 중복 이름: ${names}`;
   },
   duplicatedCodes(codes) {
-    return `조합원 코드가 중복되었습니다. 중복 코드: ${codes}`
+    return `조합원 코드가 중복되었습니다. 중복 코드: ${codes}`;
+  },
+  incorrectFormat(cell, format) {
+    let formatExplain;
+
+    switch (format) {
+      case "number":
+      case "money":
+        formatExplain = "숫자"; break;
+      case "date":
+        formatExplain = "날짜(yyyy-mm-dd)"; break;
+      default:
+        formatExplain = format;
+    }
+    return `입력값이 형식과 다릅니다.\n입력값: ${cell}\n맞는 형식: ` + formatExplain;
   }
 }
 

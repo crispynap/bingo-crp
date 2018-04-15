@@ -190,6 +190,8 @@
 
   function sheetValidCheck(sheet, tableData) {
 
+    console.log(sheet)
+
     if (!formFormatCheck(sheet)) return { err: true, message: messages.incorrectSheet };
 
     const everyRowsErr = everyRowsCheck(sheet, tableData);
@@ -217,24 +219,43 @@
       return { err: true, message: messages.emptyCodeRow };
 
     //포맷 체크
-    const flattenColumnsInfo = _.flatten(tableColumns, true);
-    console.log(flattenColumnsInfo);
-    _.each(sheet, row => {
-      for (const cellName in row) {
-        if (cellName === 'mark')
-          continue;
+    for (const row of sheet) {
 
-
-
-        // _.findWhere(publicServicePulitzers, { newsroom: "The New York Times" });
-        console.log(cellName);
-
-
+      for (const cellName in dataInfo) {
+        const cellForamtErr = cellFormatCheck(row[cellName], dataInfo[cellName].format);
+        if (cellForamtErr.err) return cellForamtErr;
       }
-    });
+
+    }
 
     return { err: false };
   }
+
+  function cellFormatCheck(cell, format) {
+    if (cell === undefined) return { err: false };
+
+    switch (format) {
+      case "number":
+      case "money":
+        if (isNaN(parseInt(cell, 10)))
+          return { err: true, message: messages.incorrectFormat(cell, format) };
+        break;
+
+      case "date":
+        if (typeof cell !== "string")
+          return { err: true, message: messages.incorrectFormat(cell, format) };
+        const date = cell.split("-");
+        if (date.length !== 3 ||
+          date[0].length !== 4 || isNaN(parseInt(date[0], 10)) ||
+          date[1].length !== 2 || isNaN(parseInt(date[1], 10)) || date[1] > 12 || date[1] == 0 ||
+          date[2].length !== 2 || isNaN(parseInt(date[2], 10)) || date[1] > 31 || date[2] == 0)
+          return { err: true, message: messages.incorrectFormat(cell, format) };
+        break;
+    }
+
+    return { err: false };
+  }
+
 
   function addingRowsCheck(sheet, tableData) {
 
