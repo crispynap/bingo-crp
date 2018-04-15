@@ -204,7 +204,7 @@
     if (_.find(sheet, (row) => { return (_.isEmpty(row['name']) && _.isEmpty(row['member_code'])) }))
       return { err: true, message: messages.emptyCodeRow };
 
-    const addingRowsErr = addingCheck(sheet, tableData);
+    const addingRowsErr = addingRowsCheck(sheet, tableData);
     if (addingRowsErr.err) return addingRowsErr;
 
     const modifingRowsErr = modifingRowsCheck(sheet, tableData);
@@ -219,25 +219,25 @@
     return { err: false };
   }
 
-  function addingCheck(sheet, tableData) {
+  function addingRowsCheck(sheet, tableData) {
 
     const addingRows = _.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" });
-    //'a' / 'A'에 이름 중복 행이 있는지
+    //추가행에 이름 중복 행이 있는지
     const sheetNamesCount = getFieldCounts(addingRows, "name");
     const duplSheetNames = getDuplicatesField(sheetNamesCount);
     if (!_.isEmpty(duplSheetNames)) return { err: true, message: messages.duplicatedNames(duplSheetNames) }
 
-    //'a' / 'A'와 현재 테이블에 중복되는 이름 있는지
+    //추가행와 현재 테이블에 중복되는 이름 있는지
     const tableNamesCount = getFieldCounts(tableData, "name");
     duplTableName = _.findKey(sheetNamesCount, (count, name) => { return _.has(tableNamesCount, name) })
     if (duplTableName) return { err: true, message: messages.duplicatedNames(duplTableName) }
 
-    //'a' / 'A'에 조합원 코드 중복 행이 있는지
+    //추가행에 조합원 코드 중복 행이 있는지
     const sheetCodesCount = getFieldCounts(addingRows, "member_code");
     const duplSheetCodes = getDuplicatesField(sheetCodesCount);
     if (!_.isEmpty(duplSheetCodes)) return { err: true, message: messages.duplicatedCodes(duplSheetCodes) }
 
-    //'a' / 'A'와 현재 테이블에 중복되는 조합원 코드가 있는지
+    //추가행와 현재 테이블에 중복되는 조합원 코드가 있는지
     const tableCodesCount = getFieldCounts(tableData, "member_code");
     duplTableCode = _.findKey(sheetCodesCount, (count, code) => { return _.has(tableCodesCount, code) })
     if (duplTableCode) return { err: true, message: messages.duplicatedCodes(duplTableCode) }
@@ -250,16 +250,18 @@
 
     const modifingRows = _.pick(sheet, ({ mark }) => { return mark === "s" || mark === "S" });
 
-    //s가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
+    //수정행의 코드 혹은 이름이 현재 테이블 내용에 있는지
+    _.each(modifingRows, row => {
+    });
 
     //s가 코드를 지정하고 이름이 있을 경우 테이블/ s코드 행들에 중복 이름이 있는지
 
-    //'a' / 'A'에 이름 중복 행이 있는지
+    //추가행에 이름 중복 행이 있는지
     const sheetNamesCount = getFieldCounts(addingRows, "name");
     const duplSheetNames = getDuplicatesField(sheetNamesCount);
     if (!_.isEmpty(duplSheetNames)) return { err: true, message: messages.duplicatedNames(duplSheetNames) }
 
-    //'a' / 'A'와 현재 테이블에 중복되는 이름 있는지
+    //추가행와 현재 테이블에 중복되는 이름 있는지
     const tableNamesCount = getFieldCounts(tableData, "name");
     duplTableName = _.findKey(sheetNamesCount, (count, name) => { return _.has(tableNamesCount, name) })
     if (duplTableName) return { err: true, message: messages.duplicatedNames(duplTableName) }
