@@ -148,7 +148,6 @@
       alert(valid.message);
       return;
     }
-
     console.log('sheet: ', sheet)
     console.log('tableData: ', tableData)
 
