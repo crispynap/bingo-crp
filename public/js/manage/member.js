@@ -4,33 +4,33 @@
 
   const tableColumns = {
     primary: [
-      { data: 'member_code', },
+      { data: 'member_code', format: 'number', inputName: '코드', modifiable: false },
       { data: 'doer_name', inputName: '이름' },
       { data: 'rname', inputName: '실명' },
       { data: 'category', inputName: '구분' },
       { data: 'main_commune', inputName: '주 공동체' },
-      { data: 'total_fund', },
-      { data: 'total_util', },
+      { data: 'total_fund', format: 'money', modifiable: false },
+      { data: 'total_util', format: 'money', modifiable: false },
       { data: 'note', inputName: '비고' },
       { data: 'current', inputName: '현황' },
     ],
     fund: [
-      { data: 'member_code', },
+      { data: 'member_code', format: 'number', inputName: '코드', modifiable: false },
       { data: 'doer_name', inputName: '이름' },
-      { data: 'total_fund' },
+      { data: 'total_fund', format: 'money', modifiable: false },
     ],
     util: [
-      { data: 'member_code', },
+      { data: 'member_code', format: 'number', inputName: '코드', modifiable: false },
       { data: 'doer_name', inputName: '이름' },
-      { data: 'total_util' },
+      { data: 'total_util', format: 'money', modifiable: false },
     ],
     action: [
-      { data: 'member_code', },
+      { data: 'member_code', format: 'number', inputName: '코드', modifiable: false },
       { data: 'doer_name', inputName: '이름' },
       { data: 'main_commune', inputName: '주 공동체' },
     ],
     detail: [
-      { data: 'member_code', },
+      { data: 'member_code', format: 'number', inputName: '코드', modifiable: false },
       { data: 'doer_name', inputName: '이름' },
       { data: 'rname', inputName: '실명' },
       { data: 'join_date', format: 'date', inputName: '가입일' },
