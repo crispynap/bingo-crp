@@ -204,27 +204,26 @@
     if (_.find(sheet, (row) => { return (_.isEmpty(row['name']) && _.isEmpty(row['member_code'])) }))
       return { err: true, message: messages.emptyCodeRow };
 
-    const addingRowsErr = aTagRowsCheck(sheet, tableData);
+    const addingRowsErr = addingCheck(sheet, tableData);
     if (addingRowsErr.err) return addingRowsErr;
 
-    const changingRowsErr = sTagRowsCheck(sheet, tableData);
-    if (changingRowsErr.err) return changingRowsErr;
+    const modifingRowsErr = modifingRowsCheck(sheet, tableData);
+    if (modifingRowsErr.err) return modifingRowsErr;
 
-    const deletingRowsErr = dTagRowsCheck(sheet, tableData);
+    const deletingRowsErr = deletingRowsCheck(sheet, tableData);
     if (deletingRowsErr.err) return deletingRowsErr;
 
-    //'s' / 'S' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
     //'d' / 'D' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
     // const SDTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "s" || 표시 === "S" || 표시 === "d" || 표시 === "D" });
 
     return { err: false };
   }
 
-  function aTagRowsCheck(sheet, tableData) {
+  function addingCheck(sheet, tableData) {
 
-    const aTagRows = _.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" });
+    const addingRows = _.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" });
     //'a' / 'A'에 이름 중복 행이 있는지
-    const sheetNamesCount = getFieldCounts(aTagRows, "name");
+    const sheetNamesCount = getFieldCounts(addingRows, "name");
     const duplSheetNames = getDuplicatesField(sheetNamesCount);
     if (!_.isEmpty(duplSheetNames)) return { err: true, message: messages.duplicatedNames(duplSheetNames) }
 
@@ -234,7 +233,7 @@
     if (duplTableName) return { err: true, message: messages.duplicatedNames(duplTableName) }
 
     //'a' / 'A'에 조합원 코드 중복 행이 있는지
-    const sheetCodesCount = getFieldCounts(aTagRows, "member_code");
+    const sheetCodesCount = getFieldCounts(addingRows, "member_code");
     const duplSheetCodes = getDuplicatesField(sheetCodesCount);
     if (!_.isEmpty(duplSheetCodes)) return { err: true, message: messages.duplicatedCodes(duplSheetCodes) }
 
@@ -245,6 +244,29 @@
 
     return { err: false };
   }
+
+
+  function modifingRowsCheck(sheet, tableData) {
+
+    const modifingRows = _.pick(sheet, ({ mark }) => { return mark === "s" || mark === "S" });
+
+    //s가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
+
+    //s가 코드를 지정하고 이름이 있을 경우 테이블/ s코드 행들에 중복 이름이 있는지
+
+    //'a' / 'A'에 이름 중복 행이 있는지
+    const sheetNamesCount = getFieldCounts(addingRows, "name");
+    const duplSheetNames = getDuplicatesField(sheetNamesCount);
+    if (!_.isEmpty(duplSheetNames)) return { err: true, message: messages.duplicatedNames(duplSheetNames) }
+
+    //'a' / 'A'와 현재 테이블에 중복되는 이름 있는지
+    const tableNamesCount = getFieldCounts(tableData, "name");
+    duplTableName = _.findKey(sheetNamesCount, (count, name) => { return _.has(tableNamesCount, name) })
+    if (duplTableName) return { err: true, message: messages.duplicatedNames(duplTableName) }
+
+    return { err: false };
+  }
+
 
   function formValid(sheet) { return (_.isArray(sheet)); }
 
