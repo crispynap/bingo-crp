@@ -47,14 +47,22 @@
   });
 
   function setEvents() {
+
+    //서식 삽입 버튼 누를 시 xlsx 업로드 동작
     const xlsButton = document.querySelector('.xls-upload>input');
     xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableData) });
 
+    //탭 전환시
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+      const prevTabName = $(e.relatedTarget).attr("href");
+      const prevTableName = $(prevTabName)[0].dataset.tablename;
+      const prevTable = dataTables[prevTableName];
+      const prevRow = prevTable.row('.selected');
+
       const shownTabName = $(e.target).attr("href");
       const shownTableName = $(shownTabName)[0].dataset.tablename;
       const shownTable = dataTables[shownTableName];
-      shownTable.row(editingRow).select();
+      shownTable.row(prevRow).select();
     });
   }
 
@@ -115,7 +123,7 @@
         <div class="col-xs-4">
           <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">${columnInfo.inputName}</span>
-            <input type="text" class="form-control" value="${inputData}">
+            <input type="text" class="form-control" data-name="${columnInfo.data}" value="${inputData}">
           </div>
         </div>`;
       } else {
@@ -234,5 +242,6 @@
     });
     return counts;
   }
+
 
 })();
