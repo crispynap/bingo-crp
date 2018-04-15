@@ -55,7 +55,7 @@
       const shownTableName = $(shownTabName)[0].dataset.tablename;
       const shownTable = dataTables[shownTableName];
       shownTable.row(editingRow).select();
-    })
+    });
   }
 
   function getMembersAll() {
@@ -124,7 +124,7 @@
     }
     const inputs = _.reduce(tableColumns[nowTab], (memo, column) => memo + getInput(column), "");
 
-    $('#form-setting>div').empty().append(inputs);
+    $('#editor').empty().append(inputs);
   }
 
   function getXlsx(sheet, tableData) {

@@ -23,7 +23,7 @@ section.title{
   cursor: pointer;
 }
 
-#form-setting{
+#editor-form{
   position: relative;
   width: 100%;
   height: 220px;
@@ -31,23 +31,8 @@ section.title{
   margin: 15px 10px;
   padding: 10px;
 }
-#form-setting .input-group{
+#editor-form .input-group{
   margin-bottom: 10px;
-
-}
-  form.i-form .i-slot{
-  width: 105px;
-  float: left;
-  position: relative;
-  margin-top: 5px;
-  margin-bottom: 15px;
-  line-height: 1.5;
-}
-.i-slot .label{
-  line-height: 180%;
-  color: rgb(126, 132, 138);
-  margin-bottom: 1px;
-  margin-top: 0;
 }
 div.quick-date>a{
   padding: 3px 5px 3px 0;
