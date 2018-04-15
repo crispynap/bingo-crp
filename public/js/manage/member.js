@@ -1,7 +1,6 @@
 (() => {
 
   let tableData = [];
-  let editingRow;
   const dataTables = {};
 
   const tableColumns = {
@@ -114,8 +113,7 @@
 
     _.each(dataTables, (table) => {
       table.on('select', function (e, dt, type, indexes) {
-        editingRow = indexes[0];
-        setFormSetting(editingRow);
+        setFormSetting(indexes[0]);
       });
     });
 
@@ -123,7 +121,7 @@
 
   function setFormSetting(rowNumber) {
     const nowTab = $('.tab-content>.active')[0].dataset.tablename;
-    const selectedData = tableData[rowNumber];
+    const selectedData = getActiveTable().row(rowNumber).data();
 
     const getInput = columnInfo => {
       if (columnInfo.inputName) {
