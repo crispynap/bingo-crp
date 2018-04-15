@@ -60,8 +60,8 @@ function addMember(memberInfo = {}) {
   console.log(memberInfo)
 
   return new Promise((resolve, reject) => {
-    const addDoerQuery = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('조합원', '${memberInfo.name}');`;
-    const getDoerCodeQuery = `SELECT doer_code FROM 주체 WHERE doer_name='${memberInfo.name}';`;
+    const addDoerQuery = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('조합원', '${memberInfo.doer_name}');`;
+    const getDoerCodeQuery = `SELECT doer_code FROM 주체 WHERE doer_name='${memberInfo.doer_name}';`;
     const db = new mysqlDbc();
 
     _.go('',
@@ -71,7 +71,7 @@ function addMember(memberInfo = {}) {
         const doerCode = rows[0].doer_code;
         let fieldNames = 'doer_code';
         let fieldValues = `'${doerCode}'`;
-        _.each(_.pairs(_.omit(memberInfo, 'name')), field => {
+        _.each(_.pairs(_.omit(memberInfo, 'doer_name')), field => {
           fieldNames += ', ' + field[0];
           fieldValues += `, '${field[1]}'`
         })

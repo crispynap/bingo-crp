@@ -215,17 +215,15 @@
   function everyRowsCheck(sheet, tableData) {
 
     //코드와 이름 둘 다 누락된 줄이 있는지
-    if (_.find(sheet, (row) => { return (_.isEmpty(row['name']) && _.isEmpty(row['member_code'])) }))
+    if (_.find(sheet, (row) => { return (_.isEmpty(row['doer_name']) && _.isEmpty(row['member_code'])) }))
       return { err: true, message: messages.emptyCodeRow };
 
     //포맷 체크
     for (const row of sheet) {
-
       for (const cellName in dataInfo) {
         const cellForamtErr = cellFormatCheck(row[cellName], dataInfo[cellName].format);
         if (cellForamtErr.err) return cellForamtErr;
       }
-
     }
 
     return { err: false };
@@ -261,12 +259,12 @@
 
     const addingRows = _.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" });
     //추가행에 이름 중복 행이 있는지
-    const sheetNamesCount = getFieldCounts(addingRows, "name");
+    const sheetNamesCount = getFieldCounts(addingRows, "doer_name");
     const duplSheetNames = getDuplicatesField(sheetNamesCount);
     if (!_.isEmpty(duplSheetNames)) return { err: true, message: messages.duplicatedNames(duplSheetNames) }
 
     //추가행와 현재 테이블에 중복되는 이름 있는지
-    const tableNamesCount = getFieldCounts(tableData, "name");
+    const tableNamesCount = getFieldCounts(tableData, "doer_name");
     duplTableName = _.findKey(sheetNamesCount, (count, name) => { return _.has(tableNamesCount, name) })
     if (duplTableName) return { err: true, message: messages.duplicatedNames(duplTableName) }
 
@@ -295,12 +293,12 @@
     //s가 코드를 지정하고 이름이 있을 경우 테이블/ s코드 행들에 중복 이름이 있는지
 
     //추가행에 이름 중복 행이 있는지
-    const sheetNamesCount = getFieldCounts(addingRows, "name");
+    const sheetNamesCount = getFieldCounts(addingRows, "doer_name");
     const duplSheetNames = getDuplicatesField(sheetNamesCount);
     if (!_.isEmpty(duplSheetNames)) return { err: true, message: messages.duplicatedNames(duplSheetNames) }
 
     //추가행와 현재 테이블에 중복되는 이름 있는지
-    const tableNamesCount = getFieldCounts(tableData, "name");
+    const tableNamesCount = getFieldCounts(tableData, "doer_name");
     duplTableName = _.findKey(sheetNamesCount, (count, name) => { return _.has(tableNamesCount, name) })
     if (duplTableName) return { err: true, message: messages.duplicatedNames(duplTableName) }
 
