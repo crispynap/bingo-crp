@@ -198,7 +198,7 @@
 
   function sheetValidCheck(sheet, tableData) {
 
-    if (!formValid(sheet)) return { err: true, message: messages.incorrectSheet };
+    if (!formFormatCheck(sheet)) return { err: true, message: messages.incorrectSheet };
 
     //코드와 이름 둘 다 누락된 줄이 있는지
     if (_.find(sheet, (row) => { return (_.isEmpty(row['name']) && _.isEmpty(row['member_code'])) }))
@@ -270,7 +270,7 @@
   }
 
 
-  function formValid(sheet) { return (_.isArray(sheet)); }
+  function formFormatCheck(sheet) { return (_.isArray(sheet)); }
 
   function getDuplicatesField(counts) { return _.keys(_.pick(counts, (value) => { return value > 1; })); }
 
