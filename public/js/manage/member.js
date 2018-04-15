@@ -65,16 +65,12 @@
 
     //내용 수정시 데이터에 반영
     $('#editor').change(e => {
-      // _.find(tableData[editingRow], () => { })
-      const row = tableData[editingRow];
+      const table = getActiveTable();
+      const row = table.row('.selected').data();
       const editingCell = e.target.dataset.name;
       row[editingCell] = e.target.value;
 
-      d = getActiveTable().row('.selected').data();
-      _.each(dataTables, table => {
-        console.log(table.cell(2, 2).data('a'))
-        // table.draw();
-      });
+      table.row('.selected').data(row).draw();
     });
 
   }
