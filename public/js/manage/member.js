@@ -2,6 +2,7 @@
 
   let tableData = [];
   let selectedRowNumber;
+  const dataTables = {};
 
   const tableColumns = {
     primary: [
@@ -16,18 +17,22 @@
       { data: 'current', inputName: '현황' },
     ],
     fund: [
+      { data: 'member_code', },
       { data: 'doer_name', inputName: '이름' },
       { data: 'total_fund' },
     ],
     util: [
+      { data: 'member_code', },
       { data: 'doer_name', inputName: '이름' },
       { data: 'total_util' },
     ],
     action: [
+      { data: 'member_code', },
       { data: 'doer_name', inputName: '이름' },
       { data: 'main_commune', inputName: '주 공동체' },
     ],
     detail: [
+      { data: 'member_code', },
       { data: 'doer_name', inputName: '이름' },
       { data: 'rname', inputName: '실명' },
       { data: 'join_date', format: 'date', inputName: '가입일' },
@@ -46,17 +51,17 @@
     xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableData) });
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-
-      console.log(e.target)
-
-      setFormSetting(selectedRowNumber);
+      const shownTabName = $(e.target).attr("href");
+      const shownTableName = $(shownTabName)[0].dataset.tablename;
+      const shownTable = dataTables[shownTableName];
+      shownTable.row(selectedRowNumber).select();
     })
   }
 
   function getMembersAll() {
     $.get("../api/members", (data) => {
-      setTables(data);
       tableData = data;
+      setTables(data);
     });
   }
 
@@ -69,35 +74,34 @@
   }
 
   function setTables(data) {
-    const tables = {};
-
     const primaryTableOptions = getTableOptions(data, tableColumns.primary);
     const primaryTable = $('#table-primary').DataTable(primaryTableOptions);
-    tables.primary = primaryTable;
+    dataTables.primary = primaryTable;
 
     const fundTableOptions = getTableOptions(data, tableColumns.fund);
     const fundTable = $('#table-fund').DataTable(fundTableOptions);
-    tables.fund = fundTable;
+    dataTables.fund = fundTable;
 
     const utilTableOptions = getTableOptions(data, tableColumns.util);
     const utilTable = $('#table-util').DataTable(utilTableOptions);
-    tables.util = utilTable;
+    dataTables.util = utilTable;
 
     const actionTableOptions = getTableOptions(data, tableColumns.action);
     const actionTable = $('#table-action').DataTable(actionTableOptions);
-    tables.push(actionTable);
-    tables.action = actionTable;
+    dataTables.action = actionTable;
 
     const detailTableOptions = getTableOptions(data, tableColumns.detail);
     const detailTable = $('#table-detail').DataTable(detailTableOptions);
-    tables.detail = detailTable;
+    dataTables.detail = detailTable;
 
-    _.each(tables, (table) => {
+    _.each(dataTables, (table) => {
       table.on('select', function (e, dt, type, indexes) {
         selectedRowNumber = indexes[0];
         setFormSetting(selectedRowNumber);
       });
-    })
+    });
+
+
   }
 
   function setFormSetting(rowNumber) {
