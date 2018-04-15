@@ -4,39 +4,48 @@
 
   const tableColumns = {
     primary: [
-      { data: 'member_code', format: 'number', inputName: '코드', modifiable: false },
+      { data: 'member_code', inputName: '코드', },
       { data: 'doer_name', inputName: '이름' },
       { data: 'rname', inputName: '실명' },
       { data: 'category', inputName: '구분' },
       { data: 'main_commune', inputName: '주 공동체' },
-      { data: 'total_fund', format: 'money', modifiable: false },
-      { data: 'total_util', format: 'money', modifiable: false },
+      { data: 'total_fund', },
+      { data: 'total_util', },
       { data: 'note', inputName: '비고' },
       { data: 'current', inputName: '현황' },
     ],
     fund: [
-      { data: 'member_code', format: 'number', inputName: '코드', modifiable: false },
+      { data: 'member_code', inputName: '코드', },
       { data: 'doer_name', inputName: '이름' },
-      { data: 'total_fund', format: 'money', modifiable: false },
+      { data: 'total_fund', },
     ],
     util: [
-      { data: 'member_code', format: 'number', inputName: '코드', modifiable: false },
+      { data: 'member_code', inputName: '코드', },
       { data: 'doer_name', inputName: '이름' },
-      { data: 'total_util', format: 'money', modifiable: false },
+      { data: 'total_util', },
     ],
     action: [
-      { data: 'member_code', format: 'number', inputName: '코드', modifiable: false },
+      { data: 'member_code', inputName: '코드', },
       { data: 'doer_name', inputName: '이름' },
       { data: 'main_commune', inputName: '주 공동체' },
     ],
     detail: [
-      { data: 'member_code', format: 'number', inputName: '코드', modifiable: false },
+      { data: 'member_code', inputName: '코드', },
       { data: 'doer_name', inputName: '이름' },
       { data: 'rname', inputName: '실명' },
-      { data: 'join_date', format: 'date', inputName: '가입일' },
-      { data: 'leave_date', format: 'date', inputName: '탈퇴일' },
-      { data: 'celeb_date', format: 'date', inputName: '기념일' },
+      { data: 'join_date', inputName: '가입일' },
+      { data: 'leave_date', inputName: '탈퇴일' },
+      { data: 'celeb_date', inputName: '기념일' },
     ],
+  }
+
+  const dataInfo = {
+    member_code: { format: 'number', modifiable: false },
+    total_fund: { format: 'money', modifiable: false },
+    total_util: { format: 'money', modifiable: false },
+    join_date: { format: 'date' },
+    leave_date: { format: 'date' },
+    celeb_date: { format: 'date' },
   }
 
   $(document).ready(() => {
@@ -189,11 +198,11 @@
     const addingRowsErr = addingRowsCheck(sheet, tableData);
     if (addingRowsErr.err) return addingRowsErr;
 
-    const modifingRowsErr = modifingRowsCheck(sheet, tableData);
-    if (modifingRowsErr.err) return modifingRowsErr;
+    // const modifingRowsErr = modifingRowsCheck(sheet, tableData);
+    // if (modifingRowsErr.err) return modifingRowsErr;
 
-    const deletingRowsErr = deletingRowsCheck(sheet, tableData);
-    if (deletingRowsErr.err) return deletingRowsErr;
+    // const deletingRowsErr = deletingRowsCheck(sheet, tableData);
+    // if (deletingRowsErr.err) return deletingRowsErr;
 
     //'d' / 'D' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
     // const SDTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "s" || 표시 === "S" || 표시 === "d" || 표시 === "D" });
@@ -208,9 +217,23 @@
       return { err: true, message: messages.emptyCodeRow };
 
     //포맷 체크
+    const flattenColumnsInfo = _.flatten(tableColumns, true);
+    console.log(flattenColumnsInfo);
     _.each(sheet, row => {
+      for (const cellName in row) {
+        if (cellName === 'mark')
+          continue;
 
+
+
+        // _.findWhere(publicServicePulitzers, { newsroom: "The New York Times" });
+        console.log(cellName);
+
+
+      }
     });
+
+    return { err: false };
   }
 
   function addingRowsCheck(sheet, tableData) {
