@@ -1,6 +1,5 @@
 (() => {
 
-  let tableData = [];
   const dataTables = {};
 
   const tableColumns = {
@@ -49,7 +48,7 @@
 
     //서식 삽입 버튼 누를 시 xlsx 업로드 동작
     const xlsButton = document.querySelector('.xls-upload>input');
-    xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, tableData) });
+    xlsButton.addEventListener('change', function (e) { commonEvent.readXlsx(e, getXlsx, getActiveTable().data()) });
 
     //탭 전환시
     $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
@@ -77,7 +76,6 @@
 
   function getMembersAll() {
     $.get("../api/members", (data) => {
-      tableData = data;
       setTables(data);
     });
   }
