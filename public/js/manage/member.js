@@ -128,23 +128,24 @@
 
   function setFormSetting(rowNumber) {
     const nowTab = $('.tab-content>.active')[0].dataset.tablename;
-    const selectedData = getActiveTable().row(rowNumber).data();
+    const nowTableColumns = tableColumns[nowTab];
+    const selectedRow = getActiveTable().row(rowNumber).data();
+    const inputs = $("<div></div>");
 
-    const getInput = columnInfo => {
-      if (columnInfo.inputName) {
-        const inputData = selectedData[columnInfo.data] !== null ? selectedData[columnInfo.data] : "";
-        return `
-        <div class="col-xs-4">
-          <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">${columnInfo.inputName}</span>
-            <input type="text" class="form-control" data-name="${columnInfo.data}" value="${inputData}">
-          </div>
-        </div>`;
-      } else {
-        return "";
-      }
-    }
-    const inputs = _.reduce(tableColumns[nowTab], (memo, column) => memo + getInput(column), "");
+    _.each(nowTableColumns, column => {
+      if (!column.inputName) return;
+
+      const inputData = selectedRow[column.data] !== null ? selectedRow[column.data] : "";
+      const inputWrapper = $(`<div class="col-xs-4"></div>`);
+      const inputGroup = $(`<div class="input-group"></div>`);
+      const inputName = $(`<span class="input-group-addon">${column.inputName}</span>`);
+      const input = $(
+        `<input type="text" class="form-control" data-name="${column.data}" 
+        class="input-group-addon" value="${inputData}"></input>`
+      );
+
+      inputs.append(inputWrapper.append(inputGroup.append(inputName, input)));
+    });
 
     $('#editor').empty().append(inputs);
   }
