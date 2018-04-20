@@ -120,15 +120,14 @@
 
     _.each(dataTables, (table) => {
       table.on('select', function (e, dt, type, indexes) {
-        setFormSetting(indexes[0]);
+        setFormSetting(e.target.dataset.tablename, indexes[0]);
       });
     });
 
   }
 
-  function setFormSetting(rowNumber) {
-    const nowTab = $('.tab-content>.active')[0].dataset.tablename;
-    const nowTableColumns = tableColumns[nowTab];
+  function setFormSetting(tableName, rowNumber) {
+    const nowTableColumns = tableColumns[tableName];
     const selectedRow = getActiveTable().row(rowNumber).data();
     const inputs = $("<div></div>");
 
@@ -145,18 +144,7 @@
       );
 
       if (dataInfo[column.data] && dataInfo[column.data].format === 'date') {
-        input.datepicker({
-          dateFormat: "yy-mm-dd",
-          changeMonth: true,
-          changeYear: true,
-          dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
-          monthNames: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
-          monthNamesShort: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
-
-          numberOfMonths: [1, 3],
-          showCurrentAtPos: 1
-
-        });
+        input.datepicker(common.options.datePicker);
       }
 
       inputs.append(inputWrapper.append(inputGroup.append(inputName, input)));
