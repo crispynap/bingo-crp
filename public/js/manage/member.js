@@ -144,6 +144,10 @@
         class="input-group-addon" value="${inputData}"></input>`
       );
 
+      if (dataInfo[column.data] && dataInfo[column.data].format === 'date') {
+        input.datepicker();
+      }
+
       inputs.append(inputWrapper.append(inputGroup.append(inputName, input)));
     });
 
