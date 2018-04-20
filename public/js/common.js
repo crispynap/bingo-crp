@@ -2,7 +2,7 @@
 
 })();
 
-const commonEvent = {
+window.commonEvent = {
   readXlsx(e, callback, tableData) {
     console.log(tableData)
 
@@ -31,7 +31,7 @@ const commonEvent = {
 
 }
 
-const common = {
+window.common = {
   /* 선택자를 매개변수로 넘겨서 해당 cssRule을 찾아서 리턴하는 함수 */
   cssSelector(selector) {
     for (i = 0; i < document.styleSheets.length; i++) {
@@ -49,10 +49,16 @@ const common = {
   cssInsert(style) {
     const sheet = document.styleSheets[0];
     sheet.insertRule(style, 1);
+  },
+
+  options: {
+    datePicker: {
+      altFormat: "yy-mm-dd"
+    }
   }
 }
 
-const messages = {
+window.messages = {
   incorrectFile: "파일이 형식에 맞지 않습니다.",
   incorrectSheet: "서식이 맞지 않습니다.",
   emptyCodeRow: "코드와 이름 둘 다 누락된 줄이 있습니다.",
