@@ -34,6 +34,9 @@ section.title{
 #editor-form .input-group{
   margin-bottom: 10px;
 }
+#editor-form input[data-format="money"]{
+  text-align: right;
+}
 div.quick-date>a{
   padding: 3px 5px 3px 0;
   text-decoration: none;
