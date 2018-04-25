@@ -134,11 +134,11 @@
     _.each(nowTableColumns, column => {
       if (!column.inputName) return;
 
-      const inputData = selectedRow[column.data] !== null ? selectedRow[column.data] : "";
-      if (dataFormat(column.data)) {
-
-      }
-
+      const dataName = column.data;
+      const selectedData = selectedRow[dataName];
+      const inputData = selectedData === null ? "" :
+        dataFormat(dataName) === 'money' ? renderMoney(selectedData) :
+          selectedData;
 
       const inputWrapper = $(`<div class="col-xs-4"></div>`);
       const inputGroup = $(`<div class="input-group"></div>`);
