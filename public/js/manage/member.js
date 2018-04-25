@@ -17,12 +17,12 @@
     fund: [
       { data: 'member_code', inputName: '코드', },
       { data: 'doer_name', inputName: '이름' },
-      { data: 'total_fund', },
+      { data: 'total_fund', render: C.renderMoney, inputName: '출자금' },
     ],
     util: [
       { data: 'member_code', inputName: '코드', },
       { data: 'doer_name', inputName: '이름' },
-      { data: 'total_util', },
+      { data: 'total_util', render: C.renderMoney, inputName: '이용금' },
     ],
     action: [
       { data: 'member_code', inputName: '코드', },
@@ -33,9 +33,16 @@
       { data: 'member_code', inputName: '코드', },
       { data: 'doer_name', inputName: '이름' },
       { data: 'rname', inputName: '실명' },
+      { data: 'finance_account', inputName: '금융계좌' },
       { data: 'join_date', inputName: '가입일' },
       { data: 'leave_date', inputName: '탈퇴일' },
       { data: 'celeb_date', inputName: '기념일' },
+      { data: 'tel1', inputName: '전화1' },
+      { data: 'tel2', inputName: '전화2' },
+      { data: 'addr', inputName: '주소' },
+      { data: 'webpage', inputName: '웹페이지' },
+      { data: 'kakaotalk', inputName: '카카오톡' },
+      { data: 'facebook', inputName: '페이스북' },
     ],
   }
 

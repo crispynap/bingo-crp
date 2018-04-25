@@ -67,13 +67,14 @@ section#tables .tab-content{
   padding: 5px;
   border: 1px solid #ddd;
   border-top: 0;
+  overflow: scroll;
+
 }
 .tab-content>div{  display: none;}
 .tab-content>div.active{  display: block;}
 table{
   vertical-align: middle;
   cursor: default;
-  overflow: scroll;
 }
 th {
   padding: 0 8px;
