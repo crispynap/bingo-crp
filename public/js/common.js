@@ -97,7 +97,12 @@ window.C = {
       .replace(/^$/, "0") //빈칸만 남았다면 0 넣음
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 빈'; //3자리마다 , 추가하고 마지막에 빈 붙임
   },
-  bin2Number: bin => bin.replace(/\,|빈|\ /g, '')
+
+  bin2Number: bin => {
+    return bin
+      .replace(/\,|빈|\ /g, '') //',', 빈 제거
+      .replace(/0/, ""); //0만 있다면 빈칸으로
+  }
 }
 
 _.fill = (list, filling = '') => {
