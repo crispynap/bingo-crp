@@ -101,7 +101,6 @@ window.C = {
   bin2Number: bin => {
     return bin
       .replace(/\,|빈|\ /g, '') //',', 빈 제거
-      .replace(/0/, ""); //0만 있다면 빈칸으로
   }
 }
 

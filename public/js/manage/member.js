@@ -157,7 +157,10 @@
     });
 
     $('#editor').empty().append(inputs);
-    $('#editor input[data-format="money"').focus(e => e.target.value = C.bin2Number(e.target.value));
+    $('#editor input[data-format="money"').focus(e => {
+      e.target.value = C.bin2Number(e.target.value);
+      e.target.select();
+    });
     $('#editor input[data-format="money"').blur(e => e.target.value = C.renderMoney(e.target.value));
 
 
