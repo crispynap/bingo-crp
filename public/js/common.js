@@ -90,7 +90,13 @@ window.messages = {
 }
 
 window.C = {
-  renderMoney: money => money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 빈',
+  renderMoney: money => {
+    return money.toString()
+      .replace(/[^0-9]/g, "") //숫자만 남김
+      .replace(/^0+/, "") //앞자리에 0 있으면 제거
+      .replace(/^$/, "0") //빈칸만 남았다면 0 넣음
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 빈'; //3자리마다 , 추가하고 마지막에 빈 붙임
+  },
   bin2Number: bin => bin.replace(/\,|빈|\ /g, '')
 }
 
