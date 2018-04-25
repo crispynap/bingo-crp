@@ -73,6 +73,7 @@ section#tables .tab-content{
 table{
   vertical-align: middle;
   cursor: default;
+  overflow: scroll;
 }
 th {
   padding: 0 8px;
