@@ -135,6 +135,11 @@
       if (!column.inputName) return;
 
       const inputData = selectedRow[column.data] !== null ? selectedRow[column.data] : "";
+      if (dataFormat(column.data)) {
+
+      }
+
+
       const inputWrapper = $(`<div class="col-xs-4"></div>`);
       const inputGroup = $(`<div class="input-group"></div>`);
       const inputName = $(`<span class="input-group-addon">${column.inputName}</span>`);
@@ -143,7 +148,7 @@
         class="input-group-addon" value="${inputData}"></input>`
       );
 
-      if (_.v(dataInfo[column.data], 'format') === 'date') {
+      if (dataFormat(column.data) === 'date') {
         input.datepicker(common.options.datePicker);
       }
 
@@ -333,4 +338,6 @@
   function renderMoney(money) {
     return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 빈';
   };
+
+  const dataFormat = dataName => _.v(dataInfo[dataName], 'format');
 })();
