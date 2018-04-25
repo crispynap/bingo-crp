@@ -9,8 +9,8 @@
       { data: 'rname', inputName: '실명' },
       { data: 'category', inputName: '구분' },
       { data: 'main_commune', inputName: '주 공동체' },
-      { data: 'total_fund', render: renderMoney, inputName: '출자금' },
-      { data: 'total_util', render: renderMoney, inputName: '이용금' },
+      { data: 'total_fund', render: C.renderMoney, inputName: '출자금' },
+      { data: 'total_util', render: C.renderMoney, inputName: '이용금' },
       { data: 'note', inputName: '비고' },
       { data: 'current', inputName: '현황' },
     ],
@@ -137,14 +137,14 @@
       const dataName = column.data;
       const selectedData = selectedRow[dataName];
       const inputData = selectedData === null ? "" :
-        dataFormat(dataName) === 'money' ? renderMoney(selectedData) :
+        dataFormat(dataName) === 'money' ? C.renderMoney(selectedData) :
           selectedData;
 
       const inputWrapper = $(`<div class="col-xs-4"></div>`);
       const inputGroup = $(`<div class="input-group"></div>`);
       const inputName = $(`<span class="input-group-addon">${column.inputName}</span>`);
       const input = $(
-        `<input type="text" class="form-control" data-name="${column.data}" 
+        `<input type="text" class="form-control" data-name="${column.data}" data-format="${dataFormat(column.data)}" 
         class="input-group-addon" value="${inputData}"></input>`
       );
 
@@ -335,9 +335,6 @@
     return dataTables[$('.tab-content div.active')[0].dataset.tablename];
   }
 
-  function renderMoney(money) {
-    return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 빈';
-  };
 
   const dataFormat = dataName => _.v(dataInfo[dataName], 'format');
 })();

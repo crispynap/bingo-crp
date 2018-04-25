@@ -89,6 +89,11 @@ window.messages = {
   }
 }
 
+window.C = {
+  renderMoney: money => money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 빈',
+  bin2Number: bin => bin.replace(/\,|빈|\ /g, '')
+}
+
 _.fill = (list, filling = '') => {
   return _.map(list, element => {
     if (_.isUndefined(element)) return filling;
