@@ -76,7 +76,6 @@
       shownTable.row(prevRow).select();
     });
 
-
     //내용 수정시 데이터에 반영
     $('#editor').change(e => {
       const table = getActiveTable();
@@ -128,6 +127,7 @@
     _.each(dataTables, (table) => {
       table.on('select', function (e, dt, type, indexes) {
         setFormSetting(e.target.dataset.tablename, indexes[0]);
+        showRemoveBtn();
       });
     });
 
@@ -169,8 +169,10 @@
       e.target.select();
     });
     $('#editor input[data-format="money"').blur(e => e.target.value = C.renderMoney(e.target.value));
+  }
 
-
+  function showRemoveBtn() {
+    $('#remove-btn').show()
   }
 
   function getXlsx(sheet, tableData) {

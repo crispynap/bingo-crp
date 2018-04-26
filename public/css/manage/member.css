@@ -33,14 +33,14 @@ section.title{
   overflow-y: scroll;
   overflow-x: hidden; 
 }
-#editor-buttons #reomve-btn{
+#remove-btn{
   float: right;
   display: none;
 }
-#editor-buttons #reomve-btn{
+#remove-btn>span{
   color:#d64c4c;
 }
-#editor-buttons #add-btn>span{
+#add-btn>span{
   color:#337ab7;
 }
 
