@@ -48,8 +48,8 @@
 
   const dataInfo = {
     member_code: { format: 'number', modifiable: false },
-    total_fund: { format: 'money', modifiable: false },
-    total_util: { format: 'money', modifiable: false },
+    total_fund: { format: 'money', modifiable: false, readOnly: true, },
+    total_util: { format: 'money', modifiable: false, readOnly: true, },
     join_date: { format: 'date' },
     leave_date: { format: 'date' },
     celeb_date: { format: 'date' },
@@ -380,6 +380,6 @@
     return dataTables[$('.tab-content div.active')[0].dataset.tablename];
   }
 
-
   const dataFormat = dataName => _.v(dataInfo[dataName], 'format');
+  const dataReadOnly = dataName => _.v(dataInfo[dataName], 'readOnly');
 })();
