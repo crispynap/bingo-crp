@@ -89,19 +89,25 @@
       const shownTableName = $(shownTabName)[0].dataset.tablename;
       const shownTable = dataTables[shownTableName];
       shownTable.row(prevRow).select();
+      shownTable.data().draw();
+
+      console.log(shownTable.data());
     });
 
     //내용 수정시 데이터에 반영
     $('#editor').change(e => {
-      const table = getActiveTable();
-      const row = table.row('.selected').data();
+      const row = getActiveTable().row('.selected');
+      const rowData = row.data();
       const editingCell = e.target.dataset.name;
 
       if (isDateFormat(editingCell)) e.target.value = C.renderDate(e.target.value); //날짜 서식에 맞추기
 
-      row[editingCell] = e.target.value;
+      rowData[editingCell] = e.target.value;
 
-      table.row('.selected').data(row).draw();
+      _.each(dataTables, table => {
+        table.row(row).data(rowData).draw();
+      });
+
     });
 
     $('#add-btn').click(e => {
@@ -118,6 +124,29 @@
 
       getActiveTable().row((idx, data) => data.member_code === newRowCode).select();
     });
+
+    $('#removeModal').on('shown.bs.modal', (e => {
+      $('#remove-confirm').focus();
+    }));
+
+    $('#remove-confirm').click(e => {
+      getActiveTable().row('.selected').remove().draw();
+      const selectedRow = getActiveTable().row('.selected');
+
+      // _.each(dataTables, table => {
+      //   table.row(selectedRow).remove().draw();
+      // });
+
+      $('#removeModal').modal('hide');
+      // const editingCell = e.target.dataset.name;
+
+      // if (isDateFormat(editingCell)) e.target.value = C.renderDate(e.target.value); //날짜 서식에 맞추기
+
+      // row[editingCell] = e.target.value;
+
+      // table.row('.selected').data(row).draw();
+    });
+
   }
 
 
@@ -156,7 +185,7 @@
     const detailTable = $('#table-detail').DataTable(detailTableOptions);
     dataTables.detail = detailTable;
 
-    _.each(dataTables, (table) => {
+    eachTables(table => {
       table.on('select', function (e, dt, type, indexes) {
         setFormSetting(e.target.dataset.tablename, indexes[0]);
         showRemoveBtn();
@@ -389,4 +418,5 @@
   const dataFormat = dataName => _.v(dataInfo[dataName], 'format');
   const isDataReadOnly = dataName => _.v(dataInfo[dataName], 'readOnly');
   const isDateFormat = dataName => dataFormat(dataName) === 'date';
+  const eachTables = f => _.each(dataTables, f);
 })();
