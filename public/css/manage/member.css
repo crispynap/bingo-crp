@@ -33,14 +33,15 @@ section.title{
   overflow-y: scroll;
   overflow-x: hidden; 
 }
-#editor-buttons>button:nth-child(2){
+#editor-buttons #reomve-btn{
   float: right;
+  display: none;
 }
-#editor-buttons>button:nth-child(1)>span{
-  color:#337ab7;
-}
-#editor-buttons>button:nth-child(2)>span{
+#editor-buttons #reomve-btn{
   color:#d64c4c;
+}
+#editor-buttons #add-btn>span{
+  color:#337ab7;
 }
 
 #editor-form .input-group{
