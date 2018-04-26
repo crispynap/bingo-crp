@@ -96,6 +96,9 @@
       const table = getActiveTable();
       const row = table.row('.selected').data();
       const editingCell = e.target.dataset.name;
+
+      if (isDateFormat(editingCell)) e.target.value = C.renderDate(e.target.value); //날짜 서식에 맞추기
+
       row[editingCell] = e.target.value;
 
       table.row('.selected').data(row).draw();
@@ -176,7 +179,7 @@
         dataFormat(dataName) === 'money' ? C.renderMoney(selectedData) :
           selectedData;
 
-      const readOnly = dataReadOnly(dataName) ? 'readonly' : "";
+      const readOnly = isDataReadOnly(dataName) ? 'readonly' : "";
 
       const inputWrapper = $(`<div class="col-xs-4"></div>`);
       const inputGroup = $(`<div class="input-group"></div>`);
@@ -196,8 +199,8 @@
 
     $('#editor').empty().append(inputs);
     $('#editor input[data-format="money"').focus(e => {
-      if (!dataReadOnly(e.target.dataset.name))
-        e.target.value = C.bin2Number(e.target.value);
+      if (!isDataReadOnly(e.target.dataset.name))
+        e.target.value = C.renderNumber(e.target.value);
       e.target.select();
     });
     $('#editor input[data-format="money"').blur(e => e.target.value = C.renderMoney(e.target.value));
@@ -384,5 +387,6 @@
   }
 
   const dataFormat = dataName => _.v(dataInfo[dataName], 'format');
-  const dataReadOnly = dataName => _.v(dataInfo[dataName], 'readOnly');
+  const isDataReadOnly = dataName => _.v(dataInfo[dataName], 'readOnly');
+  const isDateFormat = dataName => dataFormat(dataName) === 'date';
 })();

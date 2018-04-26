@@ -98,10 +98,16 @@ window.C = {
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 빈'; //3자리마다 , 추가하고 마지막에 빈 붙임
   },
 
-  bin2Number: bin => {
-    return bin
-      .replace(/\,|빈|\ /g, '') //',', 빈 제거
+  renderNumber: data => {
+    return data
+      .replace(/[^0-9]/g, "") //숫자만 남김
   },
+
+  renderDate: data => {
+    data = data.replace(/[^0-9|\-]/g, ""); //숫자와 '-'만 남김
+    if (data.search(/^\d{4}\-\d{2}\-\d{2}$/) == -1) return "";
+    return data;
+  }
 }
 
 _.fill = (list, filling = '') => {
