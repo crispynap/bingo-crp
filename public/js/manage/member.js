@@ -90,8 +90,6 @@
       const shownTable = dataTables[shownTableName];
       shownTable.row(prevRow).select();
       shownTable.data().draw();
-
-      console.log(shownTable.data());
     });
 
     //내용 수정시 데이터에 반영
@@ -104,7 +102,7 @@
 
       rowData[editingCell] = e.target.value;
 
-      _.each(dataTables, table => {
+      eachTables(table => {
         table.row(row).data(rowData).draw();
       });
 
@@ -118,7 +116,7 @@
       ) + 1;
       newMemberRow.member_code = newRowCode;
 
-      _.each(dataTables, table => {
+      eachTables(table => {
         table.data().row.add(newMemberRow).draw();
       });
 
@@ -130,21 +128,15 @@
     }));
 
     $('#remove-confirm').click(e => {
-      getActiveTable().row('.selected').remove().draw();
       const selectedRow = getActiveTable().row('.selected');
 
-      // _.each(dataTables, table => {
-      //   table.row(selectedRow).remove().draw();
-      // });
+      eachTables(table => {
+        table.row(selectedRow).remove().draw();
+      });
 
+      $('#editor').empty();
+      $('#remove-btn').hide();
       $('#removeModal').modal('hide');
-      // const editingCell = e.target.dataset.name;
-
-      // if (isDateFormat(editingCell)) e.target.value = C.renderDate(e.target.value); //날짜 서식에 맞추기
-
-      // row[editingCell] = e.target.value;
-
-      // table.row('.selected').data(row).draw();
     });
 
   }
