@@ -30,12 +30,27 @@ section.title{
   border: 1px solid black;
   margin: 15px 10px;
   padding: 10px;
+  overflow-y: scroll;
+  overflow-x: hidden; 
 }
+#editor-buttons>button:nth-child(2){
+  float: right;
+}
+#editor-buttons>button:nth-child(1)>span{
+  color:#337ab7;
+}
+#editor-buttons>button:nth-child(2)>span{
+  color:#d64c4c;
+}
+
 #editor-form .input-group{
   margin-bottom: 10px;
 }
 #editor-form input[data-format="money"]{
   text-align: right;
+}
+#editor{
+  margin-top: 10px;
 }
 div.quick-date>a{
   padding: 3px 5px 3px 0;
