@@ -32,3 +32,7 @@ body{
 .footer > div{
   padding-left: 108px;  
 }
+
+input:read-only{
+  cursor: default !important;
+}

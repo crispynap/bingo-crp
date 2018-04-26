@@ -176,12 +176,14 @@
         dataFormat(dataName) === 'money' ? C.renderMoney(selectedData) :
           selectedData;
 
+      const readOnly = dataReadOnly(dataName) ? 'readonly' : "";
+
       const inputWrapper = $(`<div class="col-xs-4"></div>`);
       const inputGroup = $(`<div class="input-group"></div>`);
       const inputName = $(`<span class="input-group-addon">${column.inputName}</span>`);
       const input = $(
         `<input type="text" class="form-control" data-name="${column.data}" data-format="${dataFormat(column.data)}" 
-        class="input-group-addon" value="${inputData}"></input>`
+        class="input-group-addon" ${readOnly} value="${inputData}"></input>`
       );
 
       if (dataFormat(column.data) === 'date') {
@@ -194,7 +196,8 @@
 
     $('#editor').empty().append(inputs);
     $('#editor input[data-format="money"').focus(e => {
-      e.target.value = C.bin2Number(e.target.value);
+      if (!dataReadOnly(e.target.dataset.name))
+        e.target.value = C.bin2Number(e.target.value);
       e.target.select();
     });
     $('#editor input[data-format="money"').blur(e => e.target.value = C.renderMoney(e.target.value));
