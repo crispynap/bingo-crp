@@ -53,7 +53,22 @@
     join_date: { format: 'date' },
     leave_date: { format: 'date' },
     celeb_date: { format: 'date' },
+    doer_name: {},
+    addr: {},
+    category: {},
+    current: {},
+    email: {},
+    facebook: {},
+    finance_account: {},
+    kakaotalk: {},
+    main_commune: {},
+    note: {},
+    rname: {},
+    tel1: {},
+    tel2: {},
+    webpage: {},
   }
+
 
   $(document).ready(() => {
     setEvents();
@@ -86,6 +101,20 @@
       table.row('.selected').data(row).draw();
     });
 
+    $('#add-btn').click(e => {
+      const newMemberRow = _.mapObject(dataInfo, (val, key) => "");
+      const newRowCode = _.go(
+        _.max(dataTables.primary.data(), row => row.member_code),
+        _.v('member_code')
+      ) + 1;
+      newMemberRow.member_code = newRowCode;
+
+      _.each(dataTables, table => {
+        table.data().row.add(newMemberRow).draw();
+      });
+
+      getActiveTable().row((idx, data) => data.member_code === newRowCode).select();
+    });
   }
 
 

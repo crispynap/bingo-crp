@@ -101,7 +101,7 @@ window.C = {
   bin2Number: bin => {
     return bin
       .replace(/\,|빈|\ /g, '') //',', 빈 제거
-  }
+  },
 }
 
 _.fill = (list, filling = '') => {
