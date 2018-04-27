@@ -130,6 +130,18 @@ window.C = {
 
   renderDate: data => {
     data = data.replace(/[^0-9|\-]/g, ""); //숫자와 '-'만 남김
+    if (data.length == 4) {
+      const year = new Date().getFullYear();
+      const month = parseInt(data.substr(0, 2));
+      const day = data.substr(2, 2);
+      return `${year}-${month < 13 ? month : '01'}-${day}`;
+    }
+    if (data.length == 3) {
+      const year = new Date().getFullYear();
+      const month = data.substr(0, 1);
+      const day = data.substr(1, 2);
+      return `${year}-${month}-${day}`;
+    }
     if (data.search(/^\d{4}\-\d{2}\-\d{2}$/) == -1) return "";
     return data;
   }
