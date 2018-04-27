@@ -128,22 +128,21 @@ window.C = {
       .replace(/[^0-9]/g, "") //숫자만 남김
   },
 
-  renderDate: data => {
-    data = data.replace(/[^0-9|\-]/g, ""); //숫자와 '-'만 남김
-    if (data.length == 4) {
-      const year = new Date().getFullYear();
-      const month = parseInt(data.substr(0, 2));
-      const day = data.substr(2, 2);
-      return `${year}-${month < 13 ? month : '01'}-${day}`;
+  renderDate: date => {
+    date = date.replace(/[^0-9|\-]/g, ""); //숫자와 '-'만 남김
+    const year = new Date().getFullYear();
+
+    if (date.length == 4) {
+      const month = parseInt(date.substr(0, 2));
+      const day = date.substr(2, 2);
+      date = `${year}-${month}-${day}`;
     }
-    if (data.length == 3) {
-      const year = new Date().getFullYear();
-      const month = data.substr(0, 1);
-      const day = data.substr(1, 2);
-      return `${year}-${month}-${day}`;
+    if (date.length == 3) {
+      const month = date.substr(0, 1);
+      const day = date.substr(1, 2);
+      date = `${year}-0${month}-${day}`;
     }
-    if (data.search(/^\d{4}\-\d{2}\-\d{2}$/) == -1) return "";
-    return data;
+    return moment(date).isValid() ? date : `${year}-01-01`;
   }
 }
 
