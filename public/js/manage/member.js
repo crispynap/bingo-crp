@@ -153,6 +153,7 @@
       data: data,
       select: 'single',
       columns: columns,
+      language: common.options.tableLang_kor
     }
   }
 
