@@ -133,7 +133,7 @@ window.C = {
     const year = new Date().getFullYear();
 
     if (date.length == 4) {
-      const month = parseInt(date.substr(0, 2));
+      const month = date.substr(0, 2);
       const day = date.substr(2, 2);
       date = `${year}-${month}-${day}`;
     }
