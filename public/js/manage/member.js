@@ -325,11 +325,7 @@
       case "date":
         if (typeof cell !== "string")
           return { err: true, message: messages.incorrectFormat(cell, format) };
-        const date = cell.split("-");
-        if (date.length !== 3 ||
-          date[0].length !== 4 || isNaN(parseInt(date[0], 10)) ||
-          date[1].length !== 2 || isNaN(parseInt(date[1], 10)) || date[1] > 12 || date[1] == 0 ||
-          date[2].length !== 2 || isNaN(parseInt(date[2], 10)) || date[1] > 31 || date[2] == 0)
+        if (!moment(cell).isValid() || cell.search(/^\d{4}\-\d{2}\-\d{2}$/) == -1)
           return { err: true, message: messages.incorrectFormat(cell, format) };
         break;
     }
