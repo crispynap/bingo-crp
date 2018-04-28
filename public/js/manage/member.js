@@ -160,7 +160,6 @@
       memo[row.doer_name] = 1;
       return memo;
     }, {});
-    console.log(tableValidChecker.nameList);
   }
 
   function getTableOptions(data, columns) {
@@ -291,7 +290,7 @@
 
     if (!formFormatCheck(sheet)) return { err: true, message: messages.incorrectSheet };
 
-    const everyRowsErr = everyRowsCheck(sheet, tableData);
+    const everyRowsErr = everyRowsCheck(sheet);
     if (everyRowsErr.err) return everyRowsErr;
 
     const addingRowsErr = addingRowsCheck(sheet, tableData);
@@ -309,7 +308,7 @@
     return { err: false };
   }
 
-  function everyRowsCheck(sheet, tableData) {
+  function everyRowsCheck(sheet) {
 
     //코드와 이름 둘 다 누락된 줄이 있는지
     if (_.find(sheet, (row) => { return (_.isEmpty(row['doer_name']) && _.isEmpty(row['member_code'])) }))
@@ -403,21 +402,14 @@
 
   function getDuplicatesField(counts) { return _.keys(_.pick(counts, (value) => { return value > 1; })); }
 
-  function getFieldCounts(sheet, name, counts = {}) {
-    _.each(_.map(sheet, _.val(name)), col => {
-      if (!_.isNumber(counts[col])) {
-        counts[col] = 1;
-      } else {
-        counts[col]++;
-      }
+  function getFieldCounts(rows, name, counts = {}) {
+    _.each(_.map(rows, _.val(name)), field => {
+      _.isNumber(counts[field]) ? counts[field]++ : counts[field] = 1
     });
     return counts;
   }
 
-  function getActiveTable() {
-    return dataTables[$('.tab-content div.active')[0].dataset.tablename];
-  }
-
+  const getActiveTable = () => dataTables[$('.tab-content div.active')[0].dataset.tablename];
   const dataFormat = dataName => _.v(dataInfo[dataName], 'format');
   const isDataReadOnly = dataName => _.v(dataInfo[dataName], 'readOnly');
   const isDateFormat = dataName => dataFormat(dataName) === 'date';
