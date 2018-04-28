@@ -111,7 +111,8 @@
     });
 
     $('#add-btn').click(e => {
-      addMember();
+      const addedRow = addMember();
+      selectRow(addedRow);
     });
 
     $('#removeModal').on('shown.bs.modal', (e => {
@@ -269,7 +270,8 @@
   }
 
   function addMembers(members) {
-    _.each(member => addMember(member));
+    const addedMembers = _.map(member => addMember(member));
+    selectRow(_.last(addedMembers));
   }
 
   function addMember(member = {}) {
@@ -291,12 +293,10 @@
 
     eachTables(table => {
       table.data().row.add(newMemberRow);
+      table.data().row.add(newMemberRow);
     });
 
-    getActiveTable()
-      .row((idx, data) => data.member_code === newMemberRow.member_code)
-      .draw()
-      .select();
+    return newMemberRow;
   }
 
   function sheetValidCheck(sheet) {
@@ -345,6 +345,13 @@
     )
     return counts;
   }
+
+  const selectRow = (row) => {
+    getActiveTable()
+      .row((idx, data) => data.member_code === row.member_code)
+      .draw()
+      .select()
+  };
 
   const getActiveTable = () => dataTables[$('.tab-content div.active')[0].dataset.tablename];
   const dataFormat = dataName => _.v(dataInfo[dataName], 'format');
