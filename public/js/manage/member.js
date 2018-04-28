@@ -105,7 +105,7 @@
       rowData[editingCell] = e.target.value;
 
       eachTables(table => {
-        table.row(row).data(rowData).draw();
+        table.row(row).data(rowData);
       });
 
     });
@@ -246,7 +246,7 @@
       // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
     }
     catch (e) {
-
+      alert(e.message);
     }
   }
 
@@ -270,7 +270,7 @@
   }
 
   function addMembers(members) {
-    const addedMembers = _.map(member => addMember(member));
+    const addedMembers = _.map(members, member => addMember(member));
     selectRow(_.last(addedMembers));
   }
 
@@ -293,8 +293,9 @@
 
     eachTables(table => {
       table.data().row.add(newMemberRow);
-      table.data().row.add(newMemberRow);
     });
+    tableChecker.codeList[member.member_code] = 1;
+    tableChecker.nameList[member.doer_name] = 1;
 
     return newMemberRow;
   }
@@ -346,7 +347,8 @@
     return counts;
   }
 
-  const selectRow = (row) => {
+  const selectRow = row => {
+    console.log(row)
     getActiveTable()
       .row((idx, data) => data.member_code === row.member_code)
       .draw()
