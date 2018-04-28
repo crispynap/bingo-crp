@@ -241,10 +241,10 @@
 
   function getXlsx(sheet, tableData) {
     _.removeByIndex(sheet, 0);
-    const valid = sheetValidCheck(sheet, tableData);
+    const sheetError = sheetValidCheck(sheet);
 
-    if (valid.err) {
-      alert(valid.message);
+    if (sheetError) {
+      alert(sheetError.message);
       return;
     }
     console.log('sheet: ', sheet)
@@ -278,19 +278,10 @@
     $.post("../api/members", { memberInfos: memberInfos });
   }
 
-  function sheetValidCheck(sheet, tableData) {
+  function sheetValidCheck(sheet) {
 
-    console.log(sheet)
-
-    if (!isFormValid(sheet)) return { err: true, message: messages.incorrectSheet };
-
-    const everyRowsErr = everyRowsCheck(sheet);
-    if (everyRowsErr.err) return everyRowsErr;
-
-    return { err: false };
-  }
-
-  function everyRowsCheck(sheet) {
+    if (!_.isArray(sheet))
+      return { err: true, message: messages.incorrectSheet };
 
     //코드와 이름 둘 다 누락된 줄이 있는지
     if (_.find(sheet, (row) => { return (_.isEmpty(row['doer_name']) && _.isEmpty(row['member_code'])) }))
@@ -303,8 +294,6 @@
         if (cellForamtErr.err) return cellForamtErr;
       }
     }
-
-    return { err: false };
   }
 
   function cellFormatCheck(cell, format) {
@@ -327,8 +316,6 @@
 
     return { err: false };
   }
-
-  const isFormValid = sheet => _.isArray(sheet);
 
   const getFieldCounts = (rows, fieldName, counts) => {
     _.each(_.map(rows, _.val(fieldName)), field => {
