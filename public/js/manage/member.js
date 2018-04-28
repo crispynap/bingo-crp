@@ -392,11 +392,11 @@
   }
 
 
-  function formFormatCheck(sheet) { return (_.isArray(sheet)); }
+  const formFormatCheck = sheet => _.isArray(sheet);
 
-  function getDuplicatesField(counts) { return _.keys(_.pick(counts, (value) => { return value > 1; })); }
+  const getDuplicatesField = counts => _.keys(_.pick(counts, value => value > 1));
 
-  function getFieldCounts(rows, fieldName, counts = {}) {
+  const getFieldCounts = (rows, fieldName, counts) => {
     _.each(_.map(rows, _.val(fieldName)), field => {
       _.isNumber(counts[field]) ? counts[field]++ : counts[field] = 1;
     });
