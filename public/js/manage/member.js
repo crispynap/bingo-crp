@@ -250,15 +250,20 @@
     console.log('sheet: ', sheet)
     console.log('tableData: ', tableData)
 
-    addMembers(getMarkedRows(sheet, "a", "A"));
-    // updateMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
-    // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
+    try {
+      addMembers(getMarkedRows(sheet, "a", "A"));
+      // updateMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
+      // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
+    }
+    catch (e) {
+
+    }
   }
 
   function getMarkedRows(sheet, ...selectedMarks) {
     return _.go(sheet,
-      sheet => _.pick(sheet, ({ mark }) => { return _.some(selectedMarks, selMark => selMark === mark) }),
-      aTageRows => _.map(aTageRows, row => _.omit(row, 'mark'))
+      sheet => _.pick(sheet, ({ mark }) => _.some(selectedMarks, selMark => selMark === mark)),
+      tagedRows => _.map(tagedRows, row => _.omit(row, 'mark'))
     )
   }
 
