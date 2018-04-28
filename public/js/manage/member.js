@@ -2,6 +2,8 @@
 
   const dataTables = {};
 
+  const tableValidChecker = {};
+
   const tableColumns = {
     primary: [
       { data: 'member_code', inputName: '코드', },
@@ -143,9 +145,22 @@
 
 
   function getMembersAll() {
-    $.get("../api/members", (data) => {
-      setTables(data);
+    $.get("../api/members", (memberData) => {
+      setTables(memberData);
+      setValidData(memberData);
     });
+  }
+
+  function setValidData(data) {
+    tableValidChecker.codeList = _.reduce(data, (memo, row) => {
+      memo[row.member_code] = 1;
+      return memo;
+    }, {});
+    tableValidChecker.nameList = _.reduce(data, (memo, row) => {
+      memo[row.doer_name] = 1;
+      return memo;
+    }, {});
+    console.log(tableValidChecker.nameList);
   }
 
   function getTableOptions(data, columns) {
@@ -184,7 +199,6 @@
         showRemoveBtn();
       });
     });
-
   }
 
   function setFormSetting(tableName, rowNumber) {
