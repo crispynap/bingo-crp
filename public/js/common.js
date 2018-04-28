@@ -98,7 +98,8 @@ window.messages = {
   duplicatedNames: name => `이름이 중복되었습니다: 중복 이름: ${name}`,
   duplicatedCodes: code => `조합원 코드가 중복되었습니다. 중복 코드: ${code}`,
   noName: code => `이름을 공백으로 할 수는 없습니다: 코드: ${code}`,
-  noMember: name => `그런 조합원은 없습니다: 이름: ${name}`,
+  noCode: code => `그런 코드의 조합원은 없습니다: 입력 코드: ${code}`,
+  noMember: name => `그런 이름의 조합원은 없습니다: 입력 이름: ${name}`,
   incorrectFormat(cell, format) {
     let formatExplain;
 

@@ -243,7 +243,7 @@
     // try {
     addMembers(getMarkedRows(sheet, "a", "A"));
     modifyMembers(getMarkedRows(sheet, "s", "S"));
-    // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
+    deleteMembers(getMarkedRows(sheet, "d", "D"));
     // }
     // catch (e) {
     //   alert(e.message);
@@ -348,6 +348,47 @@
     return newMemberRow;
   }
 
+  function deleteMembers(members) {
+    _.each(members, member => deleteMember(member));
+  }
+
+  function deleteMember(member) {
+    if (member.member_code)
+      return deleteMemberFromCode(member);
+    else
+      return deleteMemberFromName(member);
+  }
+
+  function deleteMemberFromCode(member) {
+
+    if (!tableChecker.codeList[member.member_code])
+      throw new Error(messages.noCode(member.member_code));
+
+    const oldRow = getActiveTable().row(findByCode(member)).data();
+
+    eachTables(table => {
+      table.row(findByCode(member)).remove().draw();
+    });
+
+    tableChecker.codeList[oldRow.member_code] = undefined;
+    tableChecker.codeList[oldRow.doer_name] = undefined;
+  }
+
+  function deleteMemberFromName(member) {
+    if (!tableChecker.codeList[member.doer_name])
+      throw new Error(messages.noMember(member.doer_name));
+
+    const oldRow = getActiveTable().row(findByName(member)).data();
+
+    eachTables(table => {
+      table.row(findByName(member)).remove().draw();
+    });
+
+    tableChecker.codeList[oldRow.member_code] = undefined;
+    tableChecker.codeList[oldRow.doer_name] = undefined;
+  }
+
+
   function sheetValidCheck(sheet) {
 
     if (!_.isArray(sheet))
@@ -377,8 +418,6 @@
         break;
 
       case "date":
-        if (typeof cell !== "string")
-          return { err: true, message: messages.incorrectFormat(cell, format) };
         if (!moment(cell).isValid() || cell.search(/^\d{4}\-\d{2}\-\d{2}$/) == -1)
           return { err: true, message: messages.incorrectFormat(cell, format) };
         break;
