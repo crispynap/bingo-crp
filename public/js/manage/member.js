@@ -152,14 +152,8 @@
   }
 
   function setValidData(data) {
-    tableValidChecker.codeList = _.reduce(data, (memo, row) => {
-      memo[row.member_code] = 1;
-      return memo;
-    }, {});
-    tableValidChecker.nameList = _.reduce(data, (memo, row) => {
-      memo[row.doer_name] = 1;
-      return memo;
-    }, {});
+    tableValidChecker.codeList = getFieldCounts(data, 'member_code');
+    tableValidChecker.nameList = getFieldCounts(data, 'doer_name');
   }
 
   function getTableOptions(data, columns) {
@@ -402,9 +396,9 @@
 
   function getDuplicatesField(counts) { return _.keys(_.pick(counts, (value) => { return value > 1; })); }
 
-  function getFieldCounts(rows, name, counts = {}) {
-    _.each(_.map(rows, _.val(name)), field => {
-      _.isNumber(counts[field]) ? counts[field]++ : counts[field] = 1
+  function getFieldCounts(rows, fieldName, counts = {}) {
+    _.each(_.map(rows, _.val(fieldName)), field => {
+      _.isNumber(counts[field]) ? counts[field]++ : counts[field] = 1;
     });
     return counts;
   }
