@@ -282,22 +282,10 @@
 
     console.log(sheet)
 
-    if (!formFormatCheck(sheet)) return { err: true, message: messages.incorrectSheet };
+    if (!isFormValid(sheet)) return { err: true, message: messages.incorrectSheet };
 
     const everyRowsErr = everyRowsCheck(sheet);
     if (everyRowsErr.err) return everyRowsErr;
-
-    const addingRowsErr = addingRowsCheck(sheet, tableData);
-    if (addingRowsErr.err) return addingRowsErr;
-
-    // const modifingRowsErr = modifingRowsCheck(sheet, tableData);
-    // if (modifingRowsErr.err) return modifingRowsErr;
-
-    // const deletingRowsErr = deletingRowsCheck(sheet, tableData);
-    // if (deletingRowsErr.err) return deletingRowsErr;
-
-    //'d' / 'D' 가 지정하는 코드 혹은 이름이 현재 테이블 내용에 있는지
-    // const SDTagRows = _.pick(sheet, ({ 표시 }) => { return 표시 === "s" || 표시 === "S" || 표시 === "d" || 표시 === "D" });
 
     return { err: false };
   }
@@ -340,61 +328,7 @@
     return { err: false };
   }
 
-
-  function addingRowsCheck(sheet, tableData) {
-
-    const addingRows = _.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" });
-    //추가행에 이름 중복 행이 있는지
-    const sheetNamesCount = getFieldCounts(addingRows, "doer_name");
-    const duplSheetNames = getDuplicatesField(sheetNamesCount);
-    if (!_.isEmpty(duplSheetNames)) return { err: true, message: messages.duplicatedNames(duplSheetNames) }
-
-    //추가행와 현재 테이블에 중복되는 이름 있는지
-    const tableNamesCount = getFieldCounts(tableData, "doer_name");
-    duplTableName = _.findKey(sheetNamesCount, (count, name) => { return _.has(tableNamesCount, name) })
-    if (duplTableName) return { err: true, message: messages.duplicatedNames(duplTableName) }
-
-    //추가행에 조합원 코드 중복 행이 있는지
-    const sheetCodesCount = getFieldCounts(addingRows, "member_code");
-    const duplSheetCodes = getDuplicatesField(sheetCodesCount);
-    if (!_.isEmpty(duplSheetCodes)) return { err: true, message: messages.duplicatedCodes(duplSheetCodes) }
-
-    //추가행와 현재 테이블에 중복되는 조합원 코드가 있는지
-    const tableCodesCount = getFieldCounts(tableData, "member_code");
-    duplTableCode = _.findKey(sheetCodesCount, (count, code) => { return _.has(tableCodesCount, code) })
-    if (duplTableCode) return { err: true, message: messages.duplicatedCodes(duplTableCode) }
-
-    return { err: false };
-  }
-
-
-  function modifingRowsCheck(sheet, tableData) {
-
-    const modifingRows = _.pick(sheet, ({ mark }) => { return mark === "s" || mark === "S" });
-
-    //수정행의 코드 혹은 이름이 현재 테이블 내용에 있는지
-    _.each(modifingRows, row => {
-    });
-
-    //s가 코드를 지정하고 이름이 있을 경우 테이블/ s코드 행들에 중복 이름이 있는지
-
-    //추가행에 이름 중복 행이 있는지
-    const sheetNamesCount = getFieldCounts(addingRows, "doer_name");
-    const duplSheetNames = getDuplicatesField(sheetNamesCount);
-    if (!_.isEmpty(duplSheetNames)) return { err: true, message: messages.duplicatedNames(duplSheetNames) }
-
-    //추가행와 현재 테이블에 중복되는 이름 있는지
-    const tableNamesCount = getFieldCounts(tableData, "doer_name");
-    duplTableName = _.findKey(sheetNamesCount, (count, name) => { return _.has(tableNamesCount, name) })
-    if (duplTableName) return { err: true, message: messages.duplicatedNames(duplTableName) }
-
-    return { err: false };
-  }
-
-
-  const formFormatCheck = sheet => _.isArray(sheet);
-
-  const getDuplicatesField = counts => _.keys(_.pick(counts, value => value > 1));
+  const isFormValid = sheet => _.isArray(sheet);
 
   const getFieldCounts = (rows, fieldName, counts) => {
     _.each(_.map(rows, _.val(fieldName)), field => {
