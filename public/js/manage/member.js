@@ -240,14 +240,14 @@
     console.log('sheet: ', sheet)
     console.log('tableData: ', tableData)
 
-    try {
-      addMembers(getMarkedRows(sheet, "a", "A"));
-      // updateMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
-      // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
-    }
-    catch (e) {
-      alert(e.message);
-    }
+    // try {
+    addMembers(getMarkedRows(sheet, "a", "A"));
+    modifyMembers(getMarkedRows(sheet, "s", "S"));
+    // deleteMembers(_.pick(sheet, ({ mark }) => { return mark === "a" || mark === "A" }));
+    // }
+    // catch (e) {
+    //   alert(e.message);
+    // }
   }
 
   function getMarkedRows(sheet, ...selectedMarks) {
@@ -271,7 +271,8 @@
 
   function addMembers(members) {
     const addedMembers = _.map(members, member => addMember(member));
-    selectRow(_.last(addedMembers));
+    if (!_.isEmpty(addedMembers))
+      selectRow(_.last(addedMembers));
   }
 
   function addMember(member = {}) {
@@ -293,6 +294,56 @@
     });
     tableChecker.codeList[member.member_code] = 1;
     tableChecker.nameList[member.doer_name] = 1;
+
+    return newMemberRow;
+  }
+
+  function modifyMembers(members) {
+    const modifiedMembers = _.map(members, member => modifyMember(member));
+    if (!_.isEmpty(modifiedMembers))
+      selectRow(_.last(modifiedMembers));
+  }
+
+  function modifyMember(member) {
+    if (member.member_code)
+      return modifyMemberFromCode(member);
+    else
+      return modifyMemberFromName(member);
+  }
+
+  function modifyMemberFromCode(member) {
+    if (!member.doer_name)
+      throw new Error(messages.noName(member.member_code));
+
+    if (_.isNumber(tableChecker.nameList[member.doer_name]))
+      throw new Error(messages.duplicatedNames(member.doer_name));
+
+    const oldMemberRow = getActiveTable().row(findByCode(member)).data();
+    const newMemberRow = _.mapObject(oldMemberRow, (val, key) => member[key] ? member[key] : "");
+
+    eachTables(table => {
+      table.row(findByCode(newMemberRow)).data(newMemberRow);
+    });
+
+    if (oldMemberRow.doer_name !== newMemberRow) {
+      tableChecker.nameList[oldMemberRow.doer_name] = undefined;
+      tableChecker.nameList[newMemberRow.doer_name] = 1;
+    }
+
+    return newMemberRow;
+  }
+
+  function modifyMemberFromName(member) {
+    if (!_.isNumber(tableChecker.nameList[member.doer_name]))
+      throw new Error(messages.noMember(member.doer_name));
+
+    const oldMemberRow = getActiveTable().row(findByName(member)).data();
+    const newMemberRow = _.mapObject(oldMemberRow, (val, key) => member[key] ? member[key] : "");
+    newMemberRow.member_code = oldMemberRow.member_code;
+
+    eachTables(table => {
+      table.row(findByName(newMemberRow)).data(newMemberRow);
+    });
 
     return newMemberRow;
   }
@@ -345,12 +396,14 @@
   }
 
   const selectRow = row => {
-    console.log(row)
     getActiveTable()
-      .row((idx, data) => data.member_code === row.member_code)
+      .row(findByCode(row))
       .draw()
       .select()
   };
+
+  const findByCode = row => (idx, data) => data.member_code == row.member_code;
+  const findByName = row => (idx, data) => data.doer_name == row.doer_name;
 
   const checkCodeDuplicates = code => {
     if (code && _.isNumber(tableChecker.codeList[code]))

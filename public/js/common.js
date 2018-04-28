@@ -83,6 +83,9 @@ window.common = {
       "aria": {
         "sortAscending": " :  오름차순 정렬",
         "sortDescending": " :  내림차순 정렬"
+      },
+      select: {
+        rows: "%d개 행이 선택됨"
       }
     }
   }
@@ -92,12 +95,10 @@ window.messages = {
   incorrectFile: "파일이 형식에 맞지 않습니다.",
   incorrectSheet: "서식이 맞지 않습니다.",
   emptyCodeRow: "코드와 이름 둘 다 누락된 줄이 있습니다.",
-  duplicatedNames(names) {
-    return `이름이 중복되었습니다: 중복 이름: ${names}`;
-  },
-  duplicatedCodes(codes) {
-    return `조합원 코드가 중복되었습니다. 중복 코드: ${codes}`;
-  },
+  duplicatedNames: name => `이름이 중복되었습니다: 중복 이름: ${name}`,
+  duplicatedCodes: code => `조합원 코드가 중복되었습니다. 중복 코드: ${code}`,
+  noName: code => `이름을 공백으로 할 수는 없습니다: 코드: ${code}`,
+  noMember: name => `그런 조합원은 없습니다: 이름: ${name}`,
   incorrectFormat(cell, format) {
     let formatExplain;
 
