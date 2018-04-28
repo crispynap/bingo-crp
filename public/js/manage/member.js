@@ -2,7 +2,7 @@
 
   const dataTables = {};
 
-  const tableValidChecker = {};
+  const tableChecker = {};
 
   const tableColumns = {
     primary: [
@@ -152,8 +152,8 @@
   }
 
   function setValidData(data) {
-    tableValidChecker.codeList = getFieldCounts(data, 'member_code');
-    tableValidChecker.nameList = getFieldCounts(data, 'doer_name');
+    tableChecker.codeList = getFieldCounts(data, 'member_code');
+    tableChecker.nameList = getFieldCounts(data, 'doer_name');
   }
 
   function getTableOptions(data, columns) {
@@ -279,8 +279,17 @@
     });
   }
 
-  function addMembers(memberInfos) {
-    $.post("../api/members", { memberInfos: memberInfos });
+  function addMembers(members) {
+    _.each(member => addMember(member));
+  }
+
+  function addMember(member) {
+    if (_.isNumber(tableChecker.nameList[member.member_code]))
+      throw new Error(messages.duplicatedCodes(member.member_code));
+
+    if (_.isNumber(tableChecker.nameList[member.doer_name]))
+      throw new Error(messages.duplicatedNames(member.doer_name));
+
   }
 
   function sheetValidCheck(sheet) {
