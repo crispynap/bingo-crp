@@ -290,10 +290,13 @@
     const newMemberRow = _.mapObject(emptyMemberRow, (val, key) => member[key] ? member[key] : "");
 
     eachTables(table => {
-      table.data().row.add(newMemberRow).draw();
+      table.data().row.add(newMemberRow);
     });
 
-    getActiveTable().row((idx, data) => data.member_code === newMemberRow.member_code).select();
+    getActiveTable()
+      .row((idx, data) => data.member_code === newMemberRow.member_code)
+      .draw()
+      .select();
   }
 
   function sheetValidCheck(sheet) {
