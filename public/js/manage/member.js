@@ -275,11 +275,8 @@
   }
 
   function addMember(member = {}) {
-    if (member.member_code && _.isNumber(tableChecker.codeList[member.member_code]))
-      throw new Error(messages.duplicatedCodes(member.member_code));
-
-    if (member.doer_name && _.isNumber(tableChecker.nameList[member.doer_name]))
-      throw new Error(messages.duplicatedNames(member.doer_name));
+    checkCodeDuplicates(member.member_code);
+    checkNameDuplicates(member.doer_name);
 
     if (!member.member_code) {
       member.member_code = _.go(
@@ -353,6 +350,16 @@
       .row((idx, data) => data.member_code === row.member_code)
       .draw()
       .select()
+  };
+
+  const checkCodeDuplicates = code => {
+    if (code && _.isNumber(tableChecker.codeList[code]))
+      throw new Error(messages.duplicatedCodes(code));
+  };
+
+  const checkNameDuplicates = name => {
+    if (name && _.isNumber(tableChecker.nameList[name]))
+      throw new Error(messages.duplicatedNames(name));
   };
 
   const getActiveTable = () => dataTables[$('.tab-content div.active')[0].dataset.tablename];
