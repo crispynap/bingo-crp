@@ -111,18 +111,7 @@
     });
 
     $('#add-btn').click(e => {
-      const newMemberRow = _.mapObject(dataInfo, (val, key) => "");
-      const newRowCode = _.go(
-        _.max(dataTables.primary.data(), row => row.member_code),
-        _.v('member_code')
-      ) + 1;
-      newMemberRow.member_code = newRowCode;
-
-      eachTables(table => {
-        table.data().row.add(newMemberRow).draw();
-      });
-
-      getActiveTable().row((idx, data) => data.member_code === newRowCode).select();
+      addMember();
     });
 
     $('#removeModal').on('shown.bs.modal', (e => {
@@ -147,11 +136,11 @@
   function getMembersAll() {
     $.get("../api/members", (memberData) => {
       setTables(memberData);
-      setValidData(memberData);
+      setValidChecker(memberData);
     });
   }
 
-  function setValidData(data) {
+  function setValidChecker(data) {
     tableChecker.codeList = getFieldCounts(data, 'member_code');
     tableChecker.nameList = getFieldCounts(data, 'doer_name');
   }
@@ -283,13 +272,28 @@
     _.each(member => addMember(member));
   }
 
-  function addMember(member) {
-    if (_.isNumber(tableChecker.nameList[member.member_code]))
+  function addMember(member = {}) {
+    if (member.member_code && _.isNumber(tableChecker.codeList[member.member_code]))
       throw new Error(messages.duplicatedCodes(member.member_code));
 
-    if (_.isNumber(tableChecker.nameList[member.doer_name]))
+    if (member.doer_name && _.isNumber(tableChecker.nameList[member.doer_name]))
       throw new Error(messages.duplicatedNames(member.doer_name));
 
+    if (!member.member_code) {
+      member.member_code = _.go(
+        _.max(dataTables.primary.data(), row => row.member_code),
+        _.v('member_code')
+      ) + 1;
+    }
+
+    const emptyMemberRow = _.mapObject(dataInfo, (val, key) => "");
+    const newMemberRow = _.mapObject(emptyMemberRow, (val, key) => member[key] ? member[key] : "");
+
+    eachTables(table => {
+      table.data().row.add(newMemberRow).draw();
+    });
+
+    getActiveTable().row((idx, data) => data.member_code === newMemberRow.member_code).select();
   }
 
   function sheetValidCheck(sheet) {
@@ -331,10 +335,11 @@
     return { err: false };
   }
 
-  const getFieldCounts = (rows, fieldName, counts) => {
-    _.each(_.map(rows, _.val(fieldName)), field => {
-      _.isNumber(counts[field]) ? counts[field]++ : counts[field] = 1;
-    });
+  const getFieldCounts = (rows, fieldName, counts = {}) => {
+    _.go(
+      _.map(rows, _.val(fieldName)),
+      _.each(field => _.isNumber(counts[field]) ? counts[field]++ : counts[field] = 1)
+    )
     return counts;
   }
 
