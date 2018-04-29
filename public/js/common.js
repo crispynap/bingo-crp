@@ -97,9 +97,9 @@ window.messages = {
   emptyCodeRow: "코드와 이름 둘 다 누락된 줄이 있습니다.",
   duplicatedNames: name => `이름이 중복되었습니다: 중복 이름: ${name}`,
   duplicatedCodes: code => `조합원 코드가 중복되었습니다. 중복 코드: ${code}`,
-  noName: code => `이름을 공백으로 할 수는 없습니다: 코드: ${code}`,
+  noEmptyName: code => `이름을 공백으로 할 수는 없습니다: 코드: ${code}`,
   noCode: code => `그런 코드의 조합원은 없습니다: 입력 코드: ${code}`,
-  noMember: name => `그런 이름의 조합원은 없습니다: 입력 이름: ${name}`,
+  noName: name => `그런 이름의 조합원은 없습니다: 입력 이름: ${name}`,
   incorrectFormat(cell, format) {
     let formatExplain;
 

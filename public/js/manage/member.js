@@ -142,8 +142,12 @@
   }
 
   function setValidChecker(data) {
-    tableChecker.codeList = getFieldCounts(data, 'member_code');
-    tableChecker.nameList = getFieldCounts(data, 'doer_name');
+
+    tableChecker.existCodes = getExistList(data, 'member_code');
+    tableChecker.existNames = getExistList(data, 'doer_name');
+
+    console.log(tableChecker.existCodes)
+    console.log(tableChecker.existNames)
   }
 
   function getTableOptions(data, columns) {
@@ -292,8 +296,9 @@
     eachTables(table => {
       table.data().row.add(newMemberRow);
     });
-    tableChecker.codeList[member.member_code] = 1;
-    tableChecker.nameList[member.doer_name] = 1;
+
+    setCodeExist(member.member_code);
+    setNameExist(member.doer_name);
 
     return newMemberRow;
   }
@@ -312,30 +317,32 @@
   }
 
   function modifyMemberFromCode(member) {
-    if (!member.doer_name)
-      throw new Error(messages.noName(member.member_code));
+    checkCodeExist(member.member_code);
 
-    if (_.isNumber(tableChecker.nameList[member.doer_name]))
-      throw new Error(messages.duplicatedNames(member.doer_name));
+    if (!member.doer_name)
+      throw new Error(messages.noEmptyName(member.member_code));
 
     const oldMemberRow = getActiveTable().row(findByCode(member)).data();
     const newMemberRow = _.mapObject(oldMemberRow, (val, key) => member[key] ? member[key] : "");
+
+    if (oldMemberRow.doer_name != newMemberRow.doer_name &&
+      isNameExist(newMemberRow.doer_name))
+      throw new Error(messages.duplicatedNames(member.doer_name));
 
     eachTables(table => {
       table.row(findByCode(newMemberRow)).data(newMemberRow);
     });
 
     if (oldMemberRow.doer_name !== newMemberRow) {
-      tableChecker.nameList[oldMemberRow.doer_name] = undefined;
-      tableChecker.nameList[newMemberRow.doer_name] = 1;
+      setNameExist(oldMemberRow.doer_name, false);
+      setNameExist(newMemberRow.doer_name);
     }
 
     return newMemberRow;
   }
 
   function modifyMemberFromName(member) {
-    if (!_.isNumber(tableChecker.nameList[member.doer_name]))
-      throw new Error(messages.noMember(member.doer_name));
+    checkNameExist(member.doer_name);
 
     const oldMemberRow = getActiveTable().row(findByName(member)).data();
     const newMemberRow = _.mapObject(oldMemberRow, (val, key) => member[key] ? member[key] : "");
@@ -360,9 +367,7 @@
   }
 
   function deleteMemberFromCode(member) {
-
-    if (!tableChecker.codeList[member.member_code])
-      throw new Error(messages.noCode(member.member_code));
+    checkCodeExist(member.member_code);
 
     const oldRow = getActiveTable().row(findByCode(member)).data();
 
@@ -370,13 +375,12 @@
       table.row(findByCode(member)).remove().draw();
     });
 
-    tableChecker.codeList[oldRow.member_code] = undefined;
-    tableChecker.codeList[oldRow.doer_name] = undefined;
+    setCodeExist(oldRow.member_code, false);
+    setNameExist(oldRow.doer_name, false);
   }
 
   function deleteMemberFromName(member) {
-    if (!tableChecker.codeList[member.doer_name])
-      throw new Error(messages.noMember(member.doer_name));
+    checkNameExist(member.doer_name);
 
     const oldRow = getActiveTable().row(findByName(member)).data();
 
@@ -384,8 +388,8 @@
       table.row(findByName(member)).remove().draw();
     });
 
-    tableChecker.codeList[oldRow.member_code] = undefined;
-    tableChecker.codeList[oldRow.doer_name] = undefined;
+    setCodeExist(oldRow.member_code, false);
+    setNameExist(oldRow.doer_name, false);
   }
 
 
@@ -426,13 +430,6 @@
     return { err: false };
   }
 
-  const getFieldCounts = (rows, fieldName, counts = {}) => {
-    _.go(
-      _.map(rows, _.val(fieldName)),
-      _.each(field => _.isNumber(counts[field]) ? counts[field]++ : counts[field] = 1)
-    )
-    return counts;
-  }
 
   const selectRow = row => {
     getActiveTable()
@@ -444,15 +441,31 @@
   const findByCode = row => (idx, data) => data.member_code == row.member_code;
   const findByName = row => (idx, data) => data.doer_name == row.doer_name;
 
+  const getExistList = (rows, field) => _.reduce(rows, (memo, row) => {
+    if (_.v(row, field)) memo[_.v(row, field)] = true;
+    return memo;
+  }, {});
+
+  const isCodeExist = code => _.v(tableChecker.existCodes, code);
+  const isNameExist = name => _.v(tableChecker.existNames, name);
+  const setCodeExist = (code, bool = true) => tableChecker.existCodes[code] = bool;
+  const setNameExist = (name, bool = true) => tableChecker.existNames[name] = bool;
+
   const checkCodeDuplicates = code => {
-    if (code && _.isNumber(tableChecker.codeList[code]))
-      throw new Error(messages.duplicatedCodes(code));
+    if (isCodeExist(code)) throw new Error(messages.duplicatedCodes(code));
   };
 
   const checkNameDuplicates = name => {
-    if (name && _.isNumber(tableChecker.nameList[name]))
-      throw new Error(messages.duplicatedNames(name));
+    if (isNameExist(name)) throw new Error(messages.duplicatedNames(name));
   };
+
+  const checkCodeExist = code => {
+    if (isCodeExist(code)) throw new Error(messages.noCode(code));
+  };
+  const checkNameExist = name => {
+    if (isNameExist(name)) throw new Error(messages.noName(name));
+  };
+
 
   const getActiveTable = () => dataTables[$('.tab-content div.active')[0].dataset.tablename];
   const dataFormat = dataName => _.v(dataInfo[dataName], 'format');
