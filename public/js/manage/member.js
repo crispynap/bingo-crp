@@ -142,12 +142,8 @@
   }
 
   function setValidChecker(data) {
-
     tableChecker.existCodes = getExistList(data, 'member_code');
     tableChecker.existNames = getExistList(data, 'doer_name');
-
-    console.log(tableChecker.existCodes)
-    console.log(tableChecker.existNames)
   }
 
   function getTableOptions(data, columns) {
@@ -460,12 +456,11 @@
   };
 
   const checkCodeExist = code => {
-    if (isCodeExist(code)) throw new Error(messages.noCode(code));
+    if (!isCodeExist(code)) throw new Error(messages.noCode(code));
   };
   const checkNameExist = name => {
-    if (isNameExist(name)) throw new Error(messages.noName(name));
+    if (!isNameExist(name)) throw new Error(messages.noName(name));
   };
-
 
   const getActiveTable = () => dataTables[$('.tab-content div.active')[0].dataset.tablename];
   const dataFormat = dataName => _.v(dataInfo[dataName], 'format');
