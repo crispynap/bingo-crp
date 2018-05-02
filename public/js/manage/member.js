@@ -526,7 +526,7 @@ const eachTables = f => _.each(dataTables, f);
 
 const addRow = row => {
   row.edited = "added";
-  eachTables(table => table.data().row.add(data));
+  eachTables(table => table.data().row.add(row));
 };
 
 const modifyRow = row => {
