@@ -179,7 +179,8 @@ window.C = {
     return moment(date).isValid() ? date : `${year}-01-01`;
   },
 
-  toNum: _(parseInt, _, 10)
+  toInt: data => parseInt(data, 10),
+  toNum: data => (isNaN(C.toInt(data)) ? 0 : C.toInt(data))
 };
 
 _.fill = (list, filling = "") => {
