@@ -337,9 +337,7 @@
       (val, key) => (member[key] ? member[key] : "")
     );
 
-    eachTables(table => {
-      table.data().row.add(newMemberRow);
-    });
+    addRow(newMemberRow);
 
     setCodeExist(member.member_code);
     setNameExist(member.doer_name);
@@ -546,4 +544,9 @@
   const isDataReadOnly = dataName => _.v(dataInfo[dataName], "readOnly");
   const isDateFormat = dataName => dataFormat(dataName) === "date";
   const eachTables = f => _.each(dataTables, f);
+
+  const addRow = data => {
+    data.edited = "added";
+    eachTables(table => table.data().row.add(newMemberRow));
+  };
 })();
