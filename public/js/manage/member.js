@@ -143,14 +143,11 @@
     });
 
     $("#remove-confirm").click(e => {
-      const selectedRow = getActiveTable().row(".selected");
+      const selectedRow = getActiveTable()
+        .row(".selected")
+        .data();
 
-      eachTables(table => {
-        table
-          .row(selectedRow)
-          .remove()
-          .draw();
-      });
+      removeRow(selectedRow.member_code);
 
       $("#editor").empty();
       $("#remove-btn").hide();
@@ -362,7 +359,7 @@
       throw new Error(messages.noEmptyName(member.member_code));
 
     const oldMemberRow = getActiveTable()
-      .row(findByCode(member))
+      .row(findByCode(member.member_code))
       .data();
     const newMemberRow = _.mapObject(
       oldMemberRow,
@@ -376,7 +373,7 @@
       throw new Error(messages.duplicatedNames(member.doer_name));
 
     eachTables(table => {
-      table.row(findByCode(newMemberRow)).data(newMemberRow);
+      table.row(findByCode(newMemberRow.member_code)).data(newMemberRow);
     });
 
     if (oldMemberRow.doer_name !== newMemberRow) {
@@ -391,7 +388,7 @@
     checkNameExist(member.doer_name);
 
     const oldMemberRow = getActiveTable()
-      .row(findByName(member))
+      .row(findByName(member.doer_name))
       .data();
     const newMemberRow = _.mapObject(
       oldMemberRow,
@@ -400,7 +397,7 @@
     newMemberRow.member_code = oldMemberRow.member_code;
 
     eachTables(table => {
-      table.row(findByName(newMemberRow)).data(newMemberRow);
+      table.row(findByName(newMemberRow.doer_name)).data(newMemberRow);
     });
 
     return newMemberRow;
@@ -419,15 +416,10 @@
     checkCodeExist(member.member_code);
 
     const oldRow = getActiveTable()
-      .row(findByCode(member))
+      .row(findByCode(member.member_code))
       .data();
 
-    eachTables(table => {
-      table
-        .row(findByCode(member))
-        .remove()
-        .draw();
-    });
+    removeRow(member.member_code);
 
     setCodeExist(oldRow.member_code, false);
     setNameExist(oldRow.doer_name, false);
@@ -437,12 +429,12 @@
     checkNameExist(member.doer_name);
 
     const oldRow = getActiveTable()
-      .row(findByName(member))
+      .row(findByName(member.doer_name))
       .data();
 
     eachTables(table => {
       table
-        .row(findByName(member))
+        .row(findByName(member.doer_name))
         .remove()
         .draw();
     });
@@ -498,13 +490,13 @@
 
   const selectRow = row => {
     getActiveTable()
-      .row(findByCode(row))
+      .row(findByCode(row.member_code))
       .draw()
       .select();
   };
 
-  const findByCode = row => (idx, data) => data.member_code == row.member_code;
-  const findByName = row => (idx, data) => data.doer_name == row.doer_name;
+  const findByCode = row => (idx, code) => code == row.member_code;
+  const findByName = row => (idx, name) => name == row.doer_name;
 
   const getExistList = (rows, field) =>
     _.reduce(
@@ -547,6 +539,16 @@
 
   const addRow = data => {
     data.edited = "added";
-    eachTables(table => table.data().row.add(newMemberRow));
+    eachTables(table => table.data().row.add(data));
+  };
+  const removeRow = rowCode => {
+    eachTables(table => {
+      table
+        .row(findByCode(rowCode))
+        .remove()
+        .draw();
+    });
+
+    removedRows.push({ member_code: rowCode });
   };
 })();
