@@ -465,7 +465,6 @@
     )
       return { err: true, message: messages.emptyCodeRow };
 
-    //포맷 체크
     for (const row of sheet) {
       for (const cellName in dataInfo) {
         const cellForamtErr = cellFormatCheck(
