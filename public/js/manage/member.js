@@ -524,9 +524,17 @@ const isDataReadOnly = dataName => _.v(dataInfo[dataName], "readOnly");
 const isDateFormat = dataName => dataFormat(dataName) === "date";
 const eachTables = f => _.each(dataTables, f);
 
-const addRow = data => {
-  data.edited = "added";
+const addRow = row => {
+  row.edited = "added";
   eachTables(table => table.data().row.add(data));
+};
+
+const modifyRow = row => {
+  if (!row.edited) row.edited = "modified";
+
+  eachTables(table => {
+    table.row(findByCode(row.member_code)).data(row);
+  });
 };
 
 const removeRow = rowCode => {
@@ -538,11 +546,5 @@ const removeRow = rowCode => {
   });
 
   removedRows.push({ member_code: rowCode });
-};
-
-const modifyRow = row => {
-  eachTables(table => {
-    table.row(findByCode(row.member_code)).data(row);
-  });
 };
 // })();
