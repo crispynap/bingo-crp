@@ -325,8 +325,9 @@
     if (!member.member_code) {
       member.member_code =
         _.go(
-          _.max(dataTables.primary.data(), row => row.member_code),
-          _.v("member_code")
+          _.max(dataTables.primary.data(), row => C.toNum(row.member_code)),
+          _.v("member_code"),
+          C.toNum
         ) + 1;
     }
 
