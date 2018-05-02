@@ -120,18 +120,17 @@ function setEvents() {
 
   //내용 수정시 데이터에 반영
   $("#editor").change(e => {
-    const row = getActiveTable().row(".selected");
-    const rowData = row.data();
+    const row = getActiveTable()
+      .row(".selected")
+      .data();
     const editingCell = e.target.dataset.name;
 
     if (isDateFormat(editingCell))
       e.target.value = C.renderDate(e.target.value); //날짜 서식에 맞추기
 
-    rowData[editingCell] = e.target.value;
+    row[editingCell] = e.target.value;
 
-    eachTables(table => {
-      table.row(row).data(rowData);
-    });
+    modifyRow(row);
   });
 
   $("#add-btn").click(e => {
@@ -373,9 +372,7 @@ function modifyMemberFromCode(member) {
   )
     throw new Error(messages.duplicatedNames(member.doer_name));
 
-  eachTables(table => {
-    table.row(findByCode(newMemberRow.member_code)).data(newMemberRow);
-  });
+  modifyRow(newMemberRow);
 
   if (oldMemberRow.doer_name !== newMemberRow) {
     setNameExist(oldMemberRow.doer_name, false);
@@ -397,9 +394,7 @@ function modifyMemberFromName(member) {
   );
   newMemberRow.member_code = oldMemberRow.member_code;
 
-  eachTables(table => {
-    table.row(findByName(newMemberRow.doer_name)).data(newMemberRow);
-  });
+  modifyRow(newMemberRow);
 
   return newMemberRow;
 }
@@ -433,12 +428,7 @@ function deleteMemberFromName(member) {
     .row(findByName(member.doer_name))
     .data();
 
-  eachTables(table => {
-    table
-      .row(findByName(member.doer_name))
-      .remove()
-      .draw();
-  });
+  removeRow(oldRow.member_code);
 
   setCodeExist(oldRow.member_code, false);
   setNameExist(oldRow.doer_name, false);
@@ -538,6 +528,7 @@ const addRow = data => {
   data.edited = "added";
   eachTables(table => table.data().row.add(data));
 };
+
 const removeRow = rowCode => {
   eachTables(table => {
     table
@@ -547,5 +538,11 @@ const removeRow = rowCode => {
   });
 
   removedRows.push({ member_code: rowCode });
+};
+
+const modifyRow = row => {
+  eachTables(table => {
+    table.row(findByCode(row.member_code)).data(row);
+  });
 };
 // })();
