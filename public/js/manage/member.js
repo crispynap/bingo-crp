@@ -549,12 +549,12 @@ const modifyRow = row => {
 };
 
 const removeRow = rowCode => {
-  romovingRow = dataTables.primary.row(findByCode(rowCode));
-  if (!romovingRow.edited === "added") removedRows.push(romovingRow);
+  removingRow = dataTables.primary.row(findByCode(rowCode)).data();
+  if (!removingRow.edited === "added") removedRows.push(removingRow);
 
   eachTables(table => {
     table
-      .row(findByCode(romovingRow.member_code))
+      .row(findByCode(removingRow.member_code))
       .remove()
       .draw();
   });
