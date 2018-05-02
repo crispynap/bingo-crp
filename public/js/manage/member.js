@@ -153,6 +153,17 @@ function setEvents() {
     $("#remove-btn").hide();
     $("#removeModal").modal("hide");
   });
+
+  $("#save-btn").click(e => {
+    const tableData = dataTables.primary.data();
+    const addedRows = _.filter(tableData, row => row.edited === "added");
+    const modifiedRows = _.filter(tableData, row => row.edited === "modified");
+    const romovedRows = removedRows;
+
+    console.log("addedRows: ", addedRows);
+    console.log("modifiedRows: ", modifiedRows);
+    console.log("romovedRows: ", romovedRows);
+  });
 }
 
 function getMembersAll() {
@@ -538,13 +549,14 @@ const modifyRow = row => {
 };
 
 const removeRow = rowCode => {
+  romovingRow = dataTables.primary.row(findByCode(rowCode));
+  if (!romovingRow.edited === "added") removedRows.push(romovingRow);
+
   eachTables(table => {
     table
-      .row(findByCode(rowCode))
+      .row(findByCode(romovingRow.member_code))
       .remove()
       .draw();
   });
-
-  removedRows.push({ member_code: rowCode });
 };
 // })();
