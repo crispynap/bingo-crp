@@ -8,7 +8,7 @@
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
-    "mysql": "^2.15.0",
+    "mongoose": "^5.0.17",
     "npm": "^5.8.0",
     "partial-js": "^1.1.2"
   },

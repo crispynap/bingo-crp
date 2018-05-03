@@ -154,11 +154,24 @@ function setEvents() {
     $("#removeModal").modal("hide");
   });
 
+  const removeEdited = data => _.map(data, row => _.omit(row, "edited"));
+  const removeReadOnly = data =>
+    _.map(data, row => _.omit(row, (val, key) => isDataReadOnly(key)));
+  const getEditedRows = (rows, object) =>
+    _.go(
+      rows,
+      _.filter(row => row.edited === object),
+      removeEdited,
+      removeReadOnly
+    );
+
   $("#save-btn").click(e => {
     const tableData = dataTables.primary.data();
-    const addedRows = _.filter(tableData, row => row.edited === "added");
-    const modifiedRows = _.filter(tableData, row => row.edited === "modified");
-    const romovedRows = removedRows;
+    const addedRows = getEditedRows(tableData, "added");
+    const modifiedRows = getEditedRows(tableData, "modified");
+    const romovedRows = removeEdited(removedRows);
+
+    if (addedRows) $.post("../api/members", { memberInfos: addedRows });
 
     console.log("addedRows: ", addedRows);
     console.log("modifiedRows: ", modifiedRows);

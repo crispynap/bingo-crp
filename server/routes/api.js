@@ -73,6 +73,7 @@ function addMember(memberInfo = {}) {
         let fieldValues = `'${doerCode}'`;
         _.each(_.pairs(_.omit(memberInfo, 'doer_name')), field => {
           fieldNames += ', ' + field[0];
+          if (field[1].indexOf('date') === '') field[1] = undefined;
           fieldValues += `, '${field[1]}'`
         })
         const addMemberQuery = `INSERT INTO 조합원 (${fieldNames}) VALUES (${fieldValues});`;
@@ -83,24 +84,6 @@ function addMember(memberInfo = {}) {
     )
   })
 }
-
-
-// const membersStructure = req.body.membersStructure;
-// const structureQuery = _.reduce(membersStructure, (memo, fieldName) => {
-//   if (memo !== '(') memo += ', ';
-//   return memo + fieldName;
-// }, '(') + ')';
-// const membersData = req.body.membersData;
-// const dataQuery = _.reduce(membersData, (memo, row) => {
-//   if (memo !== '') memo += ', ';
-//   return memo + _.reduce(row, (memo, field) => {
-//     if (memo !== '(') memo += ', ';
-//     return memo + "'" + field + "'";
-//   }, '(') + ')';
-// }, '');
-
-// const membersQuery = "INSERT INTO `조합원` " + structureQuery + " VALUES " + dataQuery + ";"
-// queryDB(membersQuery);
 
 
 module.exports = router;
