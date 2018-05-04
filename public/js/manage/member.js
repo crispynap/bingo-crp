@@ -7,7 +7,7 @@ const removedRows = [];
 const tableColumns = {
   primary: [
     { data: "member_code", inputName: "코드" },
-    { data: "doer_name", inputName: "이름" },
+    { data: "name", inputName: "이름" },
     { data: "rname", inputName: "실명" },
     { data: "category", inputName: "구분" },
     { data: "main_commune", inputName: "주 공동체" },
@@ -28,7 +28,7 @@ const tableColumns = {
   ],
   fund: [
     { data: "member_code", inputName: "코드" },
-    { data: "doer_name", inputName: "이름" },
+    { data: "name", inputName: "이름" },
     {
       data: "total_fund",
       render: C.renderMoney,
@@ -38,7 +38,7 @@ const tableColumns = {
   ],
   util: [
     { data: "member_code", inputName: "코드" },
-    { data: "doer_name", inputName: "이름" },
+    { data: "name", inputName: "이름" },
     {
       data: "total_util",
       render: C.renderMoney,
@@ -48,12 +48,12 @@ const tableColumns = {
   ],
   action: [
     { data: "member_code", inputName: "코드" },
-    { data: "doer_name", inputName: "이름" },
+    { data: "name", inputName: "이름" },
     { data: "main_commune", inputName: "주 공동체" }
   ],
   detail: [
     { data: "member_code", inputName: "코드" },
-    { data: "doer_name", inputName: "이름" },
+    { data: "name", inputName: "이름" },
     { data: "rname", inputName: "실명" },
     { data: "region", inputName: "지역" },
     { data: "join_way", inputName: "가입경로" },
@@ -77,7 +77,7 @@ const dataInfo = {
   join_date: { format: "date" },
   leave_date: { format: "date" },
   celeb_date: { format: "date" },
-  doer_name: {},
+  name: {},
   addr: {},
   category: {},
   current: {},
@@ -103,12 +103,12 @@ $(document).ready(() => {
 function setEvents() {
   //서식 삽입 버튼 누를 시 xlsx 업로드 동작
   const xlsButton = document.querySelector(".xls-upload>input");
-  xlsButton.addEventListener("change", function(e) {
+  xlsButton.addEventListener("change", function (e) {
     commonEvent.readXlsx(e, getXlsx, getActiveTable().data());
   });
 
   //탭 전환시
-  $('a[data-toggle="tab"]').on("show.bs.tab", function(e) {
+  $('a[data-toggle="tab"]').on("show.bs.tab", function (e) {
     const prevRow = getActiveTable().row(".selected");
 
     const shownTabName = $(e.target).attr("href");
@@ -180,15 +180,19 @@ function setEvents() {
 }
 
 function getMembersAll() {
-  $.get("../api/members", memberData => {
-    setTables(memberData);
-    setValidChecker(memberData);
+  $.get("../api/members", members => {
+    const newMembers = _.map(members, member =>
+      _.mapObject(dataInfo, (v, key) => member[key] === undefined ? '' : member[key])
+    );
+
+    setTables(newMembers);
+    setValidChecker(newMembers);
   });
 }
 
 function setValidChecker(data) {
   tableChecker.existCodes = getExistList(data, "member_code");
-  tableChecker.existNames = getExistList(data, "doer_name");
+  tableChecker.existNames = getExistList(data, "name");
 }
 
 function getTableOptions(data, columns) {
@@ -222,7 +226,7 @@ function setTables(data) {
   dataTables.detail = detailTable;
 
   eachTables(table => {
-    table.on("select", function(e, dt, type, indexes) {
+    table.on("select", function (e, dt, type, indexes) {
       setFormSetting(e.target.dataset.tablename, indexes[0]);
       showRemoveBtn();
     });
@@ -257,7 +261,7 @@ function setFormSetting(tableName, rowNumber) {
     );
     const input = $(
       `<input type="text" class="form-control" data-name="${
-        column.data
+      column.data
       }" data-format="${dataFormat(column.data)}" 
         class="input-group-addon" ${readOnly} value="${inputData}"></input>`
     );
@@ -341,7 +345,7 @@ function addMembers(members) {
 
 function addMember(member = {}) {
   checkCodeDuplicates(member.member_code);
-  checkNameDuplicates(member.doer_name);
+  checkNameDuplicates(member.name);
 
   if (!member.member_code) {
     member.member_code =
@@ -361,7 +365,7 @@ function addMember(member = {}) {
   addRow(newMemberRow);
 
   setCodeExist(member.member_code);
-  setNameExist(member.doer_name);
+  setNameExist(member.name);
 
   return newMemberRow;
 }
@@ -379,7 +383,7 @@ function modifyMember(member) {
 function modifyMemberFromCode(member) {
   checkCodeExist(member.member_code);
 
-  if (!member.doer_name)
+  if (!member.name)
     throw new Error(messages.noEmptyName(member.member_code));
 
   const oldMemberRow = getActiveTable()
@@ -391,26 +395,26 @@ function modifyMemberFromCode(member) {
   );
 
   if (
-    oldMemberRow.doer_name != newMemberRow.doer_name &&
-    isNameExist(newMemberRow.doer_name)
+    oldMemberRow.name != newMemberRow.name &&
+    isNameExist(newMemberRow.name)
   )
-    throw new Error(messages.duplicatedNames(member.doer_name));
+    throw new Error(messages.duplicatedNames(member.name));
 
   modifyRow(newMemberRow);
 
-  if (oldMemberRow.doer_name !== newMemberRow) {
-    setNameExist(oldMemberRow.doer_name, false);
-    setNameExist(newMemberRow.doer_name);
+  if (oldMemberRow.name !== newMemberRow) {
+    setNameExist(oldMemberRow.name, false);
+    setNameExist(newMemberRow.name);
   }
 
   return newMemberRow;
 }
 
 function modifyMemberFromName(member) {
-  checkNameExist(member.doer_name);
+  checkNameExist(member.name);
 
   const oldMemberRow = getActiveTable()
-    .row(findByName(member.doer_name))
+    .row(findByName(member.name))
     .data();
   const newMemberRow = _.mapObject(
     oldMemberRow,
@@ -442,20 +446,20 @@ function deleteMemberFromCode(member) {
   removeRow(member.member_code);
 
   setCodeExist(oldRow.member_code, false);
-  setNameExist(oldRow.doer_name, false);
+  setNameExist(oldRow.name, false);
 }
 
 function deleteMemberFromName(member) {
-  checkNameExist(member.doer_name);
+  checkNameExist(member.name);
 
   const oldRow = getActiveTable()
-    .row(findByName(member.doer_name))
+    .row(findByName(member.name))
     .data();
 
   removeRow(oldRow.member_code);
 
   setCodeExist(oldRow.member_code, false);
-  setNameExist(oldRow.doer_name, false);
+  setNameExist(oldRow.name, false);
 }
 
 function sheetValidCheck(sheet) {
@@ -464,7 +468,7 @@ function sheetValidCheck(sheet) {
   //코드와 이름 둘 다 누락된 줄이 있는지
   if (
     _.find(sheet, row => {
-      return _.isEmpty(row["doer_name"]) && _.isEmpty(row["member_code"]);
+      return _.isEmpty(row["name"]) && _.isEmpty(row["member_code"]);
     })
   )
     return { err: true, message: messages.emptyCodeRow };
@@ -507,7 +511,7 @@ const selectRow = row => {
 };
 
 const findByCode = code => (idx, data) => code == data.member_code;
-const findByName = name => (idx, data) => name == data.doer_name;
+const findByName = name => (idx, data) => name == data.name;
 
 const getExistList = (rows, field) =>
   _.reduce(
