@@ -177,6 +177,12 @@ function setEvents() {
 
     if (added) $.post("../api/members", { memberInfos: added });
 
+    if (removed) $.ajax({
+      url: '../api/members',
+      type: 'DELETE',
+      data: { data: removed }
+    });
+
     setRowsField(tableData, 'edited', undefined);
     removedRows = [];
   });
@@ -570,7 +576,7 @@ const modifyRow = row => {
 
 const removeRow = rowCode => {
   removingRow = dataTables.primary.row(findByCode(rowCode)).data();
-  if (!removingRow.edited === "added") removedRows.push(removingRow);
+  if (removingRow.edited !== "added") { removedRows.push(removingRow) };
 
   eachTables(table => {
     table

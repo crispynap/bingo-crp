@@ -51,8 +51,15 @@ router.put('/members/:member_id', (req, res) => {
   res.end();
 });
 
-router.delete('/members/:member_id', (req, res) => {
-  res.end();
+router.delete('/members', (req, res) => {
+  const removingCodes = _.map(req.body.data, row => _.v(row, 'member_code'));
+
+  _.each(removingCodes, memberCode => {
+    memberSchema.findOneAndRemove({ member_code: memberCode }, (err) => {
+      if (err) return res.status(500).send(err);
+      return res.status(200).send('삭제 완료');
+    })
+  })
 });
 
 
