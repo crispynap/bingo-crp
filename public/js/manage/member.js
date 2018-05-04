@@ -2,7 +2,7 @@
 const dataTables = {};
 
 const tableChecker = {};
-const removedRows = [];
+let removedRows = [];
 
 const tableColumns = {
   primary: [
@@ -164,18 +164,21 @@ function setEvents() {
       removeEdited,
       removeReadOnly
     );
+  const setRowsField = (data, field, val) => _.map(data, row => {
+    row[field] = val;
+    return row;
+  });
 
   $("#save-btn").click(e => {
     const tableData = dataTables.primary.data();
-    const addedRows = getEditedRows(tableData, "added");
-    const modifiedRows = getEditedRows(tableData, "modified");
-    const romovedRows = removeEdited(removedRows);
+    const added = getEditedRows(tableData, "added");
+    const modified = getEditedRows(tableData, "modified");
+    const removed = removeEdited(removedRows);
 
-    if (addedRows) $.post("../api/members", { memberInfos: addedRows });
+    if (added) $.post("../api/members", { memberInfos: added });
 
-    console.log("addedRows: ", addedRows);
-    console.log("modifiedRows: ", modifiedRows);
-    console.log("romovedRows: ", romovedRows);
+    setRowsField(tableData, 'edited', undefined);
+    removedRows = [];
   });
 }
 
