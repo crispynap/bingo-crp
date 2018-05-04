@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('partial-js');
-const mysqlDbc = require('../config/db/db_con');
 
 router.get('/members', (req, res) => {
   const query = "SELECT * FROM `members_view`;";
@@ -37,14 +36,14 @@ router.delete('/members/:member_id', (req, res) => {
 
 
 function queryAndSend(query, res) {
-  const db = new mysqlDbc();
-  db.query(query)
-    .then(rows => {
-      res.send(rows);
-      db.close();
-    }, err => {
-      console.log(err)
-    })
+  // const db = new mysqlDbc();
+  // db.query(query)
+  //   .then(rows => {
+  //     res.send(rows);
+  //     db.close();
+  //   }, err => {
+  //     console.log(err)
+  //   })
 }
 
 function addMembers(memberInfos = {}) {
@@ -62,7 +61,7 @@ function addMember(memberInfo = {}) {
   return new Promise((resolve, reject) => {
     const addDoerQuery = `INSERT INTO 주체 (doer_category, doer_name) VALUES ('조합원', '${memberInfo.doer_name}');`;
     const getDoerCodeQuery = `SELECT doer_code FROM 주체 WHERE doer_name='${memberInfo.doer_name}';`;
-    const db = new mysqlDbc();
+    // const db = new mysqlDbc();
 
     _.go('',
       () => db.query(addDoerQuery),
