@@ -120,15 +120,26 @@ function setEvents() {
 
   //내용 수정시 데이터에 반영
   $("#editor").change(e => {
-    const row = getActiveTable()
-      .row(".selected")
-      .data();
-    const editingCell = e.target.dataset.name;
+    const fieldName = e.target.dataset.name;
+    const value = e.target.value;
+    const row = getActiveTable().row(".selected").data();
 
-    if (isDateFormat(editingCell))
+    if (fieldName === 'name' && isNameExist(value)) {
+      e.target.value = row[fieldName];
+      alert(messages.duplicatedNames(value));
+      return;
+    }
+
+    if (fieldName === 'member_code' && isCodeExist(value)) {
+      e.target.value = row[fieldName];
+      alert(messages.duplicatedCodes(value));
+      return;
+    }
+
+    if (isDateFormat(fieldName))
       e.target.value = C.renderDate(e.target.value); //날짜 서식에 맞추기
 
-    row[editingCell] = e.target.value;
+    row[fieldName] = e.target.value;
 
     modifyRow(row);
   });
