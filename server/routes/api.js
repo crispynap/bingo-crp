@@ -39,12 +39,25 @@ router.post('/members', (req, res) => {
   }
 });
 
+router.put('/members', (req, res) => {
+  const memberInfos = req.body.memberInfos;
+
+  if (!_.isEmpty(memberInfos)) {
+    modifyMembers(memberInfos)
+      .then(() => res.send('ok'))
+      .catch(err => res.send('error: ' + err).status(500));
+  }
+});
+
+
 router.delete('/members', (req, res) => {
   const codes = _.map(req.body.data, row => _.v(row, 'member_code'));
 
-  removeMembers(codes)
-    .then(res.send('삭제 완료').status(200))
-    .catch(err => res.send('삭제 오류: ' + err).status(500));
+  if (!_.isEmpty(codes)) {
+    removeMembers(codes)
+      .then(res.send('삭제 완료').status(200))
+      .catch(err => res.send('삭제 오류: ' + err).status(500));
+  }
 });
 
 
@@ -71,6 +84,26 @@ function addMember(memberInfo) {
   });
 }
 
+
+function modifyMembers(memberInfos) {
+  return new Promise((resolve, reject) => {
+    _.each(memberInfos, memberInfo => modifyMember(memberInfo))
+      .then(resolve)
+      .catch(reject);
+  });
+}
+
+function modifyMember(memberInfo) {
+  return new Promise((resolve, reject) => {
+
+    memberSchema.findOneAndUpdate({ member_code: memberInfo.member_code }, _.omit(memberInfo, 'name'))
+      .then(member => doerSchema.findByIdAndUpdate(member.doer_id, { name: memberInfo.name }))
+      .then(resolve)
+      .catch(reject)
+
+  });
+}
+
 function removeMembers(codes) {
   return new Promise((resolve, reject) => {
     _.each(codes, code => removeMember(code))
@@ -82,7 +115,7 @@ function removeMembers(codes) {
 function removeMember(code) {
   return new Promise((resolve, reject) => {
     memberSchema.findOne({ member_code: code })
-      .then(member => { console.log(member.doer_id); return doerSchema.findByIdAndRemove(member.doer_id) })
+      .then(member => doerSchema.findByIdAndRemove(member.doer_id))
       .then(() => memberSchema.findOneAndRemove({ member_code: code }))
       .then(resolve)
       .catch(reject);

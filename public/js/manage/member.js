@@ -193,6 +193,13 @@ function setEvents() {
         data: { data: removed }
       }).done(console.log);
 
+    if (!_.isEmpty(modified))
+      $.ajax({
+        url: '../api/members',
+        type: 'PUT',
+        data: { memberInfos: modified }
+      }).done(console.log);
+
     if (!_.isEmpty(added))
       $.post("../api/members", { memberInfos: added }, msg => console.log(msg));
 
