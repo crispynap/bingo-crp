@@ -3,12 +3,12 @@ const router = express.Router();
 const _ = require('partial-js');
 
 const mongoose = require('mongoose');
-const db = mongoose.connection;
 const memberSchema = require('../models/members.js');
 const doerSchema = require('../models/doers.js');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/testDB');
-db.on('error', () => console.log('MongoDB Connection Failed!'));
+mongoose.connect('mongodb://localhost:27017/testDB')
+  .then(() => console.log('Successfully connected to mongodb'))
+  .catch(e => console.error(e));
 
 router.get('/members', (req, res) => {
   memberSchema
