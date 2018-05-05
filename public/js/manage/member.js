@@ -110,12 +110,17 @@ function setEvents() {
   //탭 전환시
   $('a[data-toggle="tab"]').on("show.bs.tab", function (e) {
     const prevRow = getActiveTable().row(".selected");
+    const prevTableName = getActiveTableName();
 
     const shownTabName = $(e.target).attr("href");
     const shownTableName = $(shownTabName)[0].dataset.tablename;
     const shownTable = dataTables[shownTableName];
     shownTable.row(prevRow).select();
-    shownTable.data().draw();
+
+    const prevSearching = $(`[data-tablename=${prevTableName}] .dataTables_filter input`)[0].value;
+    $(`[data-tablename=${shownTableName}] .dataTables_filter input`)[0].value = prevSearching;
+
+    shownTable.search(prevSearching).data().draw();
   });
 
   //내용 수정시 데이터에 반영
@@ -573,8 +578,8 @@ const checkNameExist = name => {
   if (!isFieldExist('name', name)) throw new Error(messages.noName(name));
 };
 
-const getActiveTable = () =>
-  dataTables[$(".tab-content div.active")[0].dataset.tablename];
+const getActiveTableName = () => $(".tab-content div.active")[0].dataset.tablename;
+const getActiveTable = () => dataTables[getActiveTableName()];
 const dataFormat = dataName => _.v(dataInfo[dataName], "format");
 const eachTables = f => _.each(dataTables, f);
 
