@@ -9,7 +9,7 @@ const tableColumns = {
     { data: "member_code", inputName: "코드" },
     { data: "name", inputName: "이름" },
     { data: "rname", inputName: "실명" },
-    { data: "category", inputName: "구분" },
+    { data: "region", inputName: "구분" },
     { data: "main_commune", inputName: "주 공동체" },
     {
       data: "total_fund",
