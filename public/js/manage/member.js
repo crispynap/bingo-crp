@@ -152,6 +152,7 @@ function setEvents() {
   $("#add-btn").click(e => {
     const addedRow = addMember();
     selectRow(addedRow);
+    pageTable('last');
   });
 
   $("#removeModal").on("shown.bs.modal", e => {
@@ -542,6 +543,7 @@ const selectRow = row => {
     .draw()
     .select();
 };
+const pageTable = page => getActiveTable().page(page).draw('page');
 
 const findByCode = code => (idx, data) => code == data.member_code;
 const findByName = name => (idx, data) => name == data.name;
