@@ -175,7 +175,7 @@ function setEvents() {
     const modified = getEditedRows(tableData, "modified");
     const removed = removeEdited(removedRows);
 
-    if (added) $.post("../api/members", { memberInfos: added });
+    if (added) $.post("../api/members", { memberInfos: added }, msg => console.log(msg));
 
     if (removed) $.ajax({
       url: '../api/members',

@@ -34,7 +34,7 @@ router.post('/members', (req, res) => {
 
   addMembers(memberInfos)
     .then(() => res.end('ok'))
-    .catch(() => res.end('error'));
+    .catch(err => res.end('error: ' + err));
 });
 
 router.delete('/members', (req, res) => {
@@ -52,7 +52,8 @@ router.delete('/members', (req, res) => {
 function addMembers(memberInfos = {}) {
   return new Promise((resolve, reject) => {
     _.each(memberInfos, memberInfo => addMember(memberInfo))
-      .then(resolve);
+      .then(resolve)
+      .catch(reject);
   });
 }
 
@@ -63,10 +64,10 @@ function addMember(memberInfo = {}) {
       .then(() => doerSchema.findOne({ name: memberInfo.name }))
       .then(savedDoer => {
         const newMember = new memberSchema({ doer_id: savedDoer._id, member_code: memberInfo.member_code });
-        newMember.save()
+        newMember.save();
       })
       .then(resolve)
-      .catch((err) => console.log(err));
+      .catch(reject);
   });
 }
 
