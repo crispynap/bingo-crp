@@ -180,6 +180,8 @@ function setEvents() {
     return row;
   });
 
+  const alertIfError = msg => msg.indexOf('error') !== -1 ? alert(msg) : '';
+
   $("#save-btn").click(e => {
     const tableData = dataTables.primary.data();
     const added = getEditedRows(tableData, "added");
@@ -191,17 +193,17 @@ function setEvents() {
         url: '../api/members',
         type: 'DELETE',
         data: { data: removed }
-      }).done(console.log);
+      }).done(alertIfError);
 
     if (!_.isEmpty(modified))
       $.ajax({
         url: '../api/members',
         type: 'PUT',
         data: { memberInfos: modified }
-      }).done(console.log);
+      }).done(alertIfError);
 
     if (!_.isEmpty(added))
-      $.post("../api/members", { memberInfos: added }, msg => console.log(msg));
+      $.post("../api/members", { memberInfos: added }, alertIfError);
 
     setRowsField(tableData, 'edited', undefined);
     removedRows = [];
