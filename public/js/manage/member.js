@@ -186,13 +186,15 @@ function setEvents() {
     const modified = getEditedRows(tableData, "modified");
     const removed = removeEdited(removedRows);
 
-    if (added) $.post("../api/members", { memberInfos: added }, msg => console.log(msg));
+    if (!_.isEmpty(added))
+      $.post("../api/members", { memberInfos: added }, msg => console.log(msg));
 
-    if (removed) $.ajax({
-      url: '../api/members',
-      type: 'DELETE',
-      data: { data: removed }
-    });
+    if (!_.isEmpty(removed))
+      $.ajax({
+        url: '../api/members',
+        type: 'DELETE',
+        data: { data: removed }
+      }).done(console.log);
 
     setRowsField(tableData, 'edited', undefined);
     removedRows = [];
