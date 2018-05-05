@@ -1,4 +1,4 @@
-(() => {})();
+(() => { })();
 
 window.commonEvent = {
   readXlsx(e, callback, tableData) {
@@ -121,8 +121,12 @@ window.messages = {
   incorrectFile: "파일이 형식에 맞지 않습니다.",
   incorrectSheet: "서식이 맞지 않습니다.",
   emptyCodeRow: "코드와 이름 둘 다 누락된 줄이 있습니다.",
-  duplicatedNames: name => `이름이 중복되었습니다: 중복 이름: ${name}`,
-  duplicatedCodes: code => `조합원 코드가 중복되었습니다. 중복 코드: ${code}`,
+  duplicatedField: (fieldName, field) => `${fieldName} 필드가 중복되었습니다. 중복 내용: ${field}`,
+  requiredField: (fieldName, code = '') =>
+    code === '' ?
+      `${fieldName} 필드는 공백으로 할 수 없습니다.` :
+      `${fieldName} 필드는 공백으로 할 수 없습니다. 코드: ${code}`,
+
   noEmptyName: code => `이름을 공백으로 할 수는 없습니다: 코드: ${code}`,
   noCode: code => `그런 코드의 조합원은 없습니다: 입력 코드: ${code}`,
   noName: name => `그런 이름의 조합원은 없습니다: 입력 이름: ${name}`,

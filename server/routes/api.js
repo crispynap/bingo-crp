@@ -32,9 +32,11 @@ router.get('/members', (req, res) => {
 router.post('/members', (req, res) => {
   const memberInfos = req.body.memberInfos;
 
-  addMembers(memberInfos)
-    .then(() => res.send('ok'))
-    .catch(err => res.send('error: ' + err).status(500));
+  if (!_.isEmpty(memberInfos)) {
+    addMembers(memberInfos)
+      .then(() => res.send('ok'))
+      .catch(err => res.send('error: ' + err).status(500));
+  }
 });
 
 router.delete('/members', (req, res) => {
@@ -46,7 +48,7 @@ router.delete('/members', (req, res) => {
 });
 
 
-function addMembers(memberInfos = {}) {
+function addMembers(memberInfos) {
   return new Promise((resolve, reject) => {
     _.each(memberInfos, memberInfo => addMember(memberInfo))
       .then(resolve)
@@ -54,13 +56,14 @@ function addMembers(memberInfos = {}) {
   });
 }
 
-function addMember(memberInfo = {}) {
+function addMember(memberInfo) {
   return new Promise((resolve, reject) => {
     const newDoer = new doerSchema({ name: memberInfo.name, category: '조합원' });
     newDoer.save()
       .then(() => doerSchema.findOne({ name: memberInfo.name }))
       .then(savedDoer => {
-        const newMember = new memberSchema({ doer_id: savedDoer._id, member_code: memberInfo.member_code });
+        let newMember = new memberSchema({ doer_id: savedDoer._id, member_code: memberInfo.member_code });
+        newMember = _.extend(newMember, _.omit(memberInfo, 'name'));
         newMember.save();
       })
       .then(resolve)

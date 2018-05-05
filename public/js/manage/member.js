@@ -1,7 +1,7 @@
 // (() => {
 const dataTables = {};
 
-const tableChecker = {};
+let tableChecker = {};
 let removedRows = [];
 
 const tableColumns = {
@@ -71,13 +71,13 @@ const tableColumns = {
 };
 
 const dataInfo = {
-  member_code: { format: "number", modifiable: false },
+  member_code: { format: "number", modifiable: false, required: true, unique: true },
   total_fund: { format: "money", modifiable: false, readOnly: true },
   total_util: { format: "money", modifiable: false, readOnly: true },
   join_date: { format: "date" },
   leave_date: { format: "date" },
   celeb_date: { format: "date" },
-  name: {},
+  name: { required: true, unique: true },
   addr: {},
   category: {},
   current: {},
@@ -124,19 +124,19 @@ function setEvents() {
     const value = e.target.value;
     const row = getActiveTable().row(".selected").data();
 
-    if (fieldName === 'name' && isNameExist(value)) {
+    if (isFieldRequired(fieldName) && value === '') {
       e.target.value = row[fieldName];
-      alert(messages.duplicatedNames(value));
+      alert(messages.requiredField(fieldName));
       return;
     }
 
-    if (fieldName === 'member_code' && isCodeExist(value)) {
-      e.target.value = row[fieldName];
-      alert(messages.duplicatedCodes(value));
+    if (isFieldUnique(fieldName) && isFieldExist(fieldName, value)) {
+      e.target.value = '';
+      alert(messages.duplicatedField(fieldName));
       return;
     }
 
-    if (isDateFormat(fieldName))
+    if (isFieldDateFormat(fieldName))
       e.target.value = C.renderDate(e.target.value); //날짜 서식에 맞추기
 
     row[fieldName] = e.target.value;
@@ -167,7 +167,7 @@ function setEvents() {
 
   const removeEdited = data => _.map(data, row => _.omit(row, "edited"));
   const removeReadOnly = data =>
-    _.map(data, row => _.omit(row, (val, key) => isDataReadOnly(key)));
+    _.map(data, row => _.omit(row, (val, key) => isFieldReadOnly(key)));
   const getEditedRows = (rows, object) =>
     _.go(
       rows,
@@ -186,15 +186,15 @@ function setEvents() {
     const modified = getEditedRows(tableData, "modified");
     const removed = removeEdited(removedRows);
 
-    if (!_.isEmpty(added))
-      $.post("../api/members", { memberInfos: added }, msg => console.log(msg));
-
     if (!_.isEmpty(removed))
       $.ajax({
         url: '../api/members',
         type: 'DELETE',
         data: { data: removed }
       }).done(console.log);
+
+    if (!_.isEmpty(added))
+      $.post("../api/members", { memberInfos: added }, msg => console.log(msg));
 
     setRowsField(tableData, 'edited', undefined);
     removedRows = [];
@@ -213,8 +213,14 @@ function getMembersAll() {
 }
 
 function setValidChecker(data) {
-  tableChecker.existCodes = getExistList(data, "member_code");
-  tableChecker.existNames = getExistList(data, "name");
+  tableChecker = _.mapObject(dataInfo, (fieldInfo, fieldName) => {
+    if (!_.v(fieldInfo, 'required') && !_.v(fieldInfo, 'unique'))
+      return;
+
+    return getExistList(data, fieldName);
+  });
+  console.log(tableChecker)
+
 }
 
 function getTableOptions(data, columns) {
@@ -274,7 +280,7 @@ function setFormSetting(tableName, rowNumber) {
           ? C.renderMoney(selectedData)
           : selectedData;
 
-    const readOnly = isDataReadOnly(dataName) ? "readonly" : "";
+    const readOnly = isFieldReadOnly(dataName) ? "readonly" : "";
 
     const inputWrapper = $(`<div class="col-xs-4"></div>`);
     const inputGroup = $(`<div class="input-group"></div>`);
@@ -299,7 +305,7 @@ function setFormSetting(tableName, rowNumber) {
     .empty()
     .append(inputs);
   $('#editor input[data-format="money"').focus(e => {
-    if (!isDataReadOnly(e.target.dataset.name))
+    if (!isFieldReadOnly(e.target.dataset.name))
       e.target.value = C.renderNumber(e.target.value);
     e.target.select();
   });
@@ -314,23 +320,25 @@ function showRemoveBtn() {
 
 function getXlsx(sheet, tableData) {
   _.removeByIndex(sheet, 0);
+
+  console.log("sheet: ", sheet);
+  console.log("tableData: ", tableData);
+
   const sheetError = sheetValidCheck(sheet);
 
   if (sheetError) {
     alert(sheetError.message);
     return;
   }
-  console.log("sheet: ", sheet);
-  console.log("tableData: ", tableData);
 
-  // try {
-  addMembers(getMarkedRows(sheet, "a", "A"));
-  modifyMembers(getMarkedRows(sheet, "s", "S"));
-  deleteMembers(getMarkedRows(sheet, "d", "D"));
-  // }
-  // catch (e) {
-  //   alert(e.message);
-  // }
+  try {
+    addMembers(getMarkedRows(sheet, "a", "A"));
+    modifyMembers(getMarkedRows(sheet, "s", "S"));
+    deleteMembers(getMarkedRows(sheet, "d", "D"));
+  }
+  catch (e) {
+    alert(e.message);
+  }
 }
 
 function getMarkedRows(sheet, ...selectedMarks) {
@@ -386,8 +394,8 @@ function addMember(member = {}) {
 
   addRow(newMemberRow);
 
-  setCodeExist(member.member_code);
-  setNameExist(member.name);
+  setFieldExist('member_code', member.member_code);
+  setFieldExist('name', member.name);
 
   return newMemberRow;
 }
@@ -416,17 +424,14 @@ function modifyMemberFromCode(member) {
     (val, key) => (member[key] ? member[key] : "")
   );
 
-  if (
-    oldMemberRow.name != newMemberRow.name &&
-    isNameExist(newMemberRow.name)
-  )
-    throw new Error(messages.duplicatedNames(member.name));
+  if (oldMemberRow.name != newMemberRow.name && isFieldExist('name', newMemberRow.name))
+    throw new Error(messages.duplicatedField('이름', member.name));
 
   modifyRow(newMemberRow);
 
   if (oldMemberRow.name !== newMemberRow) {
-    setNameExist(oldMemberRow.name, false);
-    setNameExist(newMemberRow.name);
+    setFieldExist('name', oldMemberRow.name, false);
+    setFieldExist('name', newMemberRow.name);
   }
 
   return newMemberRow;
@@ -466,9 +471,6 @@ function deleteMemberFromCode(member) {
     .data();
 
   removeRow(member.member_code);
-
-  setCodeExist(oldRow.member_code, false);
-  setNameExist(oldRow.name, false);
 }
 
 function deleteMemberFromName(member) {
@@ -479,20 +481,15 @@ function deleteMemberFromName(member) {
     .data();
 
   removeRow(oldRow.member_code);
-
-  setCodeExist(oldRow.member_code, false);
-  setNameExist(oldRow.name, false);
 }
 
 function sheetValidCheck(sheet) {
   if (!_.isArray(sheet)) return { err: true, message: messages.incorrectSheet };
 
   //코드와 이름 둘 다 누락된 줄이 있는지
-  if (
-    _.find(sheet, row => {
-      return _.isEmpty(row["name"]) && _.isEmpty(row["member_code"]);
-    })
-  )
+  if (_.find(sheet, row => {
+    return _.isEmpty(row["name"]) && _.isEmpty(row["member_code"]);
+  }))
     return { err: true, message: messages.emptyCodeRow };
 
   for (const row of sheet) {
@@ -545,33 +542,31 @@ const getExistList = (rows, field) =>
     {}
   );
 
-const isCodeExist = code => _.v(tableChecker.existCodes, code);
-const isNameExist = name => _.v(tableChecker.existNames, name);
-const setCodeExist = (code, bool = true) =>
-  (tableChecker.existCodes[code] = bool);
-const setNameExist = (name, bool = true) =>
-  (tableChecker.existNames[name] = bool);
+const isFieldRequired = fieldName => _.v(dataInfo[fieldName], "required");
+const isFieldUnique = fieldName => _.v(dataInfo[fieldName], "unique");
+const isFieldReadOnly = fieldName => _.v(dataInfo[fieldName], "readOnly");
+const isFieldDateFormat = fieldName => dataFormat(fieldName) === "date";
+const isFieldExist = (fieldName, field) => _.v(tableChecker[fieldName], field);
+const setFieldExist = (fieldName, field, bool = true) => tableChecker[fieldName][field] = bool;
 
 const checkCodeDuplicates = code => {
-  if (isCodeExist(code)) throw new Error(messages.duplicatedCodes(code));
+  if (isFieldExist('member_code', code)) throw new Error(messages.duplicatedCodes(code));
 };
 
 const checkNameDuplicates = name => {
-  if (isNameExist(name)) throw new Error(messages.duplicatedNames(name));
+  if (isFieldExist('name', name)) throw new Error(messages.duplicatedNames(name));
 };
 
 const checkCodeExist = code => {
-  if (!isCodeExist(code)) throw new Error(messages.noCode(code));
+  if (!isFieldExist('member_code', code)) throw new Error(messages.noCode(code));
 };
 const checkNameExist = name => {
-  if (!isNameExist(name)) throw new Error(messages.noName(name));
+  if (!isFieldExist('name', name)) throw new Error(messages.noName(name));
 };
 
 const getActiveTable = () =>
   dataTables[$(".tab-content div.active")[0].dataset.tablename];
 const dataFormat = dataName => _.v(dataInfo[dataName], "format");
-const isDataReadOnly = dataName => _.v(dataInfo[dataName], "readOnly");
-const isDateFormat = dataName => dataFormat(dataName) === "date";
 const eachTables = f => _.each(dataTables, f);
 
 const addRow = row => {
@@ -590,6 +585,9 @@ const modifyRow = row => {
 const removeRow = rowCode => {
   removingRow = dataTables.primary.row(findByCode(rowCode)).data();
   if (removingRow.edited !== "added") { removedRows.push(removingRow) };
+
+  setFieldExist('member_code', removingRow.member_code, false);
+  setFieldExist('name', removingRow.name, false);
 
   eachTables(table => {
     table
