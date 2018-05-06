@@ -546,11 +546,11 @@ const isFieldExist = (fieldName, field) => _.v(tableChecker[fieldName], field);
 const setFieldExist = (fieldName, field, bool = true) => tableChecker[fieldName][field] = bool;
 
 const checkCodeDuplicates = code => {
-  if (isFieldExist('member_code', code)) throw new Error(messages.duplicatedCodes(code));
+  if (isFieldExist('member_code', code)) throw new Error(messages.duplicatedField('조합원 코드', code));
 };
 
 const checkNameDuplicates = name => {
-  if (isFieldExist('name', name)) throw new Error(messages.duplicatedNames(name));
+  if (isFieldExist('name', name)) throw new Error(messages.duplicatedField('이름', name));
 };
 
 const checkCodeExist = code => {
