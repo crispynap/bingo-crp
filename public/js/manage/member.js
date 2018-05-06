@@ -84,7 +84,10 @@ function setEvents() {
   //서식 삽입 버튼 누를 시 xlsx 업로드 동작
   const xlsButton = document.querySelector(".xls-upload>input");
   xlsButton.addEventListener("change", function (e) {
-    commonEvent.readXlsx(e, getXlsx, getActiveTable().data());
+    const file = e.target.files[0];
+    e.target.value = '';
+
+    commonEvent.readXlsx(file, getXlsx, getActiveTable().data());
   });
 
   //탭 전환시
@@ -266,7 +269,6 @@ function setFormSetting(tableName, rowNumber) {
   _.each(nowTableColumns, column => {
     if (!column.inputName) return;
 
-    debugger;
     const dataName = column.data;
     const selectedData = selectedRow[dataName];
     let inputData = '';

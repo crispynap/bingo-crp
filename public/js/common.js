@@ -1,10 +1,7 @@
 (() => { })();
 
 window.commonEvent = {
-  readXlsx(e, callback, tableData) {
-    console.log(tableData);
-
-    const file = e.target.files[0];
+  readXlsx(file, callback, tableData) {
     if (!file) return;
 
     const reader = new FileReader();
