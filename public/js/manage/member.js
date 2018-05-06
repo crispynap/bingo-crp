@@ -82,12 +82,15 @@ $(document).ready(() => {
 
 function setEvents() {
   //서식 삽입 버튼 누를 시 xlsx 업로드 동작
-  const xlsButton = document.querySelector(".xls-upload>input");
-  xlsButton.addEventListener("change", function (e) {
+  $(".xls-upload>input").on("change", function (e) {
     const file = e.target.files[0];
     e.target.value = '';
 
     commonEvent.readXlsx(file, getXlsx, getActiveTable().data());
+  });
+
+  $("button.xls-download").click(e => {
+    window.location.assign('/files/조합원 기입 서식.xlsx');
   });
 
   //탭 전환시
