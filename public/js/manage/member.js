@@ -75,6 +75,37 @@ const dataInfo = {
   join_way: {}
 };
 
+shortCutButtons = {
+  primary: [
+    { text: '출자', link: '#' },
+    { text: '출자 반환', link: '#' },
+    { text: '이체', link: '#' },
+    { text: '출자 내역', link: '#' },
+    { text: '출자 계획', link: '#' },
+  ],
+  fund: [
+    { text: '출자', link: '#' },
+    { text: '출자 반환', link: '#' },
+    { text: '이체', link: '#' },
+    { text: '출자 내역', link: '#' },
+    { text: '출자 계획', link: '#' },
+  ],
+  util: [
+    { text: '이용', link: '#' },
+    { text: '이용 반환', link: '#' },
+    { text: '이용 내역', link: '#' },
+    { text: '이용 계획', link: '#' },
+  ],
+  action: [
+    { text: '소속 공동체', link: '#' },
+    { text: '조합비 납부', link: '#' },
+    { text: '조합비 내역', link: '#' },
+  ],
+  detail: [
+
+  ],
+}
+
 $(document).ready(() => {
   setEvents();
   getMembersAll();
@@ -153,6 +184,7 @@ function setEvents() {
     removeRow(selectedRow.member_code);
 
     $("#editor").empty();
+    $("#shortcut-buttons>div").empty();
     $("#remove-btn").hide();
     $("#removeModal").modal("hide");
   });
@@ -220,7 +252,6 @@ function setValidChecker(data) {
 
     return getExistList(data, fieldName);
   });
-  console.log(tableChecker)
 
 }
 
@@ -258,6 +289,7 @@ function setTables(data) {
     table.on("select", function (e, dt, type, indexes) {
       setFormSetting(e.target.dataset.tablename, indexes[0]);
       showRemoveBtn();
+      showShortcutButtons(e.target.dataset.tablename);
     });
   });
 }
@@ -519,6 +551,17 @@ function cellFormatCheck(cell, format) {
   }
 
   return { err: false };
+}
+
+function showShortcutButtons(tableName) {
+  const buttonsBox = $('#shortcut-buttons>div');
+  buttonsBox.empty();
+
+  _.each(shortCutButtons[tableName], buttonInfo => {
+    buttonsBox.append(`
+      <button type="button" class="btn btn-default">${buttonInfo.text}</button>`
+    );
+  });
 }
 
 const selectRow = row => {
