@@ -1,18 +1,20 @@
-section.title{
+section.title {
   position: relative;
 }
 
-.right-buttons{
-  position:absolute; 
+.right-buttons {
+  position: absolute;
   bottom: 0;
   right: 0;
 }
-.xls-upload{
+
+.xls-upload {
   display: inline;
   position: relative;
   margin-left: -80px;
 }
-.xls-upload>input{
+
+.xls-upload>input {
   opacity: 0;
   position: absolute;
   left: 0;
@@ -23,37 +25,60 @@ section.title{
   cursor: pointer;
 }
 
-#editor-form{
-  position: relative;
-  width: 100%;
+#shortcut-buttons {
+  float: left;
+  width: 9%;
+  margin-right: 1%;
+  margin-top: 5px;
+  padding: 5px;
   height: 220px;
   border: 1px solid black;
-  margin: 15px 10px;
+  text-align: center;
+}
+
+#shortcut-buttons>span {
+  border-bottom: 1px solid black;
+  display: block;
+  width: 100%;
+}
+
+#editor-form {
+  position: relative;
+  width: 90%;
+  height: 220px;
+  border: 1px solid black;
+  margin: 15px 0;
   padding: 10px;
   overflow-y: scroll;
-  overflow-x: hidden; 
+  overflow-x: hidden;
 }
-#remove-btn{
+
+#remove-btn {
   float: right;
   display: none;
 }
-#remove-btn>span{
-  color:#d64c4c;
-}
-#add-btn>span{
-  color:#337ab7;
+
+#remove-btn>span {
+  color: #d64c4c;
 }
 
-#editor-form .input-group{
+#add-btn>span {
+  color: #337ab7;
+}
+
+#editor-form .input-group {
   margin-bottom: 10px;
 }
-#editor-form input[data-format="money"]{
+
+#editor-form input[data-format="money"] {
   text-align: right;
 }
-#editor{
+
+#editor {
   margin-top: 10px;
 }
-div.quick-date>a{
+
+div.quick-date>a {
   padding: 3px 5px 3px 0;
   text-decoration: none;
   font-size: 11px;
@@ -62,11 +87,13 @@ div.quick-date>a{
   line-height: 1.3;
   font-family: 'Nanum Barun Gothic', '돋움', sans-serif;
 }
-input{
+
+input {
   height: 16px;
   background: white url(/img/input.png) left top no-repeat;
 }
-input.calendar{
+
+input.calendar {
   padding: 5px 0px 5px 3px;
   letter-spacing: 3px;
   background-position: -1280px top;
@@ -78,35 +105,52 @@ input.calendar{
   font-family: system-ui;
 }
 
-section#tables .tab-content{
+section#tables .tab-content {
   min-height: 400px;
   padding: 5px;
   border: 1px solid #ddd;
   border-top: 0;
   overflow: scroll;
-
 }
-.tab-content>div{  display: none;}
-.tab-content>div.active{  display: block;}
-table{
+
+.tab-content>div {
+  display: none;
+}
+
+.tab-content>div.active {
+  display: block;
+}
+
+table {
   vertical-align: middle;
   cursor: default;
 }
+
 th {
   padding: 0 8px;
   background-color: #5067a7;
   color: #fafeff;
   white-space: nowrap;
 }
-td{
+
+td {
   max-width: 100px;
   padding: 0 0 0 3px;
   white-space: nowrap;
-  text-overflow:ellipsis; 
+  text-overflow: ellipsis;
   overflow: hidden;
   box-sizing: border-box;
   padding: 0 10px 0 5px;
 }
-tr:nth-child(even) {background-color: #eaf9fd;}
-#tables tr:hover {background-color: rgb(206, 241, 211);}
-#tables tr.selected {background-color: #08C;}
+
+tr:nth-child(even) {
+  background-color: #eaf9fd;
+}
+
+#tables tr:hover {
+  background-color: rgb(206, 241, 211);
+}
+
+#tables tr.selected {
+  background-color: #08C;
+}
