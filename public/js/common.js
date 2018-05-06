@@ -166,7 +166,9 @@ window.C = {
     return data.replace(/[^0-9]/g, ""); //숫자만 남김
   },
 
-  renderDate: date => {
+  renderDate: date => !_.isEmpty(date) ? moment(date).format('YYYY-MM-DD') : '',
+
+  formatDate: date => {
     date = date.replace(/[^0-9|\-]/g, ""); //숫자와 '-'만 남김
     const year = new Date().getFullYear();
 

@@ -11,40 +11,20 @@ const tableColumns = {
     { data: "rname", inputName: "실명" },
     { data: "region", inputName: "구분" },
     { data: "main_commune", inputName: "주 공동체" },
-    {
-      data: "total_fund",
-      render: C.renderMoney,
-      inputName: "출자금",
-      className: "text-right"
-    },
-    {
-      data: "total_util",
-      render: C.renderMoney,
-      inputName: "이용금",
-      className: "text-right"
-    },
+    { data: "total_fund", render: C.renderMoney, inputName: "출자금", className: "text-right" },
+    { data: "total_util", render: C.renderMoney, inputName: "이용금", className: "text-right" },
     { data: "note", inputName: "비고" },
     { data: "current", inputName: "현황" }
   ],
   fund: [
     { data: "member_code", inputName: "코드" },
     { data: "name", inputName: "이름" },
-    {
-      data: "total_fund",
-      render: C.renderMoney,
-      inputName: "출자금",
-      className: "text-right"
-    }
+    { data: "total_fund", render: C.renderMoney, inputName: "출자금", className: "text-right" }
   ],
   util: [
     { data: "member_code", inputName: "코드" },
     { data: "name", inputName: "이름" },
-    {
-      data: "total_util",
-      render: C.renderMoney,
-      inputName: "이용금",
-      className: "text-right"
-    }
+    { data: "total_util", render: C.renderMoney, inputName: "이용금", className: "text-right" }
   ],
   action: [
     { data: "member_code", inputName: "코드" },
@@ -58,9 +38,9 @@ const tableColumns = {
     { data: "region", inputName: "지역" },
     { data: "join_way", inputName: "가입경로" },
     { data: "finance_account", inputName: "금융계좌" },
-    { data: "join_date", inputName: "가입일" },
-    { data: "leave_date", inputName: "탈퇴일" },
-    { data: "celeb_date", inputName: "기념일" },
+    { data: "join_date", render: C.renderDate, inputName: "가입일" },
+    { data: "leave_date", render: C.renderDate, inputName: "탈퇴일" },
+    { data: "celeb_date", render: C.renderDate, inputName: "기념일" },
     { data: "tel1", inputName: "전화1" },
     { data: "tel2", inputName: "전화2" },
     { data: "addr", inputName: "주소" },
@@ -141,8 +121,8 @@ function setEvents() {
       return;
     }
 
-    if (isFieldDateFormat(fieldName))
-      e.target.value = C.renderDate(e.target.value); //날짜 서식에 맞추기
+    if (isDateFormat(fieldName))
+      e.target.value = C.formatDate(e.target.value); //날짜 서식에 맞추기
 
     row[fieldName] = e.target.value;
 
@@ -286,14 +266,14 @@ function setFormSetting(tableName, rowNumber) {
   _.each(nowTableColumns, column => {
     if (!column.inputName) return;
 
+    debugger;
     const dataName = column.data;
     const selectedData = selectedRow[dataName];
-    const inputData =
-      selectedData === null
-        ? ""
-        : dataFormat(dataName) === "money"
-          ? C.renderMoney(selectedData)
-          : selectedData;
+    let inputData = '';
+    if (selectedData === null) inputData = '';
+    else if (isMoneyFormat(dataName)) inputData = C.renderMoney(selectedData);
+    else if (isDateFormat(dataName)) inputData = C.renderDate(selectedData);
+    else inputData = selectedData;
 
     const readOnly = isFieldReadOnly(dataName) ? "readonly" : "";
 
@@ -303,9 +283,8 @@ function setFormSetting(tableName, rowNumber) {
       `<span class="input-group-addon">${column.inputName}</span>`
     );
     const input = $(
-      `<input type="text" class="form-control" data-name="${
-      column.data
-      }" data-format="${dataFormat(column.data)}" 
+      `<input type="text" class="form-control" data-name="${column.data}"
+      data-format="${dataFormat(column.data)}" 
         class="input-group-addon" ${readOnly} value="${inputData}"></input>`
     );
 
@@ -561,7 +540,8 @@ const getExistList = (rows, field) =>
 const isFieldRequired = fieldName => _.v(dataInfo[fieldName], "required");
 const isFieldUnique = fieldName => _.v(dataInfo[fieldName], "unique");
 const isFieldReadOnly = fieldName => _.v(dataInfo[fieldName], "readOnly");
-const isFieldDateFormat = fieldName => dataFormat(fieldName) === "date";
+const isDateFormat = fieldName => dataFormat(fieldName) === "date";
+const isMoneyFormat = fieldName => dataFormat(fieldName) === "money";
 const isFieldExist = (fieldName, field) => _.v(tableChecker[fieldName], field);
 const setFieldExist = (fieldName, field, bool = true) => tableChecker[fieldName][field] = bool;
 
