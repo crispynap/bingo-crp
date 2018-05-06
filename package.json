@@ -11,7 +11,10 @@
     "moment": "^2.22.1",
     "mongoose": "^5.0.17",
     "npm": "^5.8.0",
-    "partial-js": "^1.1.2"
+    "partial-js": "^1.1.2",
+    "passport": "^0.4.0",
+    "passport-google": "^0.3.0",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {},
   "repository": {

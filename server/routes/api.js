@@ -3,15 +3,15 @@ const router = express.Router();
 const _ = require('partial-js');
 
 const mongoose = require('mongoose');
-const memberSchema = require('../models/members.js');
-const doerSchema = require('../models/doers.js');
+const Members = require('../models/members.js');
+const Doers = require('../models/doers.js');
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/testDB')
   .then(() => console.log('Successfully connected to mongodb'))
   .catch(e => console.error(e));
 
 router.get('/members', (req, res) => {
-  memberSchema
+  Members
     .find({}, { _id: false, __v: false })
     .populate('doer_id', 'name')
     .then(members => {
@@ -71,11 +71,11 @@ function addMembers(memberInfos) {
 
 function addMember(memberInfo) {
   return new Promise((resolve, reject) => {
-    const newDoer = new doerSchema({ name: memberInfo.name, category: '조합원' });
+    const newDoer = new Doers({ name: memberInfo.name, category: '조합원' });
     newDoer.save()
-      .then(() => doerSchema.findOne({ name: memberInfo.name }))
+      .then(() => Doers.findOne({ name: memberInfo.name }))
       .then(savedDoer => {
-        let newMember = new memberSchema({ doer_id: savedDoer._id, member_code: memberInfo.member_code });
+        let newMember = new Members({ doer_id: savedDoer._id, member_code: memberInfo.member_code });
         newMember = _.extend(newMember, _.omit(memberInfo, 'name'));
         newMember.save();
       })
@@ -96,8 +96,8 @@ function modifyMembers(memberInfos) {
 function modifyMember(memberInfo) {
   return new Promise((resolve, reject) => {
 
-    memberSchema.findOneAndUpdate({ member_code: memberInfo.member_code }, _.omit(memberInfo, 'name'))
-      .then(member => doerSchema.findByIdAndUpdate(member.doer_id, { name: memberInfo.name }))
+    Members.findOneAndUpdate({ member_code: memberInfo.member_code }, _.omit(memberInfo, 'name'))
+      .then(member => Doers.findByIdAndUpdate(member.doer_id, { name: memberInfo.name }))
       .then(resolve)
       .catch(reject)
 
@@ -114,9 +114,9 @@ function removeMembers(codes) {
 
 function removeMember(code) {
   return new Promise((resolve, reject) => {
-    memberSchema.findOne({ member_code: code })
-      .then(member => doerSchema.findByIdAndRemove(member.doer_id))
-      .then(() => memberSchema.findOneAndRemove({ member_code: code }))
+    Members.findOne({ member_code: code })
+      .then(member => Doers.findByIdAndRemove(member.doer_id))
+      .then(() => Members.findOneAndRemove({ member_code: code }))
       .then(resolve)
       .catch(reject);
   });
