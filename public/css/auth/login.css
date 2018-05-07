@@ -1,0 +1,27 @@
+form {
+  width: 300px;
+  margin: 15px auto;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+form button {
+  width: 100%;
+}
+
+#google_login_btn {
+  margin-top: 4px;
+}
+
+#google_login_btn i {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+#join_btn {
+  margin-top: 4px;
+}
+
+input {
+  display: block;
+}
