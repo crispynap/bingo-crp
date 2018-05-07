@@ -4,6 +4,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   res.render('pages/index', {
     title: 'bingo CRP',
+    nick: req.session.nick
   })
 })
 
@@ -48,5 +49,33 @@ router.get('/login', (req, res) => {
     title: 'bingo CRP',
   })
 })
+
+router.post('/login', (req, res) => {
+  const user = {
+    userName: 'justmin',
+    password: '604051',
+    nick: '정민'
+  }
+  const userName = req.body.userName;
+  const password = req.body.password;
+
+  if (userName === user.userName && password === user.password) {
+    req.session.nick = user.nick;
+    res.redirect('/');
+  } else {
+    res.send('로그인 실패 <a href="/login">login</a>');
+  }
+});
+
+router.get('/logout', (req, res) => {
+  delete req.session.nick;
+  res.redirect('/');
+});
+
+router.get('/register', (req, res) => {
+  res.render('pages/index/register.ejs', {
+    title: 'bingo CRP',
+  })
+});
 
 module.exports = router;

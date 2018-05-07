@@ -5,21 +5,26 @@ form {
   border: 1px solid #ddd;
 }
 
-form button {
-  width: 100%;
+#login_btn {
+  margin-top: 5px;
+  width: 65%;
+  display: inline-block;
+}
+
+#join_btn {
+  margin-top: 5px;
+  width: 33%;
+  display: inline-block;
 }
 
 #google_login_btn {
-  margin-top: 4px;
+  margin-top: 12px;
+  width: 100%;
 }
 
 #google_login_btn i {
   margin-right: 10px;
   font-size: 18px;
-}
-
-#join_btn {
-  margin-top: 4px;
 }
 
 input {
