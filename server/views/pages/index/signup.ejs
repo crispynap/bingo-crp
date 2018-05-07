@@ -14,20 +14,16 @@
   <% include ../../partials/header %>
 
   <section class="container">
-    <form action="/login" method="post">
+    <form action="/signup" method="post">
       <div class="form-group" >
         <label>ID</label>
-        <input type="text" class="form-control" name="userName" placeholder="아이디">
+        <input type="text" class="form-control" name="userId" placeholder="아이디">
       </div>
       <div class="form-group">
         <label>Password</label>
         <input type="password" class="form-control" name="password" placeholder="비밀번호">
       </div>
-      <a class="btn btn-info" id="join_btn" >회원가입</a>
-      <button type="submit" id="login_btn" class="btn btn-primary">로그인</button>
-      <a class='btn btn-danger' id="google_login_btn">
-        <i class="fa fa-google-plus"></i>Google로 로그인
-      </a>
+      <button type="submit" id="login_btn" class="btn btn-success">가입</button>
     </form>
   </section>
 

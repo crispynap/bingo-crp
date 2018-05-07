@@ -23,6 +23,8 @@ app.use(session({
   saveUninitialized: true
 }));
 
+require('./server/config/passport')(passport);
+
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());

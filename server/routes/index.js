@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 
 router.get('/', (req, res) => {
   res.render('pages/index', {
@@ -50,32 +51,27 @@ router.get('/login', (req, res) => {
   })
 })
 
-router.post('/login', (req, res) => {
-  const user = {
-    userName: 'justmin',
-    password: '604051',
-    nick: '정민'
-  }
-  const userName = req.body.userName;
-  const password = req.body.password;
-
-  if (userName === user.userName && password === user.password) {
-    req.session.nick = user.nick;
-    res.redirect('/');
-  } else {
-    res.send('로그인 실패 <a href="/login">login</a>');
-  }
-});
+router.post('/login', passport.authenticate('login', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+}))
 
 router.get('/logout', (req, res) => {
   delete req.session.nick;
   res.redirect('/');
 });
 
-router.get('/register', (req, res) => {
-  res.render('pages/index/register.ejs', {
+router.get('/signup', (req, res) => {
+  res.render('pages/index/signup.ejs', {
     title: 'bingo CRP',
   })
 });
+
+router.post('/signup', passport.authenticate('signup', {
+  successRedirect: '/',
+  failureRedirect: '/signup',
+  failureFlash: true
+}));
 
 module.exports = router;
