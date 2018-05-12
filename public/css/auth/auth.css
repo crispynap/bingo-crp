@@ -5,6 +5,12 @@ form {
   border: 1px solid #ddd;
 }
 
+#signup_btn {
+  width: 80%;
+  margin: 5px auto 0;
+  display: block;
+}
+
 #login_btn {
   margin-top: 5px;
   width: 65%;
