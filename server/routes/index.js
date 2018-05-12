@@ -46,8 +46,10 @@ router.get('/chart', (req, res) => {
 })
 
 router.get('/login', (req, res) => {
+  console.log(req.flash())
   res.render('pages/index/login.ejs', {
     title: 'bingo CRP',
+    messages: req.flash("error")
   })
 })
 
