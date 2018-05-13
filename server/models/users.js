@@ -4,10 +4,10 @@ const bcrypt = require('bcrypt-nodejs');
 
 const userSchema = new Schema({
   userId: { type: String, required: true, unique: true },
-  // nick: { type: String, unique: true },
+  nick: { type: String, unique: true },
   password: { type: String, required: true },
-  // email: String,
-  // userCategory: String,
+  email: String,
+  userCategory: { type: String, default: 'normal' },
 });
 
 userSchema.methods.generateHash = password =>
