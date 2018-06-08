@@ -1,10 +1,11 @@
 // (() => {
 const dataTables = {};
+const apiUrl = '../api/members';
 
 let tableChecker = {};
 let removedRows = [];
 
-const tableColumns = {
+const tablesInfo = {
   primary: [
     { data: "member_code", inputName: "코드" },
     { data: "name", inputName: "이름" },
@@ -108,7 +109,7 @@ shortCutButtons = {
 
 $(() => {
   setEvents();
-  getMembersAll();
+  getTableData();
 });
 
 function setEvents() {
@@ -215,43 +216,43 @@ function setEvents() {
 
     if (!_.isEmpty(removed))
       $.ajax({
-        url: '../api/members',
+        url: apiUrl,
         type: 'DELETE',
         data: { data: removed }
       }).done(alertIfError);
 
     if (!_.isEmpty(modified))
       $.ajax({
-        url: '../api/members',
+        url: apiUrl,
         type: 'PUT',
         data: { memberInfos: modified }
       }).done(alertIfError);
 
     if (!_.isEmpty(added))
-      $.post("../api/members", { memberInfos: added }, alertIfError);
+      $.post(apiUrl, { memberInfos: added }, alertIfError);
 
     setRowsField(tableData, 'edited', undefined);
     removedRows = [];
   });
 }
 
-function getMembersAll() {
-  $.get("../api/members", members => {
-    const newMembers = _.map(members, member =>
-      _.mapObject(dataInfo, (v, key) => member[key] === undefined ? '' : member[key])
+function getTableData() {
+  $.get(apiUrl, rows => {
+    const newRows = _.map(rows, row =>
+      _.mapObject(dataInfo, (v, key) => row[key] === undefined ? '' : row[key])
     );
 
-    setTables(newMembers);
-    setValidChecker(newMembers);
+    setTables(newRows);
+    setValidChecker(newRows);
   });
 }
 
-function setValidChecker(data) {
+function setValidChecker(rows) {
   tableChecker = _.mapObject(dataInfo, (fieldInfo, fieldName) => {
     if (!_.v(fieldInfo, 'required') && !_.v(fieldInfo, 'unique'))
       return;
 
-    return getExistList(data, fieldName);
+    return getExistList(rows, fieldName);
   });
 
 }
@@ -266,25 +267,12 @@ function getTableOptions(data, columns) {
 }
 
 function setTables(data) {
-  const primaryTableOptions = getTableOptions(data, tableColumns.primary);
-  const primaryTable = $("#table-primary").DataTable(primaryTableOptions);
-  dataTables.primary = primaryTable;
-
-  const fundTableOptions = getTableOptions(data, tableColumns.fund);
-  const fundTable = $("#table-fund").DataTable(fundTableOptions);
-  dataTables.fund = fundTable;
-
-  const utilTableOptions = getTableOptions(data, tableColumns.util);
-  const utilTable = $("#table-util").DataTable(utilTableOptions);
-  dataTables.util = utilTable;
-
-  const actionTableOptions = getTableOptions(data, tableColumns.action);
-  const actionTable = $("#table-action").DataTable(actionTableOptions);
-  dataTables.action = actionTable;
-
-  const detailTableOptions = getTableOptions(data, tableColumns.detail);
-  const detailTable = $("#table-detail").DataTable(detailTableOptions);
-  dataTables.detail = detailTable;
+  for (tableName in tablesInfo) {
+    const tableInfo = tablesInfo[tableName];
+    const tableOptions = getTableOptions(data, tableInfo);
+    const table = $('#table-' + tableName).DataTable(tableOptions);
+    dataTables[tableName] = table;
+  }
 
   eachTables(table => {
     table.on("select", function (e, dt, type, indexes) {
@@ -296,13 +284,13 @@ function setTables(data) {
 }
 
 function setFormSetting(tableName, rowNumber) {
-  const nowTableColumns = tableColumns[tableName];
+  const nowtablesInfo = tablesInfo[tableName];
   const selectedRow = getActiveTable()
     .row(rowNumber)
     .data();
   const inputs = $("<div></div>");
 
-  _.each(nowTableColumns, column => {
+  _.each(nowtablesInfo, column => {
     if (!column.inputName) return;
 
     const dataName = column.data;
@@ -379,22 +367,6 @@ function getMarkedRows(sheet, ...selectedMarks) {
       ),
     tagedRows => _.map(tagedRows, row => _.omit(row, "mark"))
   );
-}
-
-function getMembers(membersInfo) {
-  const ids = _.map(membersInfo, ({ member_code }) => member_code);
-  const idsQuery = _.reduce(
-    ids,
-    (memo, id) => {
-      if (memo !== "") memo += "&";
-      return memo + id;
-    },
-    ""
-  );
-
-  $.get("../api/members/" + idsQuery, data => {
-    setTables(tablesInfo, data);
-  });
 }
 
 function addMembers(members) {
