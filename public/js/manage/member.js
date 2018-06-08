@@ -52,6 +52,7 @@ const tablesInfo = {
 };
 
 const dataInfo = {
+  row_code: {},
   member_code: { format: "number", modifiable: false, required: true, unique: true },
   total_fund: { format: "money", modifiable: false, readOnly: true },
   total_util: { format: "money", modifiable: false, readOnly: true },
@@ -238,9 +239,11 @@ function setEvents() {
 
 function getTableData() {
   $.get(apiUrl, rows => {
-    const newRows = _.map(rows, row =>
-      _.mapObject(dataInfo, (v, key) => row[key] === undefined ? '' : row[key])
-    );
+    let rowNumber = 0;
+    const newRows = _.map(rows, row => {
+      row.row_code = rowNumber++;
+      return _.mapObject(dataInfo, (v, key) => row[key] === undefined ? '' : row[key]);
+    });
 
     setTables(newRows);
     setValidChecker(newRows);
