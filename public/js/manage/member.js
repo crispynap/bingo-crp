@@ -372,19 +372,19 @@ function getMarkedRows(sheet, ...selectedMarks) {
   );
 }
 
-function addRows(members) {
-  const addedMembers = _.map(members, member => addRow(member));
-  if (!_.isEmpty(addedMembers)) selectRow(_.last(addedMembers));
+function addRows(rows) {
+  const addedRows = _.map(rows, row => addRow(row));
+  if (!_.isEmpty(addedRows)) selectRow(_.last(addedRows));
 }
 
-function addRow(member = {}) {
-  checkCodeDuplicates(member.member_code);
-  checkNameDuplicates(member.name);
+function addRow(row = {}) {
+  checkCodeDuplicates(row.member_code);
+  checkNameDuplicates(row.name);
 
-  if (!member.member_code) {
-    member.member_code =
+  if (!row.member_code) {
+    row.member_code =
       _.go(
-        _.max(dataTables.primary.data(), row => C.toNum(row.member_code)),
+        _.max(dataTables.primary.data(), tableRow => C.toNum(tableRow.member_code)),
         _.v("member_code"),
         C.toNum
       ) + 1;
@@ -393,43 +393,43 @@ function addRow(member = {}) {
   const emptyMemberRow = _.mapObject(dataInfo, (val, key) => "");
   const newMemberRow = _.mapObject(
     emptyMemberRow,
-    (val, key) => (member[key] ? member[key] : "")
+    (val, key) => (row[key] ? row[key] : "")
   );
 
   addTableRow(newMemberRow);
 
-  setFieldExist('member_code', member.member_code);
-  setFieldExist('name', member.name);
+  setFieldExist('member_code', row.member_code);
+  setFieldExist('name', row.name);
 
   return newMemberRow;
 }
 
-function modifyRows(members) {
-  const modifiedMembers = _.map(members, member => modifyRow(member));
-  if (!_.isEmpty(modifiedMembers)) selectRow(_.last(modifiedMembers));
+function modifyRows(rows) {
+  const modifiedRows = _.map(rows, row => modifyRow(row));
+  if (!_.isEmpty(modifiedRows)) selectRow(_.last(modifiedRows));
 }
 
-function modifyRow(member) {
-  if (member.member_code) return modifyRowFromCode(member);
-  else return modifyRowFromName(member);
+function modifyRow(row) {
+  if (row.member_code) return modifyRowFromCode(row);
+  else return modifyRowFromName(row);
 }
 
-function modifyRowFromCode(member) {
-  checkCodeExist(member.member_code);
+function modifyRowFromCode(row) {
+  checkCodeExist(row.member_code);
 
-  if (!member.name)
-    throw new Error(messages.noEmptyName(member.member_code));
+  if (!row.name)
+    throw new Error(messages.noEmptyName(row.member_code));
 
   const oldMemberRow = getActiveTable()
-    .row(findByCode(member.member_code))
+    .row(findByCode(row.member_code))
     .data();
   const newMemberRow = _.mapObject(
     oldMemberRow,
-    (val, key) => (member[key] ? member[key] : "")
+    (val, key) => (row[key] ? row[key] : "")
   );
 
   if (oldMemberRow.name != newMemberRow.name && isFieldExist('name', newMemberRow.name))
-    throw new Error(messages.duplicatedField('이름', member.name));
+    throw new Error(messages.duplicatedField('이름', row.name));
 
   modifyTableRow(newMemberRow);
 
@@ -441,15 +441,15 @@ function modifyRowFromCode(member) {
   return newMemberRow;
 }
 
-function modifyRowFromName(member) {
-  checkNameExist(member.name);
+function modifyRowFromName(row) {
+  checkNameExist(row.name);
 
   const oldMemberRow = getActiveTable()
-    .row(findByName(member.name))
+    .row(findByName(row.name))
     .data();
   const newMemberRow = _.mapObject(
     oldMemberRow,
-    (val, key) => (member[key] ? member[key] : "")
+    (val, key) => (row[key] ? row[key] : "")
   );
   newMemberRow.member_code = oldMemberRow.member_code;
 
@@ -458,30 +458,30 @@ function modifyRowFromName(member) {
   return newMemberRow;
 }
 
-function deleteRows(members) {
-  _.each(members, member => deleteRow(member));
+function deleteRows(rows) {
+  _.each(rows, row => deleteRow(row));
 }
 
-function deleteRow(member) {
-  if (member.member_code) return deleteRowFromCode(member);
-  else return deleteRowFromName(member);
+function deleteRow(row) {
+  if (row.member_code) return deleteRowFromCode(row);
+  else return deleteRowFromName(row);
 }
 
-function deleteRowFromCode(member) {
-  checkCodeExist(member.member_code);
+function deleteRowFromCode(row) {
+  checkCodeExist(row.member_code);
 
   const oldRow = getActiveTable()
-    .row(findByCode(member.member_code))
+    .row(findByCode(row.member_code))
     .data();
 
-  removeTableRow(member.member_code);
+  removeTableRow(row.member_code);
 }
 
-function deleteRowFromName(member) {
-  checkNameExist(member.name);
+function deleteRowFromName(row) {
+  checkNameExist(row.name);
 
   const oldRow = getActiveTable()
-    .row(findByName(member.name))
+    .row(findByName(row.name))
     .data();
 
   removeTableRow(oldRow.member_code);
