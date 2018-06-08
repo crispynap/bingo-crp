@@ -106,7 +106,7 @@ shortCutButtons = {
   ],
 }
 
-$(() => {
+$(document).ready(() => {
   setEvents();
   getMembersAll();
 });
@@ -158,9 +158,8 @@ function setEvents() {
       return;
     }
 
-    if (isDateFormat(fieldName)) {
+    if (isDateFormat(fieldName))
       e.target.value = C.formatDate(e.target.value); //날짜 서식에 맞추기
-    }
 
     row[fieldName] = e.target.value;
 
@@ -322,8 +321,8 @@ function setFormSetting(tableName, rowNumber) {
     );
     const input = $(
       `<input type="text" class="form-control" data-name="${column.data}"
-      data-format="${dataFormat(column.data)}" 
-        class="input-group-addon" ${readOnly} value="${inputData}"></input>`
+        data-format="${dataFormat(column.data)}" 
+          class="input-group-addon" ${readOnly} value="${inputData}"></input>`
     );
 
     if (dataFormat(column.data) === "date") {
@@ -352,6 +351,9 @@ function showRemoveBtn() {
 
 function getXlsx(sheet, tableData) {
   _.removeByIndex(sheet, 0);
+
+  console.log("sheet: ", sheet);
+  console.log("tableData: ", tableData);
 
   const sheetError = sheetValidCheck(sheet);
 
@@ -557,7 +559,7 @@ function showShortcutButtons(tableName) {
 
   _.each(shortCutButtons[tableName], buttonInfo => {
     buttonsBox.append(`
-      <button type="button" class="btn btn-default">${buttonInfo.text}</button>`
+        <button type="button" class="btn btn-default">${buttonInfo.text}</button>`
     );
   });
 }

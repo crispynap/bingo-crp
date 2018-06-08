@@ -13,7 +13,7 @@
   <% include ../../partials/header %>
   <section class="container">
     <section class="title">
-      <h1>조합원 관리</h1>
+      <h1>장부 관리</h1>
       <div class="right-buttons btn-group" role="group" aria-label="...">
         <button type="button" class="btn btn-default xls-download" >서식 받기</button>
         <button type="button" class="btn btn-default xls-upload">서식 삽입
@@ -32,7 +32,7 @@
     <form id="editor-form">
       <div id="editor-buttons">
         <button type="button" class="btn btn-default" id="add-btn">
-          <span class="glyphicon glyphicon-plus"></span> 새 조합원
+          <span class="glyphicon glyphicon-plus"></span> 행 추가
         </button>
         <button type="button" class="btn btn-default" id="remove-btn" data-toggle="modal" data-target="#removeModal">
           <span class="glyphicon glyphicon-minus"></span> 행 삭제
@@ -163,7 +163,7 @@
 
   <% include ../../partials/footer %>
   <% include ../../partials/javascript %>
-  <script src='/js/manage/member.js'></script>
+  <script src='/js/manage/sheet.js'></script>
 </body>
 
 </html>
