@@ -144,29 +144,26 @@ function setEvents() {
 
   //내용 수정시 데이터에 반영
   $("#editor").change(e => {
-    const fieldName = e.target.dataset.name;
-    const value = e.target.value;
     const row = getActiveTable().row(".selected").data();
 
-    if (isFieldRequired(fieldName) && value === '') {
-      e.target.value = row[fieldName];
-      alert(messages.requiredField(fieldName));
-      return;
-    }
-
-    if (isFieldUnique(fieldName) && isFieldExist(fieldName, value)) {
-      e.target.value = '';
-      alert(messages.duplicatedField(fieldName));
-      return;
-    }
+    const fieldName = e.target.dataset.name;
+    const value = e.target.value;
+    const oldValue = row[fieldName];
 
     if (isDateFormat(fieldName)) {
-      e.target.value = C.formatDate(e.target.value); //날짜 서식에 맞추기
+      value = C.formatDate(e.target.value);
+      e.target.value = value;
     }
 
-    row[fieldName] = e.target.value;
+    const modifiedRow = _.mapObject(row, (val, key) => fieldName === key ? value : val);
 
-    modifyTableRow(row);
+    try {
+      modifyRow(modifiedRow);
+    }
+    catch (error) {
+      alert(error.message);
+      e.target.value = oldValue;
+    }
   });
 
   $("#add-btn").click(e => {
@@ -239,6 +236,8 @@ function setEvents() {
 
 function getTableData() {
   $.get(apiUrl, rows => {
+    console.log(rows)
+
     let rowNumber = 0;
     const newRows = _.map(rows, row => {
       row.row_id = rowNumber++;
