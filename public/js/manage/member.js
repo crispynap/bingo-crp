@@ -396,8 +396,7 @@ function addRow(row = {}) {
 
   addTableRow(newMemberRow);
 
-  setFieldExist('member_code', row.member_code);
-  setFieldExist('name', row.name);
+  setRowExist(row);
 
   return newMemberRow;
 }
@@ -432,8 +431,8 @@ function modifyRowFromCode(row) {
   modifyTableRow(newMemberRow);
 
   if (oldMemberRow.name !== newMemberRow) {
-    setFieldExist('name', oldMemberRow.name, false);
-    setFieldExist('name', newMemberRow.name);
+    setRowExist(oldMemberRow, false);
+    setRowExist(newMemberRow);
   }
 
   return newMemberRow;
@@ -563,6 +562,15 @@ const isDateFormat = fieldName => dataFormat(fieldName) === "date";
 const isMoneyFormat = fieldName => dataFormat(fieldName) === "money";
 const isFieldExist = (fieldName, field) => _.v(tableChecker[fieldName], field);
 const setFieldExist = (fieldName, field, bool = true) => tableChecker[fieldName][field] = bool;
+const setRowExist = (row, bool = true) => {
+  for (fieldName in row) {
+    if (isFieldUnique(fieldName)) {
+      console.log(fieldName)
+      console.log(row[fieldName])
+      setFieldExist(fieldName, row[fieldName], bool);
+    }
+  }
+}
 const findInputName = fieldName => {
   let inputName;
   _.each(tablesInfo, tableInfo => {
@@ -611,8 +619,7 @@ const removeTableRow = rowCode => {
   removingRow = dataTables.primary.row(findByCode(rowCode)).data();
   if (removingRow.edited !== "added") { removedRows.push(removingRow) };
 
-  setFieldExist('member_code', removingRow.member_code, false);
-  setFieldExist('name', removingRow.name, false);
+  setRowExist(removingRow, false);
 
   eachTables(table => {
     table
