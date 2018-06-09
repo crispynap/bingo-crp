@@ -52,7 +52,7 @@ const tablesInfo = {
 };
 
 const dataInfo = {
-  row_code: {},
+  row_id: {},
   member_code: { format: "number", modifiable: false, required: true, unique: true },
   total_fund: { format: "money", modifiable: false, readOnly: true },
   total_util: { format: "money", modifiable: false, readOnly: true },
@@ -241,7 +241,7 @@ function getTableData() {
   $.get(apiUrl, rows => {
     let rowNumber = 0;
     const newRows = _.map(rows, row => {
-      row.row_code = rowNumber++;
+      row.row_id = rowNumber++;
       return _.mapObject(dataInfo, (v, key) => row[key] === undefined ? '' : row[key]);
     });
 
@@ -252,8 +252,7 @@ function getTableData() {
 
 function setValidChecker(rows) {
   tableChecker = _.mapObject(dataInfo, (fieldInfo, fieldName) => {
-    if (!_.v(fieldInfo, 'required') && !_.v(fieldInfo, 'unique'))
-      return;
+    if (!_.v(fieldInfo, 'required') && !_.v(fieldInfo, 'unique')) return;
 
     return getExistList(rows, fieldName);
   });
@@ -378,8 +377,7 @@ function addRows(rows) {
 }
 
 function addRow(row = {}) {
-  checkCodeDuplicates(row.member_code);
-  checkNameDuplicates(row.name);
+  checkUniqueFields(row);
 
   if (!row.member_code) {
     row.member_code =
@@ -565,14 +563,24 @@ const isDateFormat = fieldName => dataFormat(fieldName) === "date";
 const isMoneyFormat = fieldName => dataFormat(fieldName) === "money";
 const isFieldExist = (fieldName, field) => _.v(tableChecker[fieldName], field);
 const setFieldExist = (fieldName, field, bool = true) => tableChecker[fieldName][field] = bool;
+const findInputName = fieldName => {
+  let inputName;
+  _.each(tablesInfo, tableInfo => {
+    const fieldInfo = _.find(tableInfo, fieldInfo => fieldInfo.data === fieldName)
+    inputName = fieldInfo.inputName || inputName;
+  })
+  return inputName;
+}
 
-const checkCodeDuplicates = code => {
-  if (isFieldExist('member_code', code)) throw new Error(messages.duplicatedField('조합원 코드', code));
-};
+const checkUniqueFields = row => {
+  for (fieldName in dataInfo) {
+    if (isFieldUnique(fieldName) && isFieldExist(fieldName, row[fieldName])) {
+      const inputName = findInputName(fieldName);
+      throw new Error(messages.duplicatedField(inputName, row[fieldName]));
+    }
+  }
+}
 
-const checkNameDuplicates = name => {
-  if (isFieldExist('name', name)) throw new Error(messages.duplicatedField('이름', name));
-};
 
 const checkCodeExist = code => {
   if (!isFieldExist('member_code', code)) throw new Error(messages.noCode(code));
