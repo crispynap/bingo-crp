@@ -53,9 +53,9 @@ const tablesInfo = {
 
 const dataInfo = {
   row_id: {},
-  member_code: { format: "number", modifiable: false, required: true, unique: true },
-  total_fund: { format: "money", modifiable: false, readOnly: true },
-  total_util: { format: "money", modifiable: false, readOnly: true },
+  member_code: { format: "number", readOnly: true, required: true, unique: true },
+  total_fund: { format: "money", readOnly: true },
+  total_util: { format: "money", readOnly: true },
   join_date: { format: "date" },
   leave_date: { format: "date" },
   celeb_date: { format: "date" },
