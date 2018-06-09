@@ -204,7 +204,21 @@ function setEvents() {
     return row;
   });
 
-  const alertIfError = msg => msg.indexOf('error') !== -1 ? alert(msg) : '';
+  const clearEdited = (msg, state) => {
+    if (msg.indexOf('error') !== -1) {
+      alert(msg);
+      return;
+    }
+    tableData = _.map(tableData, row => {
+      if (row.edited === state) row.edited = undefined;
+      if (state === 'removed') removedRows = [];
+      return row;
+    });
+  };
+
+  const clearRemoved = msg => clearEdited(msg, 'removed');
+  const clearAdded = msg => clearEdited(msg, 'added');
+  const clearModified = msg => clearEdited(msg, 'modified');
 
   $("#save-btn").click(e => {
     const tableData = dataTables.primary.data();
@@ -217,20 +231,17 @@ function setEvents() {
         url: apiUrl,
         type: 'DELETE',
         data: { data: removed }
-      }).done(alertIfError);
+      }).done(clearRemoved);
 
     if (!_.isEmpty(modified))
       $.ajax({
         url: apiUrl,
         type: 'PUT',
         data: { memberInfos: modified }
-      }).done(alertIfError);
+      }).done(clearModified);
 
     if (!_.isEmpty(added))
-      $.post(apiUrl, { memberInfos: added }, alertIfError);
-
-    setRowsField(tableData, 'edited', undefined);
-    removedRows = [];
+      $.post(apiUrl, { memberInfos: added }, clearAdded);
   });
 }
 
