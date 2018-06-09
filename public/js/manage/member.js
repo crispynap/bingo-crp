@@ -259,9 +259,13 @@ function setEvents() {
       return;
     }
 
+    $('.save-spinner').addClass('on');
+
     await saveAddedRows(tableData);
     await saveModifiedRows(tableData);
     await saveRemovedRows(tableData);
+
+    $('.save-spinner').removeClass('on');
   });
 }
 

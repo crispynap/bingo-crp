@@ -164,3 +164,15 @@ tr:nth-child(even) {
 #tables tr.selected {
   background-color: #08C;
 }
+
+.save-spinner{
+  font-size: 24px;
+  position: absolute;
+  right: -25px;
+  top: 5px;
+  transition: opacity 0.3s ease-in;
+  opacity: 0;
+}
+.save-spinner.on{
+  opacity: 1;
+}
