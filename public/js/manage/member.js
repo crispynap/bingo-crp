@@ -54,8 +54,8 @@ const tablesInfo = {
 const dataInfo = {
   row_id: {},
   member_code: { format: "number", readOnly: true, required: true, unique: true },
-  total_fund: { format: "money", readOnly: true },
-  total_util: { format: "money", readOnly: true },
+  total_fund: { format: "money", otherDB: true, readOnly: true },
+  total_util: { format: "money", otherDB: true, readOnly: true },
   join_date: { format: "date" },
   leave_date: { format: "date" },
   celeb_date: { format: "date" },
@@ -189,25 +189,26 @@ function setEvents() {
   });
 
   const removeField_edited = data => _.map(data, row => _.omit(row, "edited"));
-  const removeField_readOnly = data =>
-    _.map(data, row => _.omit(row, (val, key) => isFieldReadOnly(key)));
+  const removeField_otherDB = data =>
+    _.map(data, row => _.omit(row, (val, key) => isFieldOtherDB(key)));
   const getEditedRows = (rows, object) =>
     _.go(
       rows,
       _.filter(row => row.edited === object),
       removeField_edited,
-      removeField_readOnly
+      removeField_otherDB
     );
   const setRowsField = (data, field, val) => _.map(data, row => {
     row[field] = val;
     return row;
   });
 
-  const clearEdited = (msg, state) => {
-    if (msg.indexOf('error') !== -1) {
-      alert(msg);
+  const clearEdited = (result, tableData, state) => {
+    if (result.indexOf('error') !== -1) {
+      alert(result);
       return;
     }
+
     tableData = _.map(tableData, row => {
       if (row.edited === state) row.edited = undefined;
       if (state === 'removed') removedRows = [];
@@ -215,59 +216,57 @@ function setEvents() {
     });
   };
 
-  const clearRemoved = msg => clearEdited(msg, 'removed');
-  const clearAdded = msg => clearEdited(msg, 'added');
-  const clearModified = msg => clearEdited(msg, 'modified');
   const saveAddedRows = async tableData => {
     const added = getEditedRows(tableData, "added");
     if (_.isEmpty(added)) return;
-    await $.post(apiUrl, { memberInfos: added }, clearAdded);
+    const result = await $.post(apiUrl, { memberInfos: added });
+
+    clearEdited(result, tableData, 'added');
   }
 
   const saveModifiedRows = async tableData => {
     const modified = getEditedRows(tableData, "modified");
     if (_.isEmpty(modified)) return;
-    console.log(modified)
 
-    await $.ajax({
+    const result = await $.ajax({
       url: apiUrl,
       type: 'PUT',
       data: { memberInfos: modified }
-    }).done(clearModified);
+    });
+    clearEdited(result, tableData, 'modified');
   }
 
   const saveRemovedRows = async tableData => {
     const removed = removeField_edited(removedRows);
     if (_.isEmpty(removed)) return;
 
-    await $.ajax({
+    const result = await $.ajax({
       url: apiUrl,
       type: 'DELETE',
       data: { data: removed }
-    }).done(clearRemoved);
+    });
+    clearEdited(result, tableData, 'modified');
   }
 
-  $("#save-btn").click(e => {
+  $("#save-btn").click(async () => {
     const tableData = getActiveTable().data();
 
     try {
       checkRequiredFields();
     }
-    catch (e) {
-      alert(e.message);
+    catch (error) {
+      alert(error.message);
       return;
     }
 
-    saveAddedRows(tableData);
-    saveModifiedRows(tableData);
-    saveRemovedRows(tableData);
+    await saveAddedRows(tableData);
+    await saveModifiedRows(tableData);
+    await saveRemovedRows(tableData);
   });
 }
 
 function getTableData() {
   $.get(apiUrl, rows => {
-    console.log(rows)
-
     let rowNumber = 0;
     const newRows = _.map(rows, row => {
       row.row_id = rowNumber++;
@@ -589,6 +588,7 @@ const getExistList = (rows, field) =>
 const isFieldRequired = fieldName => _.v(dataInfo[fieldName], "required");
 const isFieldUnique = fieldName => _.v(dataInfo[fieldName], "unique");
 const isFieldReadOnly = fieldName => _.v(dataInfo[fieldName], "readOnly");
+const isFieldOtherDB = fieldName => _.v(dataInfo[fieldName], "otherDB");
 const isDateFormat = fieldName => dataFormat(fieldName) === "date";
 const isMoneyFormat = fieldName => dataFormat(fieldName) === "money";
 const isFieldExist = (fieldName, field) => _.v(tableChecker[fieldName], field);
@@ -596,8 +596,6 @@ const setFieldExist = (fieldName, field, bool = true) => tableChecker[fieldName]
 const setRowExist = (row, bool = true) => {
   for (fieldName in row) {
     if (isFieldUnique(fieldName)) {
-      console.log(fieldName)
-      console.log(row[fieldName])
       setFieldExist(fieldName, row[fieldName], bool);
     }
   }
