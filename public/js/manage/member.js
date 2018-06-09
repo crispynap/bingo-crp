@@ -169,7 +169,6 @@ function setEvents() {
   $("#add-btn").click(e => {
     const addedRow = addRow();
     selectRow(addedRow);
-    pageTable('last');
   });
 
   $("#removeModal").on("shown.bs.modal", e => {
@@ -225,6 +224,14 @@ function setEvents() {
     const added = getEditedRows(tableData, "added");
     const modified = getEditedRows(tableData, "modified");
     const removed = removeEdited(removedRows);
+
+    try {
+      checkRequiredFields();
+    }
+    catch (e) {
+      alert(e.message);
+      return;
+    }
 
     if (!_.isEmpty(removed))
       $.ajax({
@@ -548,7 +555,9 @@ const selectRow = row => {
   getActiveTable()
     .row(findByCode(row.member_code))
     .draw()
-    .select();
+    .select()
+    .show()
+    .draw(false);
 };
 const pageTable = page => getActiveTable().page(page).draw('page');
 
@@ -599,6 +608,18 @@ const checkUniqueFields = row => {
   }
 }
 
+const checkRequiredFields = () => {
+  const tableData = getActiveTable().data();
+  _.each(tableData, row => {
+    for (fieldName in row) {
+      if (isFieldRequired(fieldName) && row[fieldName] === '') {
+        selectRow(row);
+        const inputName = findInputName(fieldName);
+        throw new Error(messages.requiredField(inputName));
+      }
+    }
+  })
+}
 
 const checkCodeExist = code => {
   if (!isFieldExist('member_code', code)) throw new Error(messages.noCode(code));
