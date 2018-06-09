@@ -188,15 +188,15 @@ function setEvents() {
     $("#removeModal").modal("hide");
   });
 
-  const removeEdited = data => _.map(data, row => _.omit(row, "edited"));
-  const removeReadOnly = data =>
+  const removeField_edited = data => _.map(data, row => _.omit(row, "edited"));
+  const removeField_readOnly = data =>
     _.map(data, row => _.omit(row, (val, key) => isFieldReadOnly(key)));
   const getEditedRows = (rows, object) =>
     _.go(
       rows,
       _.filter(row => row.edited === object),
-      removeEdited,
-      removeReadOnly
+      removeField_edited,
+      removeField_readOnly
     );
   const setRowsField = (data, field, val) => _.map(data, row => {
     row[field] = val;
@@ -218,12 +218,37 @@ function setEvents() {
   const clearRemoved = msg => clearEdited(msg, 'removed');
   const clearAdded = msg => clearEdited(msg, 'added');
   const clearModified = msg => clearEdited(msg, 'modified');
+  const saveAddedRows = async tableData => {
+    const added = getEditedRows(tableData, "added");
+    if (_.isEmpty(added)) return;
+    await $.post(apiUrl, { memberInfos: added }, clearAdded);
+  }
+
+  const saveModifiedRows = async tableData => {
+    const modified = getEditedRows(tableData, "modified");
+    if (_.isEmpty(modified)) return;
+    console.log(modified)
+
+    await $.ajax({
+      url: apiUrl,
+      type: 'PUT',
+      data: { memberInfos: modified }
+    }).done(clearModified);
+  }
+
+  const saveRemovedRows = async tableData => {
+    const removed = removeField_edited(removedRows);
+    if (_.isEmpty(removed)) return;
+
+    await $.ajax({
+      url: apiUrl,
+      type: 'DELETE',
+      data: { data: removed }
+    }).done(clearRemoved);
+  }
 
   $("#save-btn").click(e => {
-    const tableData = dataTables.primary.data();
-    const added = getEditedRows(tableData, "added");
-    const modified = getEditedRows(tableData, "modified");
-    const removed = removeEdited(removedRows);
+    const tableData = getActiveTable().data();
 
     try {
       checkRequiredFields();
@@ -233,22 +258,9 @@ function setEvents() {
       return;
     }
 
-    if (!_.isEmpty(removed))
-      $.ajax({
-        url: apiUrl,
-        type: 'DELETE',
-        data: { data: removed }
-      }).done(clearRemoved);
-
-    if (!_.isEmpty(modified))
-      $.ajax({
-        url: apiUrl,
-        type: 'PUT',
-        data: { memberInfos: modified }
-      }).done(clearModified);
-
-    if (!_.isEmpty(added))
-      $.post(apiUrl, { memberInfos: added }, clearAdded);
+    saveAddedRows(tableData);
+    saveModifiedRows(tableData);
+    saveRemovedRows(tableData);
   });
 }
 
